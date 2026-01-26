@@ -273,5 +273,198 @@ footer {
 /*cart*/
 
 .cart {
-    margin: 4rem 2rem;
+    margin: 4rem 
+}
+.c-head {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.c-head p {
+    font-size: 14px;
+}
+.selected-item {
+    display: flex;
+    justify-content: space-around;
+}
+.si-cards {
+    max-width: 700px;
+    width: 70%;
+}
+.si-card {
+    border-bottom: 1px solid;
+    display: grid;
+    grid-template-columns: 200px 2fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    
+}
+.si-img {
+    width: 200px;
+    height: 200px;
+    border: 1px solid #029FAE;
+}
+.si-writeup {
+    height: 200px;
+}
+
+.si-writeup {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.close {
+    font-size: 28px;
+    cursor: pointer;
+    color: rgb(123, 123, 123);
+    line-height: 1;
+}
+.order-sum {
+    width:  420px;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border: 1px solid #DDE0E5;
+    border-radius: 12px;
+    padding: 30px;
+}
+.order-sum button {
+    width: 100%;
+    height: 40px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.order-sum button:first-of-type {
+    background-color: #029FAE;
+    color: white;
+    border: none;
+}
+.order-sum button:last-of-type {
+    background-color: inherit;
+    border: 1px solid black;
+}
+.paym {
+    justify-content: center;
+    font-size: 14px;
+}
+.pay {
+    text-align: center;
+}
+
+/*sign-in*/
+.sign-in {
+    margin: 4rem auto;
+}
+.sign-in-card {
+    margin: 0 auto;
+    width: 648px;
+    padding: 1.5rem;
+    border-radius: 12px;
+    font-size: 12px;
+    box-shadow: 0 0 30px 0 #2723431F;
+}
+.sign-in-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.sign-in-card h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+.indiv {
+    width: 100%;
+    height: 36px;
+    background-color: #F0F2F3;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    padding-right: 1.5rem;
+}
+.indiv input {
+    background-color: inherit;
+    border: none;
+    width: 100%;
+    height: 100%;
+    outline: none;
+    padding: 0 1.5rem;
+}
+
+.indiv input::placeholder {
+    color: #9A9CAA;
+}
+.sign-in-card button {
+    width: 100%;
+    height: 40px;
+    border-radius: 6px;
+    cursor: pointer;
+    
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.sign-in-card button:first-of-type {
+    background-color: #029FAE;
+    color: white;
+}
+.tac {
+    text-align: center;
+}
+.txtcolor {
+    color: #007580;
+    cursor: pointer;
+}
+.google-logo {
+    width: 24px;
+    height: 24px;
+}
+.google-logo img {
+    width: 100%;
+    height: 100%;
+}
+
+/*product des*/
+.project-info {
+    margin: 4rem;
+}
+.info-card {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin: auto
+}
+.info-card-img {
+    border: 1px solid #029FAE;
+    height: 500px;
+    width: 450px;
+}
+.info-card-writeup {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.info-card-writeup button {
+    width: 100%;
+    height: 40px;
+    border-radius: 6px;
+    cursor: pointer;
+    
+    
+}
+.info-card-writeup {
+    max-width: 500px;
+}
+.info-card-writeup button:first-of-type {
+    background-color: #029FAE;
+    border: none;
+    color: white;
+}
+.a-size div, .a-color div {
+    border: 1px solid;
+    width: 40px;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 12px;
 }

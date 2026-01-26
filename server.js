@@ -20,7 +20,15 @@ app.get("/product", (req, res) => {
 app.get("/cart", (req, res) => {
     res.render("cart.ejs")
 })
-
+app.get("/sign-in", (req, res) => {
+    res.render("sign-in.ejs")
+})
+app.get("/sign-up", (req, res) => {
+    res.render("sign-up.ejs")
+})
+app.get("/info", (req, res) => {
+    res.render("info.ejs")
+})
 app.listen(3000, () => {
     console.log(`app is running on port ${port}`)
 });
