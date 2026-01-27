@@ -29,6 +29,12 @@ app.get("/sign-up", (req, res) => {
 app.get("/info", (req, res) => {
     res.render("info.ejs")
 })
+app.get("/checkout", (req, res) => {
+    res.render("checkout.ejs")
+})
+app.get("/track-order", (req, res) => {
+    res.render("track-order.ejs")
+})
 app.listen(3000, () => {
     console.log(`app is running on port ${port}`)
 });
