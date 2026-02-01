@@ -1,0 +1,35 @@
+<%- include('partials/header') %>
+
+<section class="edit-section">
+    <div class="edit">
+        <div class="edit-head">
+            <div class="yo">
+                <div class="edit-pic"></div>
+                <h4>Hello Kingsley</h4>
+            </div>
+        </div>
+        <div class="edit-body">
+            <div >
+                <p>Name</p>
+                <div class="flex-c gap05">
+                    <input type="text" placeholder="first-name"/>
+                    <input type="text" placeholder="last-name"/>
+                </div>
+            </div>
+            <div class="c">
+                <p>Email</p>
+                <input type="text"/>    
+            </div>
+            <div>
+                <p>Contact</p>
+                <input type="number"/>    
+            </div>
+        </div>
+        <div class="edit-footer ">
+            <a href="/"><button id="cancel-edit">Cancel</button></a>
+            <button>Save Changes</button>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer') %>

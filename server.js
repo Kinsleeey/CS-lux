@@ -35,6 +35,12 @@ app.get("/checkout", (req, res) => {
 app.get("/track-order", (req, res) => {
     res.render("track-order.ejs")
 })
+app.get("/wishlist", (req, res) => {
+    res.render("wishlist.ejs")
+})
+app.get("/edit-profile", (req, res) => {
+    res.render("edit-profile.ejs")
+})
 app.listen(3000, () => {
     console.log(`app is running on port ${port}`)
 });
