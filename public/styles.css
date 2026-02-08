@@ -1,57 +1,98 @@
+/* ==========================================================================
+   RESET & BASE STYLES
+   ========================================================================== */
+
 * {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
 }
+
 html {
     font-size: 14px;
 }
+
 body {
     font-family: "Inter", sans-serif;
     position: relative;
 }
-/* my personal standard*/
-.absolute {
-    position: absolute;
-}
-.hide {
-    display: none;
-}
+
+/* ==========================================================================
+   TYPOGRAPHY
+   ========================================================================== */
+
 h2 {
     font-size: 1.75rem;
 }
+
 h3 {
     font-size: 1.5rem;
 }
+
+/* ==========================================================================
+   UTILITY CLASSES
+   ========================================================================== */
+
+/* Display */
+.absolute {
+    position: absolute;
+}
+
+.hide {
+    display: none;
+}
+
+/* Flexbox Utilities */
+.flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
 .flex-sb-c {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
 }
+
 .flex-c {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
 
+.c-horiz {
+    display: flex;
+    justify-content: center;
+}
+
+/* Gap Utilities */
 .gap025 {
     gap: 0.25rem;
 }
+
 .gap05 {
     gap: 0.5rem;
 }
+
 .gap1 {
     gap: 1rem;
 }
 
-li {
-    list-style: none;
+/* Text Alignment */
+.tac {
+    text-align: center;
 }
-a {
-    text-decoration: none;
-    color: black
+
+/* Colors */
+.txtcolor {
+    color: #007580;
+    cursor: pointer;
 }
+
+/* Background Utilities */
 .whiteback {
     background-color: white;
     border-radius: 0.5rem;
@@ -61,6 +102,7 @@ a {
     justify-content: center;
     align-items: center;
 }
+
 .greyback {
     background-color: #F0F2F3;
     border-radius: 0.5rem;
@@ -70,6 +112,7 @@ a {
     justify-content: center;
     align-items: center;
 }
+
 .gback {
     background-color: #029FAE;
     border-radius: 0.5rem;
@@ -79,41 +122,13 @@ a {
     align-items: center;
 }
 
-/*header*/
-header {
-    width: 100%;
-    position: fixed;
-    top: 0;
-    z-index: 100;
-}
-.pre-header {
-    height: 2.8125rem;
-    background-color: #272343;
-    color: white;
-    font-size: 0.75rem;
-    padding: 1rem 5rem;
-}
-.main-header {
-    background-color: #F0F2F3;
-    font-size: 0.875rem;
-    padding: 1rem 3rem;
-}
-.brand-img {
-    border: 0.0625rem solid blue;
-    width: 2rem;
-    height: 2rem;
-}
-.brand p {
-    font-size: 1.625rem;
-    font-weight: bold;
-}
-
 .greenback {
     background-color: #007580;
     border-radius: 50%;
     padding: 0.1rem 0.4rem;
     color: white;
 }
+
 .greenoutline {
     border: 0.0625rem solid #013f45;
     border-radius: 3.75rem;
@@ -123,93 +138,77 @@ header {
     align-items: center;
     justify-content: center;
 }
-/*Hero*/
 
-/*Product*/
-
-.product {
-    padding: 5rem;
-}
-.product > span {
-    text-align: center;
-}
-.product > span p {
-    color: #1e2f47;
-    font-size: 0.875rem;
-}
-.product-sect {
-    margin-top: 3rem;
-}
-.product-sect-header p {
-    font-size: 0.75rem;
-}
-.product-sect-header {
-    margin-bottom: 1.5rem;
-}
-.grid-x4 {
-    display: grid;
-    grid-template-columns: repeat(4, 15.625rem);
-    /*grid-template-columns: repeat(auto-fit, minmax(15.625rem, 1fr));*/
-    gap: 1rem;
-    margin: 0 auto;
-}
-.fav .item {
-    width: 15.625rem;
+/* Border Utilities */
+.bord {
+    border: 0.0625rem solid #DDE0E5;
+    border-radius: 0.75rem;
+    margin: 1rem;
+    padding: 1rem;
 }
 
-.item-img {
-    width: 100%;
-    height: 15.625rem;
-    border: 0.0625rem solid #029FAE;
-    border-radius: 0.375rem;
-    position: relative;
+/* Typography Utilities */
+.sm {
+    font-size: 0.8125rem;
 }
-.item-img > div {
-    position: absolute;
-    left: 0.5rem;
-    top: 0.5rem;
-}
-.item-footer {
-    padding: 1rem 0;
-}
-.product-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.item-footer p {
-    font-size: 0.9375rem;
-    padding-left: 0.125rem;
-}
-.item-footer p:last-of-type {
+
+.sm span {
     font-weight: bold;
 }
 
-/*footer*/
-footer {
-    background-color: #F0F2F3;
-    font-size: 0.875rem;
-    padding: 2rem 4rem;
-    font-size: 0.75rem;
-}
-.top-footer {
-    display: grid;
-    grid-template-columns: 1fr 1.5fr 1fr;
-}
-.bottom-footer {
-    border-top: 0.0625rem solid #aeaeae;
-    margin-top: 2rem;
-    padding-top: 2rem;
-}
-.about-brand {
-    margin: 1rem 0;
-}
-.c-horiz {
-    display: flex;
-    justify-content: center;
+/* ==========================================================================
+   RESET OVERRIDES
+   ========================================================================== */
+
+li {
+    list-style: none;
 }
 
-/*Hero*/
+a {
+    text-decoration: none;
+    color: black;
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+}
+
+.pre-header {
+    height: 2.8125rem;
+    background-color: #272343;
+    color: white;
+    font-size: 0.75rem;
+    padding: 1rem 5rem;
+}
+
+.main-header {
+    background-color: #F0F2F3;
+    font-size: 0.875rem;
+    padding: 1rem 3rem;
+}
+
+.brand-img {
+    border: 0.0625rem solid blue;
+    width: 2rem;
+    height: 2rem;
+}
+
+.brand p {
+    font-size: 1.625rem;
+    font-weight: bold;
+}
+
+/* ==========================================================================
+   HERO SECTION
+   ========================================================================== */
+
 .hero {
     height: 60dvh;
     margin: 2.5rem 4rem;
@@ -222,12 +221,14 @@ footer {
 }
 
 .hero-text {
-    padding: 4rem 4rem;
+    padding: 4rem;
 }
+
 .hero-text h1 {
     font-size: 3.75rem;
     margin: 1rem 0;
 }
+
 .ht-button {
     font-size: 0.875rem;
     padding: 0.875rem 1.5rem;
@@ -236,6 +237,7 @@ footer {
     border: none;
     border-radius: 0.5rem;
 }
+
 .overlap {
     border-radius: 0.75rem;
     max-width: 50rem;
@@ -247,88 +249,220 @@ footer {
     transform: translateX(-50%);
     background-color: white;
     box-shadow: 0 0.5rem 0.75rem #f0f2f3;
+}
 
-}
-.flex {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-}
 .absvg svg {
     width: 2.875rem;
     height: 2.875rem;
 }
 
-/*Product-page*/
+/* ==========================================================================
+   PRODUCT SECTIONS
+   ========================================================================== */
+
+.product {
+    padding: 5rem;
+}
+
+.product > span {
+    text-align: center;
+}
+
+.product > span p {
+    color: #1e2f47;
+    font-size: 0.875rem;
+}
+
+.product-sect {
+    margin-top: 3rem;
+}
+
+.product-sect-header {
+    margin-bottom: 1.5rem;
+}
+
+.product-sect-header p {
+    font-size: 0.75rem;
+}
+
+.product-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Grid Layout */
+.grid-x4 {
+    display: grid;
+    grid-template-columns: repeat(4, 15.625rem);
+    gap: 1rem;
+    margin: 0 auto;
+}
+
+/* Product Items */
+.fav .item,
+.item {
+    width: 15.625rem;
+}
+
+.item-img {
+    width: 100%;
+    height: 15.625rem;
+    border: 0.0625rem solid #029FAE;
+    border-radius: 0.375rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.item-img img {
+    width: 100%;
+    height: 100%;
+}
+
+.item-img > div {
+    position: absolute;
+    left: 0.5rem;
+    top: 0.5rem;
+}
+
+.item-footer {
+    padding: 1rem 0;
+}
+
+.item-footer p {
+    font-size: 0.9375rem;
+    padding-left: 0.125rem;
+}
+
+.item-footer p:last-of-type {
+    font-weight: bold;
+}
+
+/* ==========================================================================
+   PRODUCT PAGE
+   ========================================================================== */
+
 .product-page {
     margin: 10rem 2rem 4rem 2rem;
 }
+
 .p-stuff {
     display: grid;
     grid-template-columns: 1fr 3.5fr;
 }
+
 .p-page-nav {
     border: 0.0625rem solid red;
     height: 90vh;
     position: sticky;
     top: 0;
 }
-.product-sect-header {
-    position: static;
-    top: 10rem
+
+/* Product Details */
+.project-info {
+    margin: 4rem;
 }
 
-/*cart*/
+.info-card {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin: auto;
+}
+
+.info-card-img {
+    border: 0.0625rem solid #029FAE;
+    height: 31.25rem;
+    width: 28.125rem;
+}
+
+.info-card-writeup {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 31.25rem;
+}
+
+.info-card-writeup button {
+    width: 100%;
+    height: 2.5rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+}
+
+.info-card-writeup button:first-of-type {
+    background-color: #029FAE;
+    border: none;
+    color: white;
+}
+
+.a-size div,
+.a-color div {
+    border: 0.0625rem solid;
+    width: 2.5rem;
+    padding: 0.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+}
+
+/* ==========================================================================
+   CART
+   ========================================================================== */
 
 .cart {
-    margin: 4rem 
+    margin: 4rem;
 }
+
 .c-head {
     text-align: center;
     margin-bottom: 1rem;
 }
+
 .c-head p {
     font-size: 0.875rem;
 }
+
 .selected-item {
     display: flex;
     justify-content: space-around;
 }
+
 .si-cards {
     max-width: 43.75rem;
     width: 70%;
 }
+
 .si-card {
     border-bottom: 0.0625rem solid;
     display: grid;
     grid-template-columns: 12.5rem 2fr;
     gap: 1.5rem;
     margin-bottom: 1rem;
-    
 }
+
 .si-img {
     width: 12.5rem;
     height: 12.5rem;
     border: 0.0625rem solid #029FAE;
 }
-.si-writeup {
-    height: 12.5rem;
-}
 
 .si-writeup {
+    height: 12.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
 }
+
 .close {
     font-size: 1.75rem;
     cursor: pointer;
     color: rgb(123, 123, 123);
     line-height: 1;
 }
+
+/* Order Summary */
 .order-sum {
-    width:  26.25rem;
+    width: 26.25rem;
     height: fit-content;
     display: flex;
     flex-direction: column;
@@ -337,6 +471,7 @@ footer {
     border-radius: 0.75rem;
     padding: 1.875rem;
 }
+
 .order-sum .c-button {
     width: 100%;
     height: 2.5rem;
@@ -347,30 +482,58 @@ footer {
     align-items: center;
     justify-content: center;
 }
+
 .order-sum .c-button:first-of-type {
     background-color: #029FAE;
     color: white;
     border: none;
 }
+
 .order-sum button:last-of-type {
     background-color: inherit;
     border: 0.0625rem solid black;
 }
+
 .paym {
     justify-content: center;
     font-size: 0.875rem;
 }
+
 .pay {
     text-align: center;
 }
 
-/*sign-in*/
+/* ==========================================================================
+   CHECKOUT
+   ========================================================================== */
+
+.checkout {
+    font-size: 0.875rem;
+    margin: 4rem 2rem;
+    display: flex;
+    justify-content: space-around;
+}
+
+.pm {
+    width: 100%;
+}
+
+/* ==========================================================================
+   SIGN IN
+   ========================================================================== */
+
 .sign-in {
     display: flex;
     align-items: center;
     justify-content: center;
     height: calc(100dvh - 7.3125rem);
 }
+
+.sign-in .error-msg {
+    color: red;
+    font-family: monospace;
+}
+
 .sign-in-card {
     margin: 0 auto;
     width: 40.5rem;
@@ -379,15 +542,18 @@ footer {
     font-size: 0.75rem;
     box-shadow: 0 0 1.875rem 0 #2723431F;
 }
+
+.sign-in-card h3 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
 .sign-in-card form {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
-.sign-in-card h3 {
-    text-align: center;
-    margin-bottom: 1rem;
-}
+
 .indiv {
     width: 100%;
     height: 2.25rem;
@@ -398,6 +564,7 @@ footer {
     border-radius: 0.375rem;
     padding-right: 1.5rem;
 }
+
 .indiv input {
     background-color: inherit;
     border: none;
@@ -410,134 +577,81 @@ footer {
 .indiv input::placeholder {
     color: #9A9CAA;
 }
+
 .sign-in-card button {
     width: 100%;
     height: 2.5rem;
     border-radius: 0.375rem;
     cursor: pointer;
-    
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
 .sign-in-card button:first-of-type {
     background-color: #029FAE;
     color: white;
 }
-.tac {
-    text-align: center;
-}
-.txtcolor {
-    color: #007580;
-    cursor: pointer;
-}
+
 .google-logo {
     width: 1.5rem;
     height: 1.5rem;
 }
+
 .google-logo img {
     width: 100%;
     height: 100%;
 }
 
-/*product des*/
-.project-info {
-    margin: 4rem;
-}
-.info-card {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    margin: auto
-}
-.info-card-img {
-    border: 0.0625rem solid #029FAE;
-    height: 31.25rem;
-    width: 28.125rem;
-}
-.info-card-writeup {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-.info-card-writeup button {
-    width: 100%;
-    height: 2.5rem;
-    border-radius: 0.375rem;
-    cursor: pointer;
-    
-    
-}
-.info-card-writeup {
-    max-width: 31.25rem;
-}
-.info-card-writeup button:first-of-type {
-    background-color: #029FAE;
-    border: none;
-    color: white;
-}
-.a-size div, .a-color div {
-    border: 0.0625rem solid;
-    width: 2.5rem;
-    padding: 0.5rem;
-    text-align: center;
-    font-size: 0.75rem;
-}
+/* ==========================================================================
+   TRACK ORDER
+   ========================================================================== */
 
-/*Checkout*/
-.checkout {
-    font-size: 0.875rem;
-    margin: 4rem 2rem;
-    display: flex;
-    justify-content: space-around;
-}
-
-.bord {
-    border: 0.0625rem solid #DDE0E5;
-    border-radius: 0.75rem;
-    margin: 1rem;
-    padding: 1rem;
-}
-.pm {
-    width: 100%;
-}
-
-/*track order*/
 .track-order {
     height: calc(100dvh - 7.3125rem);
 }
+
 .to-card {
     border: 0.0625rem solid #DDE0E5;
     border-radius: 0.75rem;
     margin: 2rem 4rem;
     padding: 2rem;
 }
+
 .to-top {
     display: flex;
     justify-content: space-between;
     margin-bottom: 1rem;
 }
+
 .to-top div:first-of-type {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem
+    gap: 0.5rem;
 }
+
+.to-bottom {
+    margin-top: 1rem;
+}
+
 .order-info {
     display: flex;
     flex-direction: row;
-    gap: 1rem
+    gap: 1rem;
 }
+
 .order-info span {
     width: 12.5rem;
     font-size: 0.75rem;
     color: #79a2ac;
-    
 }
+
 .order-info span > p:first-of-type {
     color: black;
     font-size: 0.8125rem;
 }
+
 .view-products-link {
     padding: 0.3rem 0.7rem;
     font-size: 0.75rem;
@@ -545,15 +659,6 @@ footer {
     background-color: #029FAE;
     border-radius: 0.25rem;
     border: none;
-}
-.sm {
-    font-size: 0.8125rem;
-}
-.sm span {
-    font-weight: bold;
-}
-.to-bottom {
-    margin-top: 1rem;
 }
 
 .progress-icon {
@@ -565,25 +670,34 @@ footer {
     padding: 0.4rem;
     border-radius: 0.5rem;
 }
-.done {
+
+.progress-icon.done {
     background-color: #029FAE;
 }
+
 .order-list {
     margin-bottom: 1rem;
 }
+
 .ol-img {
     width: 3.375rem;
     border: 0.0625rem solid;
     height: 4rem;
 }
+
+/* ==========================================================================
+   TABLES
+   ========================================================================== */
+
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1rem;
-  font-size: 0.75rem;
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    font-size: 0.75rem;
 }
+
 table tr {
-  border-bottom: 0.0625rem solid;
+    border-bottom: 0.0625rem solid;
 }
 
 th {
@@ -594,28 +708,32 @@ th {
 
 th:nth-last-child(-n+3),
 td:nth-last-child(-n+3) {
-  text-align: right;
-  max-width: 2.1875rem;
+    text-align: right;
+    max-width: 2.1875rem;
 }
 
-/*fav*/
+/* ==========================================================================
+   FAVORITES
+   ========================================================================== */
+
 .favourite {
     margin: 4rem;
-    
 }
-.fav-center {
-    display: flex;
-    flex-direction: row;
-    gap: 2rem
-}
+
 .fav h3 {
     margin-bottom: 4rem;
 }
-.fav .item {
-    width: 15.625rem;
+
+.fav-center {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
 }
 
-/*profile nav*/
+/* ==========================================================================
+   PROFILE
+   ========================================================================== */
+
 .profile-nav {
     width: 18.75rem;
     height: fit-content;
@@ -625,58 +743,89 @@ td:nth-last-child(-n+3) {
     top: 8rem;
     right: 1rem;
     padding: 1.5rem;
-    border-radius: 8px;
+    border-radius: 0.5rem;
     z-index: 120;
 }
+
 .profile-nav hr {
     margin: 1rem 0;
     border: 0.0625rem solid #2723431F;
 }
-.inner {
+
+.profile-nav .inner {
     padding: 1rem 1rem 0 1rem;
-    font-size: 12px; 
-}
-.user-p-pic {
-    width: 50px;
-    height: 50px;
-    border-radius: 8px;
-    border: 1px solid;
+    font-size: 0.75rem;
 }
 
-/*edit-profile*/
+.user-p-pic {
+    width: 3.125rem;
+    height: 3.125rem;
+    border-radius: 0.5rem;
+    border: 0.0625rem solid;
+}
+
+/* Edit Profile */
 .edit-section {
     margin: 10rem auto;
     display: flex;
     justify-content: center;
 }
+
 .edit {
     width: 70%;
-    border-radius: 8px;
-    border: 1px solid #029FAE;
+    border-radius: 0.5rem;
+    border: 0.0625rem solid #029FAE;
     overflow: hidden;
-    max-width: 400px;
+    max-width: 25rem;
 }
+
 .edit-head {
     padding: 1rem 0;
     display: flex;
     justify-content: center;
     position: relative;
 }
+
 .edit-head h4 {
     text-align: center;
 }
 
 .edit-pic {
-    width: 70px;
-    height: 70px;
+    width: 4.375rem;
+    height: 4.375rem;
     border-radius: 50%;
-    border: 1px solid #029FAE;
+    border: 0.0625rem solid #029FAE;
 }
+
 .yo {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem
+    gap: 0.5rem;
+}
+
+.edit-body {
+    border-top: 0.0625rem solid #029FAE;
+    border-bottom: 0.0625rem solid #029FAE;
+}
+
+.edit-body > div {
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    align-items: center;
+}
+
+.edit-body > div input {
+    width: 100%;
+    border-radius: 0.125rem;
+    border: 0.0625rem solid #029FAE;
+    padding: 0.5rem;
+}
+
+.edit-body .c {
+    border-top: 0.0625rem solid #029FAE;
+    border-bottom: 0.0625rem solid #029FAE;
 }
 
 .edit-footer {
@@ -686,38 +835,64 @@ td:nth-last-child(-n+3) {
     gap: 0.5rem;
     padding: 1rem;
 }
+
 .edit-footer button {
     padding: 0.5rem;
-    font-size: 10px;
-    border-radius: 4px;
+    font-size: 0.625rem;
+    border-radius: 0.25rem;
 }
-.edit-footer button:first-of-type {
-    border: 1px solid #029FAE;
-    background-color: inherit;
 
+.edit-footer button:first-of-type {
+    border: 0.0625rem solid #029FAE;
+    background-color: inherit;
 }
+
 .edit-footer button:last-of-type {
     border: none;
     background-color: #029FAE;
     color: white;
 }
-.edit-body {
-    border-top: 1px solid #029FAE;
-    border-bottom: 1px solid #029FAE;
-}
-.edit-body > div {
+
+/* ==========================================================================
+   ADMIN
+   ========================================================================== */
+
+.admin-landing {
+    border: 0.0625rem solid;
+    margin: 8rem 4rem;
     padding: 1rem;
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    align-items: center;
 }
-.edit-body > div input {
-    width: 100%;
-    border-radius: 2px;
-    border: 1px solid #029FAE;
+
+.admin-landing div {
     padding: 0.5rem;
 }
-.c {
-    border-top: 1px solid #029FAE;
-    border-bottom: 1px solid #029FAE;
+
+.check {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+footer {
+    background-color: #F0F2F3;
+    font-size: 0.75rem;
+    padding: 2rem 4rem;
+}
+
+.top-footer {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+}
+
+.about-brand {
+    margin: 1rem 0;
+}
+
+.bottom-footer {
+    border-top: 0.0625rem solid #aeaeae;
+    margin-top: 2rem;
+    padding-top: 2rem;
 }
