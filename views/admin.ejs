@@ -34,35 +34,99 @@
     </header>
     <div class="admin-landing">
         <h1>Welcome Admin</h1>
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <div>
-                <p>Product Category</p>
-                <select name="category">
-                    <option value="">Select an option</option>
-                    <option value="clothes">Clothes</option>
-                    <option value="shoes">Shoes</option>
-                    <option value="slippers">Slippers</option>
-                    <option value="gadgets">Gadgets</option>
-                    <option value="bike">Bike</option>
-                </select>
-            </div>
-            <div><label>Product Name <input type="text" name="product-name" /></label></div>
-            <div><label>Product Description <input type="text" name="product-des" /></label></div>
-            <div>
-                <p>Pick a size:</p>
-                <label><input type="checkbox" name="size" value="S"/> S</label>
-                <label><input type="checkbox" name="size" value="M"/> M</label>
-                <label><input type="checkbox" name="size" value="L"/> L</label>
-                <label><input type="checkbox" name="size" value="XL"/> XL</label>
-                <label><input type="checkbox" name="size" value="2XL"/> 2XL</label>
-                <label><input type="checkbox" name="size" value="3XL"/> 3XL</label>
-            </div>
-            <div><label>Product Price <input type="number" name="product-price" /></label></div>
-            <div><label>Upload Product Picture <input type="file" name="product-img" accept="image/*" /></label></div>
+        <div class="input-category">
+            <h4 style="text-align: center;">Create Category</h4>
+            <p>Categories Available</p>
+            <ul>
+            <% categories.forEach(c => { %>
+                <li><%= c.name %></li>
+            <% }) %>
+            </ul>
+            <form action="/new-category" method="post">
+                <input type="text" name="category" placeholder="create new category"/>
+                <button type="submit">Add</button>
+            </form>
+            <% if (msg) { %>
+                <p class="alert"><%= msg %></p>
+            <% } %>
+        </div>
+        <div class="input-product">
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <h4 style="text-align: center;">Create New Product</h4>
+                <div>
+                    <p>Product Category</p>
+                    <select name="category">
+                        <option value="">Select an option</option>
+                        <% categories.forEach(c => { %>
+                            <option value="<%= c.id %>"><%= c.name %></option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div><label>Product Name <input type="text" name="product-name" /></label></div>
+                <div><label>Product Description <input type="text" name="product-des" /></label></div>
+                <div style="border: 1px solid rgb(219, 219, 219);">
+                    <p>Pick a size:(optional)</p>
+                    <label><input type="checkbox" name="size" value="S"/> S</label>
+                    <label><input type="checkbox" name="size" value="M"/> M</label>
+                    <label><input type="checkbox" name="size" value="L"/> L</label>
+                    <label><input type="checkbox" name="size" value="XL"/> XL</label>
+                    <label><input type="checkbox" name="size" value="2XL"/> 2XL</label>
+                    <label><input type="checkbox" name="size" value="3XL"/> 3XL</label>
+                </div>
+                <div style="border: 1px solid rgb(202, 202, 202);">
+                    <p style="text-align: center;">Color (optional)</p>
+                    <div class="flex-sb-c" id="color-head">
+                        <p>For any color you input, kindly add the product-image</p>
+                        <div class="greyback" id="add-color"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"></path></svg></div>
+                    </div>
+                </div>
+                <div><label>Product Price <input type="number" name="product-price" /></label></div>
+                <div class="single-stock"><label>Quantity in stock<input type="number" name="stock" /></label></div>
+                <div class="single-p-pic"><label>Upload Product Picture <input type="file" name="product-img" accept="image/*" /></label></div>
 
-            <div><button type="submit">Add to Website</button></div>
-        </form>
+                <div><button type="submit">Add to Website</button></div>
+            </form>
+        </div>
         
     </div>
+    <script>
+        const defaultPicUpload = document.querySelector(".single-p-pic");
+        const defaultStock = document.querySelector(".single-stock")
+
+        document.getElementById('add-color').addEventListener('click', function() {
+            // Hide default pic upload on first add
+            if (document.querySelectorAll('.color-input').length === 0) {
+                defaultPicUpload.style.display = 'none';
+                defaultStock.style.display = 'none';
+            }
+
+            const newColorInput = document.createElement('div');
+            newColorInput.className = 'color-input';
+            newColorInput.style.cssText = 'padding: 0.5rem; border: 1px solid; border-radius: 8px;';
+            newColorInput.innerHTML = `
+                <div class="flex-sb-c">
+                    <input placeholder="Type color name" type="text" name="color" />
+                    <div class="close-color-input"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path></svg></div>    
+                </div>
+                <div class="flex-sb-c">
+                    <input type="file" name="product-img-by-color" accept="image/*" />
+                    <input type="number" placeholder="Quantity" name="stock-by-color" />
+                </div>
+                
+            `;
+            document.getElementById('color-head').insertAdjacentElement('afterend', newColorInput);
+
+            // Add listener to the new close button
+            newColorInput.querySelector('.close-color-input').addEventListener('click', function() {
+                newColorInput.remove();
+                // Show default pic upload if no color inputs left
+                if (document.querySelectorAll('.color-input').length === 0) {
+                    defaultPicUpload.style.display = 'block';  // Or whatever display value it had originally
+                    defaultStock.style.display = 'block';
+                }
+            });
+        });
+        
+    </script>
 </body>
 </html>
