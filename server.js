@@ -9,6 +9,7 @@ import { Strategy } from "passport-local";
 import bcrypt from "bcrypt"
 import env from "dotenv"
 
+env.config();
 const db = new pg.Client({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
@@ -18,7 +19,7 @@ const db = new pg.Client({
 });
 
 db.connect();
-env.config();
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/uploads/');
@@ -54,13 +55,66 @@ app.set('views', './views')
 
 const saltRounds = 3;
 
+async function getProductDetails(id) {
+    try {
+        const result = await db.query(`
+            SELECT 
+                p.id,
+                p.name,
+                p.description,
+                c.name AS category,
+                pv.size,
+                pv.color,
+                pv.image,
+                pv.stock,
+                pv.price
+            FROM products p
+            JOIN categories c ON p.category_id = c.id
+            JOIN product_variants pv ON p.id = pv.product_id
+            WHERE p.id = $1
+        `, [id]);
+        /*
+            returns array of object/objects.
+            object = {
+                id:
+                name:
+                description:
+                category:
+                size:
+                color:
+                image:
+                stock:
+                price
+            }
+        */
+        return result.rows;
+    } catch (err) {
+        console.error(err);
+        return null;  // or throw error, or return []
+    }
+}
 
 app.get("/", (req, res) => {
-    res.render("index")
+    res.render("index.ejs")
 })
 
-app.get("/product", (req, res) => {
-    res.render("product.ejs", { productDetails: "" });
+app.get("/product", async(req, res) => {
+
+    try {
+        const result = await db.query("SELECT * FROM products");
+        const products = result.rows; //array of object/objects
+        if(products.length === 0) {
+            return res.render("products.ejs", { msg: "No Products Available", products: [] })
+        }
+        res.render("product.ejs", { msg: "", products: products });
+
+    } catch(err) {
+        console.log(err)
+        res.status(404).send("error retrieving products info")
+
+    }
+    
+
 })
 
 app.get("/cart", (req, res) => {
@@ -120,11 +174,11 @@ app.post("/register", async(req, res) => {
 });
 
 app.get("/info/:id", async(req, res) => {
-    const id = req.params.id;
+    const specificId = req.params.id;
 
-    //fetch data from db
-
-    res.render("info.ejs")
+    const details = await getProductDetails(specificId); //array of object/objects
+        
+    res.render("info.ejs", { details })
 })
 
 app.get("/checkout", (req, res) => {
@@ -143,24 +197,132 @@ app.get("/edit-profile", (req, res) => {
     res.render("edit-profile.ejs")
 })
 
-app.get("/admin", (req, res) => {
-    res.render("admin.ejs")
+app.get("/admin", async(req, res) => {
+    try {
+        const result = await db.query("SELECT * FROM categories");
+        const categories =  result.rows;
+        const msg = req.query.msg || null;
+
+        if (categories.length === 0) {
+            return res.render("admin", { msg: "Kindly create a new category", categories: [] });
+        } 
+        res.render("admin", { msg: msg, categories: categories})
+
+    } catch (err) {
+        console.error("Admin page error:", err);
+        res.render("admin", {
+        msg: "Failed to load categories",
+        categories: []
+        });
+  }
 })
 
-app.post("/upload",upload.single("product-img"), (req, res) => {
-    const productDetail = {
-        category: req.body.category,
-        name: req.body["product-name"],
-        description: req.body["product-des"],
-        size: req.body.size,
-        price: req.body["product-price"],
-        image: '/uploads/' + req.file.filename
-    };
-    productDetails.push(productDetail);
+app.post("/new-category", async (req, res) => {
+  const { category } = req.body;
 
-    console.log(productDetail);
+  try {
+    if (!category) {
+      return res.redirect("/admin?msg=Input a category");
+    }
 
-    res.redirect("/product");
+    await db.query(
+      "INSERT INTO categories (name) VALUES ($1)",
+      [category.trim()]
+    );
+
+    res.redirect("/admin");
+  } catch (err) {
+    console.error("Unable to add category:", err);
+    res.redirect("/admin?msg=Something went wrong");
+  }
+});
+
+
+app.post("/upload", upload.fields([
+    {name: "product-img", maxCount: 1},
+    {name: "product-img-by-color", maxCount: 5}
+]), async(req, res) => {
+
+    //products table data
+    const categoryId = req.body.category;
+    const pName = req.body["product-name"];
+    const description = req.body["product-des"];
+    const price = parseFloat(req.body["product-price"]) || 0; //decimal, numeriac(10,2) in db
+
+    //product_variants table data
+        //without color-image-stock vaiance
+    const stock = parseInt(req.body.stock) || 0; //INT, int in db
+    const noVarianceImage = (req.files["product-img"] && req.files["product-img"].length > 0) ? '/uploads/' + req.files["product-img"][0].filename : null; //string
+    const size = (Array.isArray(req.body.size) ? (req.body.size).join(",") : req.body.size) || ""; //returns an array, optional size
+    
+    
+        //with color-image-stock variance
+    const colorArray = [].concat(req.body.color || []); //array of string/strings
+    const color = colorArray.length ? colorArray : ""; //"" if empty
+    const varianceImage = req.files["product-img-by-color"] ? req.files["product-img-by-color"].map(file => '/uploads/' + file.filename) : [] //array of strings/string
+    const stockByColor = [].concat(req.body["stock-by-color"] || []).map(n => parseInt(n)); //array of int
+;
+
+    //products table query
+    let productId;
+    try {
+        const result = await db.query("INSERT INTO products (name, description, category_id, price) VALUES ($1, $2, $3, $4) RETURNING id", [pName, description, categoryId, price]);
+        productId = result.rows[0].id;
+    } catch (err) {
+        console.log("Insert failed:", err.message);
+        
+        try {
+            const existing = await db.query("SELECT id FROM products WHERE name = $1 AND description = $2 AND category_id = $3 AND price = $4", [pName, description, categoryId, price]);
+            
+            if (!existing.rows[0]) {
+                console.log("No existing product found");
+                return res.status(500).send("Database error: product not found");
+            }
+            
+            productId = existing.rows[0].id;
+        } catch (selectErr) {
+            console.log("Select failed:", selectErr.message);
+            return res.status(500).send("Database error");
+        }
+    }
+
+    if (!productId) {
+        console.log("productId is still undefined!");
+        return res.status(500).send("Failed to get product ID");
+    }
+        
+
+        //product_variants table query
+        if (color) {
+
+            if (color.length !== varianceImage.length || color.length !== stockByColor.length) {
+                return res.status(400).send('Mismatch: number of colors, images, and stocks must match');
+            }
+            try {
+                for (let i = 0; i < color.length; i++) {
+                    await db.query("INSERT INTO product_variants (product_id, size, color, image, stock) VALUES ($1, $2, $3, $4, $5) RETURNING id", [productId, size, color[i], varianceImage[i], stockByColor[i]])
+                }
+                return res.redirect("/product")
+            } catch (err) {
+                console.log(err)
+                return res.status(400).send("error adding product details to database, check if product already exist");
+            }
+            
+        } else {
+            try {
+                await db.query("INSERT INTO product_variants (product_id, size, color, image, stock) VALUES ($1, $2, $3, $4, $5) RETURNING id", [productId, size, color, noVarianceImage, stock])
+                return res.redirect("/product")
+            } catch(err) {
+                console.log(err)
+                return res.status(400).send("error adding product details to database");
+            }
+
+        }
+   
+    
+
+    
+    
 })
 
 passport.use(new Strategy (
@@ -191,13 +353,15 @@ passport.use(new Strategy (
     }
 }))
 
-//only id is sent to the cookie
+
 passport.serializeUser((user, done) => {
+    //only id is sent to the cookie
     done(null, user.id);
 })
 
-//only the id and email are stored in req.user
+
 passport.deserializeUser(async (id, done) => {
+    //only the id and email are stored in req.user
     try {
         const result = await db.query('SELECT id, email FROM users WHERE id = $1', [id]);
         
