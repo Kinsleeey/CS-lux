@@ -47,8 +47,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+
 
 app.set('view engine', 'ejs');
 app.set('views', './views')
@@ -56,6 +58,45 @@ app.set('views', './views')
 const saltRounds = 3;
 
 async function getProductDetails(id) {
+
+    try {
+        const result = await db.query(`
+            SELECT 
+                p.id,
+                p.name,
+                p.description,
+                c.name AS category,
+                p.price
+                FROM products p
+                JOIN categories c ON p.category_id = c.id
+                WHERE p.id = $1
+        `, [id])
+            return result.rows;
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+};
+async function getVariantDetails(productId) {
+
+    try {
+        const result = await db.query(`
+            SELECT 
+                pv.size,
+                pv.color,
+                pv.image,
+                pv.stock
+                FROM product_variants pv
+                WHERE pv.product_id = $1
+        `, [productId])
+            return result.rows;
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+};
+
+/*async function getProductDetails(id) {
     try {
         const result = await db.query(`
             SELECT 
@@ -87,22 +128,73 @@ async function getProductDetails(id) {
                 price
             }
         */
-        return result.rows;
+      /*  return result.rows;
     } catch (err) {
         console.error(err);
         return null;  // or throw error, or return []
     }
-}
+}*/
 
-app.get("/", (req, res) => {
-    res.render("index.ejs")
+app.get("/", async(req, res) => {
+    if(req.user) {
+        console.log("Logged in")
+    } else {
+        console.log("Not Logged in")
+    }
+    try {
+        const result1 = await db.query("SELECT * FROM categories");
+        const categories =  result1.rows;
+
+        const result2 = await db.query(
+                `SELECT 
+                    p.id,
+                    p.name,
+                    p.price,
+                    c.name AS category,
+                    (SELECT image 
+                    FROM product_variants 
+                    WHERE product_id = p.id 
+                    ORDER BY id 
+                    LIMIT 1) as image
+                    FROM products p
+                    JOIN categories c ON p.category_id = c.id`
+        );
+        const products = result2.rows; //array of object/objects
+
+
+        if(products.length === 0) {
+            return res.render("index.ejs", { msg: "No Products Available", products: [], categories })
+        }
+
+        res.render("index.ejs", { msg: "", products, categories });
+
+    } catch(err) {
+        console.log(err)
+        res.status(404).send("error retrieving Categories/product")
+
+    }
+
 })
 
 app.get("/product", async(req, res) => {
 
     try {
-        const result = await db.query("SELECT * FROM products");
+        const result = await db.query(
+            `SELECT 
+                p.id,
+                p.name,
+                p.price,
+                c.name AS category,
+                (SELECT image 
+                FROM product_variants 
+                WHERE product_id = p.id 
+                ORDER BY id 
+                LIMIT 1) as image
+                FROM products p
+                JOIN categories c ON p.category_id = c.id`
+        );
         const products = result.rows; //array of object/objects
+        
         if(products.length === 0) {
             return res.render("products.ejs", { msg: "No Products Available", products: [] })
         }
@@ -117,21 +209,17 @@ app.get("/product", async(req, res) => {
 
 })
 
-app.get("/cart", (req, res) => {
-//more stuff
-        res.render("cart.ejs") 
-})
 
 app.get("/sign-in", (req, res) => {
     res.render("sign-in.ejs", {msg: ""})
 })
 
 app.post("/login", 
-     passport.authenticate('local', {
+    passport.authenticate('local', {
         successRedirect: '/',
         failureRedirect: '/sign-in',
     })
-)
+);
 
 app.get("/sign-up", (req, res) => {
     res.render("sign-up", { msg: "" })
@@ -173,13 +261,84 @@ app.post("/register", async(req, res) => {
 
 });
 
-app.get("/info/:id", async(req, res) => {
+app.get("/info/:category/:id", async(req, res) => {
     const specificId = req.params.id;
+    const specifiedCategory = req.params.category;
 
-    const details = await getProductDetails(specificId); //array of object/objects
-        
-    res.render("info.ejs", { details })
+    const result = await db.query(
+            `SELECT 
+                p.id,
+                p.name,
+                p.price,
+                (SELECT image 
+                FROM product_variants 
+                WHERE product_id = p.id 
+                ORDER BY id 
+                LIMIT 1) as image
+                FROM products p
+                JOIN categories c ON p.category_id = c.id
+                WHERE c.name = $1`, [specifiedCategory]
+    );
+
+    const relatedProducts = result.rows;
+
+    const product = await getProductDetails(specificId); // Single product object
+    const variants = await getVariantDetails(specificId); // Array of variants
+    
+
+
+    res.render("info.ejs", { product: product[0], variants, relatedProducts })
 })
+
+app.get("/cart", async(req, res) => {
+    if (req.user) {
+        const result = await db.query()
+    }
+    res.render("cart.ejs") 
+})
+
+app.get("/cart/count", async(req, res) => {
+    let count = 0;
+    
+    if (req.user) {
+        const userId = req.user.id;
+        const result = await db.query("SELECT COUNT(*) FROM cart WHERE user_id = $1", [userId]);
+        count = parseInt(result.rows[0].count);
+    } else if (req.session.cart) {
+        count = req.session.cart.length;
+    }
+    
+    res.json({ count: count });
+});
+
+app.post("/cart/:id", async(req, res) => {
+    const productId = req.params.id;
+    
+    // Initialize session cart if it doesn't exist
+    if (!req.session.cart) {
+        req.session.cart = [];
+    }
+    
+    let count = 0;
+    
+    if (req.user) {
+        // User is logged in - save to database
+        const userId = req.user.id;
+        await db.query("INSERT INTO cart(user_id, product_id) VALUES ($1, $2)", [userId, productId]);
+        
+        // Get cart count from database
+        const result = await db.query("SELECT COUNT(*) FROM cart WHERE user_id = $1", [userId]);
+        count = parseInt(result.rows[0].count);
+    } else {
+        // User not logged in - save to session
+        req.session.cart.push({product_id: productId, qty: 1});
+        count = req.session.cart.length;
+    }
+    
+    console.log("Cart count:", count);
+    console.log(req.session.cart)
+    res.json({ success: true, count: count });
+});
 
 app.get("/checkout", (req, res) => {
     res.render("checkout.ejs")
