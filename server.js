@@ -10,15 +10,14 @@ import bcrypt from "bcrypt"
 import env from "dotenv"
 
 env.config();
-const db = new pg.Client({
+const { Pool } = pg;
+const db = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
 });
-
-db.connect();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -57,6 +56,25 @@ app.set('views', './views')
 
 const saltRounds = 3;
 
+async function getProductPreviewDetails() {
+    try {
+        const result = await db.query(`
+            SELECT 
+                p.id,
+                p.name,
+                p.price,
+                c.name AS category,
+                p.image
+                FROM products p
+                JOIN categories c ON p.category_id = c.id
+            `)
+            return result.rows;
+        } catch (err) {
+            console.error(err);
+            return null;
+        }
+};
+
 async function getProductDetails(id) {
 
     try {
@@ -66,7 +84,8 @@ async function getProductDetails(id) {
                 p.name,
                 p.description,
                 c.name AS category,
-                p.price
+                p.price,
+                p.image
                 FROM products p
                 JOIN categories c ON p.category_id = c.id
                 WHERE p.id = $1
@@ -77,14 +96,14 @@ async function getProductDetails(id) {
             return null;
         }
 };
+
 async function getVariantDetails(productId) {
 
     try {
         const result = await db.query(`
             SELECT 
+                pv.id,
                 pv.size,
-                pv.color,
-                pv.image,
                 pv.stock
                 FROM product_variants pv
                 WHERE pv.product_id = $1
@@ -96,48 +115,42 @@ async function getVariantDetails(productId) {
         }
 };
 
-/*async function getProductDetails(id) {
+/*
+async function getProductInfo(id) {
     try {
         const result = await db.query(`
             SELECT 
                 p.id,
                 p.name,
+                p.price
                 p.description,
                 c.name AS category,
+                (SELECT image 
+                FROM product_variants 
+                WHERE product_id = p.id 
+                ORDER BY id 
+                LIMIT 1) as image
                 pv.size,
                 pv.color,
-                pv.image,
-                pv.stock,
-                pv.price
+                pv.stock
             FROM products p
             JOIN categories c ON p.category_id = c.id
             JOIN product_variants pv ON p.id = pv.product_id
             WHERE p.id = $1
         `, [id]);
-        /*
-            returns array of object/objects.
-            object = {
-                id:
-                name:
-                description:
-                category:
-                size:
-                color:
-                image:
-                stock:
-                price
-            }
-        */
-      /*  return result.rows;
+        
+        return result.rows;
     } catch (err) {
         console.error(err);
         return null;  // or throw error, or return []
     }
-}*/
+}
+*/
 
 app.get("/", async(req, res) => {
     if(req.user) {
         console.log("Logged in")
+        console.log(req.user);
     } else {
         console.log("Not Logged in")
     }
@@ -145,21 +158,8 @@ app.get("/", async(req, res) => {
         const result1 = await db.query("SELECT * FROM categories");
         const categories =  result1.rows;
 
-        const result2 = await db.query(
-                `SELECT 
-                    p.id,
-                    p.name,
-                    p.price,
-                    c.name AS category,
-                    (SELECT image 
-                    FROM product_variants 
-                    WHERE product_id = p.id 
-                    ORDER BY id 
-                    LIMIT 1) as image
-                    FROM products p
-                    JOIN categories c ON p.category_id = c.id`
-        );
-        const products = result2.rows; //array of object/objects
+        
+        const products = await getProductPreviewDetails();
 
 
         if(products.length === 0) {
@@ -179,36 +179,78 @@ app.get("/", async(req, res) => {
 app.get("/product", async(req, res) => {
 
     try {
-        const result = await db.query(
-            `SELECT 
+        const result1 = await db.query("SELECT * FROM categories");
+        const categories =  result1.rows;
+
+        const result = await db.query(`
+            SELECT 
                 p.id,
                 p.name,
-                p.price,
-                c.name AS category,
-                (SELECT image 
-                FROM product_variants 
-                WHERE product_id = p.id 
-                ORDER BY id 
-                LIMIT 1) as image
+                p.image,
+                p.price
                 FROM products p
-                JOIN categories c ON p.category_id = c.id`
-        );
-        const products = result.rows; //array of object/objects
+                WHERE category_id = 1
+            `, )
         
-        if(products.length === 0) {
-            return res.render("products.ejs", { msg: "No Products Available", products: [] })
+        const products = result.rows;
+
+        let variants = [];
+        const varArr = products.map(product => product.id);
+
+        for (let v of varArr) {
+            const variant = await getVariantDetails(v);    
+            variants.push(variant);
         }
-        res.render("product.ejs", { msg: "", products: products });
+
+        if(products.length === 0) {
+            return res.render("product.ejs", { msg: "No Products Available", products: [], categories, variants })
+        }
+
+        res.render("product.ejs", { msg: "", products, categories, variants });
 
     } catch(err) {
         console.log(err)
         res.status(404).send("error retrieving products info")
 
     }
-    
-
 })
 
+app.get("/p-cat/:id", async(req, res) => {
+    const specificId = req.params.id;
+    const result1 = await db.query("SELECT * FROM categories");
+        const categories =  result1.rows;
+
+    const result = await db.query(`
+        SELECT 
+            p.id,
+            p.name,
+            p.price,
+            p.image,
+            p.price
+            FROM products p
+            WHERE category_id = $1
+        `, [specificId])
+
+    const products = result.rows;
+
+    console.log(products)
+
+    let variants = [];
+    const varArr = products.map(product => product.id);
+    
+
+    for (let v of varArr) {
+        const variant = await getVariantDetails(v);    
+        variants.push(variant);
+    }
+    
+    console.log(variants);
+    if(products.length === 0) {
+        return res.render("product.ejs", { msg: "No Products Available", products: [], categories })
+    }
+    res.render("product.ejs", { msg: "", products, categories, variants });
+
+})
 
 app.get("/sign-in", (req, res) => {
     res.render("sign-in.ejs", {msg: ""})
@@ -270,11 +312,7 @@ app.get("/info/:category/:id", async(req, res) => {
                 p.id,
                 p.name,
                 p.price,
-                (SELECT image 
-                FROM product_variants 
-                WHERE product_id = p.id 
-                ORDER BY id 
-                LIMIT 1) as image
+                p.image
                 FROM products p
                 JOIN categories c ON p.category_id = c.id
                 WHERE c.name = $1`, [specifiedCategory]
@@ -282,19 +320,35 @@ app.get("/info/:category/:id", async(req, res) => {
 
     const relatedProducts = result.rows;
 
-    const product = await getProductDetails(specificId); // Single product object
-    const variants = await getVariantDetails(specificId); // Array of variants
+    const product = await getProductDetails(specificId); 
+    const variants = await getVariantDetails(specificId); 
+    console.log(product)
+    console.log(variants)
     
-
-
     res.render("info.ejs", { product: product[0], variants, relatedProducts })
 })
 
 app.get("/cart", async(req, res) => {
-    if (req.user) {
-        const result = await db.query()
-    }
-    res.render("cart.ejs") 
+    const userId = req.user.id;
+
+    const result = await db.query(`
+            SELECT 
+                p.name,
+                p.image,
+                p.price,
+                pv.id,
+                pv.size,
+                pv.stock,
+                c.qty
+                FROM cart c
+                JOIN product_variants pv ON c.variant_id = pv.id
+                JOIN products p ON pv.product_id = p.id
+                WHERE c.user_id = $1`,
+            [userId]);
+
+    const cartedProducts = result.rows;
+
+    res.render("cart.ejs", { cartedProducts }); 
 })
 
 app.get("/cart/count", async(req, res) => {
@@ -311,9 +365,12 @@ app.get("/cart/count", async(req, res) => {
     res.json({ count: count });
 });
 
-app.post("/cart/:id", async(req, res) => {
-    const productId = req.params.id;
-    
+app.post("/cart/:id/:qty/:stock", async(req, res) => {
+
+     const variantId = req.params.id;
+     const qty = req.params.qty;
+     const stock = req.params.stock;
+
     // Initialize session cart if it doesn't exist
     if (!req.session.cart) {
         req.session.cart = [];
@@ -324,19 +381,114 @@ app.post("/cart/:id", async(req, res) => {
     if (req.user) {
         // User is logged in - save to database
         const userId = req.user.id;
-        await db.query("INSERT INTO cart(user_id, product_id) VALUES ($1, $2)", [userId, productId]);
         
+        const cartResult = await db.query(
+            `SELECT qty FROM cart WHERE user_id = $1 AND variant_id = $2`,
+            [userId, variantId]
+        );
+
+        const currentQty = cartResult.rows.length > 0 ? cartResult.rows[0].qty : 0;
+
+        // Check if adding qty would exceed stock
+        if (parseInt(currentQty) + parseInt(qty) > parseInt(stock)) {
+            return res.status(409).json({ message: 'Product out of stock' });
+        }
+
+        await db.query(`
+                INSERT INTO cart (user_id, variant_id, qty)
+                VALUES ($1, $2, $3)
+                ON CONFLICT (user_id, variant_id)
+                DO UPDATE SET qty = cart.qty + EXCLUDED.qty
+            `, [userId, variantId, qty])
+
         // Get cart count from database
         const result = await db.query("SELECT COUNT(*) FROM cart WHERE user_id = $1", [userId]);
         count = parseInt(result.rows[0].count);
+
     } else {
         // User not logged in - save to session
-        req.session.cart.push({product_id: productId, qty: 1});
+        const existing = req.session.cart.find(item => item.variant_id === variantId);
+        if (existing) {
+            existing.qty = parseInt(existing.qty) + parseInt(qty);
+        } else {
+            req.session.cart.push({ variant_id: variantId, qty: parseInt(qty) });
+        }
         count = req.session.cart.length;
     }
     
     console.log("Cart count:", count);
     console.log(req.session.cart)
+    res.json({ success: true, count: count });
+});
+
+app.patch("/cart/:id", async(req, res) => {
+    const variantId = req.params.id;
+    let count = 0;
+
+    if (req.user) {
+        const userId = req.user.id;
+
+        // Get current qty
+        const cartResult = await db.query(
+            `SELECT qty FROM cart WHERE user_id = $1 AND variant_id = $2`,
+            [userId, variantId]
+        );
+
+        const currentQty = cartResult.rows[0].qty;
+
+        if (currentQty <= 1) {
+            // Remove from cart if qty is 1
+            await db.query(
+                `DELETE FROM cart WHERE user_id = $1 AND variant_id = $2`,
+                [userId, variantId]
+            );
+        } else {
+            // Reduce qty by 1
+            await db.query(
+                `UPDATE cart SET qty = qty - 1 WHERE user_id = $1 AND variant_id = $2`,
+                [userId, variantId]
+            );
+        }
+
+        const result = await db.query("SELECT COUNT(*) FROM cart WHERE user_id = $1", [userId]);
+        count = parseInt(result.rows[0].count);
+
+    } else {
+        const existing = req.session.cart.find(item => item.variant_id === variantId);
+
+        if (existing) {
+            if (existing.qty <= 1) {
+                req.session.cart = req.session.cart.filter(item => item.variant_id !== variantId);
+            } else {
+                existing.qty -= 1;
+            }
+        }
+        count = req.session.cart.length;
+    }
+
+    res.json({ success: true, count: count });
+});
+
+app.delete("/cart/:id", async(req, res) => {
+    const variantId = req.params.id;
+    let count = 0;
+
+    if (req.user) {
+        const userId = req.user.id;
+
+        await db.query(
+            `DELETE FROM cart WHERE user_id = $1 AND variant_id = $2`,
+            [userId, variantId]
+        );
+
+        const result = await db.query("SELECT COUNT(*) FROM cart WHERE user_id = $1", [userId]);
+        count = parseInt(result.rows[0].count);
+
+    } else {
+        req.session.cart = req.session.cart.filter(item => item.variant_id !== variantId);
+        count = req.session.cart.length;
+    }
+
     res.json({ success: true, count: count });
 });
 
@@ -348,8 +500,90 @@ app.get("/track-order", (req, res) => {
     res.render("track-order.ejs")
 })
 
-app.get("/wishlist", (req, res) => {
-    res.render("wishlist.ejs")
+app.get("/wishlist", async(req, res) => {
+    // add this at the top of the route
+    if (!req.user) return res.redirect("/sign-in");
+    try {
+        const result = await db.query(`
+            SELECT 
+                p.id,
+                p.name,
+                p.image,
+                p.price
+                FROM wishlist w
+                JOIN products p ON w.product_id = p.id
+                WHERE w.user_id = $1
+            `, [req.user.id] );
+        
+        const products = result.rows;
+
+        let variants = [];
+        const varArr = products.map(product => product.id);
+
+        for (let v of varArr) {
+            const variant = await getVariantDetails(v);    
+            variants.push(variant);
+        }
+
+        if(products.length === 0) {
+            return res.render("wishlist.ejs", { msg: "No Products Available", products: [], variants })
+        }
+
+        return res.render("wishlist.ejs", { msg: "", products, variants });
+
+    } catch(err) {
+        console.log(err)
+        res.status(404).send("error retrieving products info")
+
+    }
+})
+
+app.post("/wishlist/:id", async (req, res) => {
+    const productId = req.params.id;
+
+    if (!req.session.wishlist) {
+        req.session.wishlist = [];
+    }
+    
+    if (req.user) {
+        const userId = req.user.id;
+
+        try {
+            await db.query(`INSERT INTO wishlist (user_id, product_id) VALUES ($1, $2)`, [userId, productId]);
+            res.json({ success: true, message: "Product added to wishlist" });
+        } catch (err) {
+            console.log(err);
+            res.json({ success: false, message: "An error occured" });
+        }
+    } else {
+        const existing = req.session.wishlist.find(item => item.product_id === productId);
+
+        if (existing) {
+            res.json({ success: true, message: "Product already exists in wishlist" });
+        } else {
+            req.session.wishlist.push({ product_id: productId }); 
+            res.json({ success: true, message: "Product added to wishlist" });
+        }
+    }
+});
+
+app.delete("/wishlist/:id", async(req, res) => {
+    const productId = req.params.id;
+
+    if (req.user) {
+        const userId = req.user.id;
+        try {
+            await db.query(`DELETE FROM wishlist WHERE user_id = $1 AND product_id = $2`,[userId, productId]);
+            res.json({ success: true, message: "Product deleted from wishlist" });
+        } catch(err) {
+            console.log(err)
+            res.json({ success: false, message: "An error occured" });
+        }
+
+    } else {
+        res.redirect("/sign-in")
+    }
+
 })
 
 app.get("/edit-profile", (req, res) => {
@@ -396,92 +630,107 @@ app.post("/new-category", async (req, res) => {
   }
 });
 
+app.post("/upload", upload.single("product-img"), async(req, res) => {
+    //product details
+    const categoryId = req.body["category-id"];
+    const productName = req.body["product-name"];
+    const productDes = req.body["product-des"];
+    const productPrice = req.body["product-price"];
+    const imageUrl = `/uploads/${req.file.filename}`;
+    const singleStock = req.body["single-stock"] || "";
 
-app.post("/upload", upload.fields([
-    {name: "product-img", maxCount: 1},
-    {name: "product-img-by-color", maxCount: 5}
-]), async(req, res) => {
+    console.log(categoryId);
+    console.log(productName);
+    console.log(productDes);
+    console.log(productPrice);
+    console.log(imageUrl);
+    console.log(singleStock);
 
-    //products table data
-    const categoryId = req.body.category;
-    const pName = req.body["product-name"];
-    const description = req.body["product-des"];
-    const price = parseFloat(req.body["product-price"]) || 0; //decimal, numeriac(10,2) in db
-
-    //product_variants table data
-        //without color-image-stock vaiance
-    const stock = parseInt(req.body.stock) || 0; //INT, int in db
-    const noVarianceImage = (req.files["product-img"] && req.files["product-img"].length > 0) ? '/uploads/' + req.files["product-img"][0].filename : null; //string
-    const size = (Array.isArray(req.body.size) ? (req.body.size).join(",") : req.body.size) || ""; //returns an array, optional size
-    
-    
-        //with color-image-stock variance
-    const colorArray = [].concat(req.body.color || []); //array of string/strings
-    const color = colorArray.length ? colorArray : ""; //"" if empty
-    const varianceImage = req.files["product-img-by-color"] ? req.files["product-img-by-color"].map(file => '/uploads/' + file.filename) : [] //array of strings/string
-    const stockByColor = [].concat(req.body["stock-by-color"] || []).map(n => parseInt(n)); //array of int
-;
-
-    //products table query
-    let productId;
+    let productId
+    //product query
     try {
-        const result = await db.query("INSERT INTO products (name, description, category_id, price) VALUES ($1, $2, $3, $4) RETURNING id", [pName, description, categoryId, price]);
-        productId = result.rows[0].id;
+        const result1 = await db.query(`
+            INSERT INTO products (name, description, category_id, price, image)
+            VALUES ($1, $2, $3, $4, $5)
+            RETURNING id`,
+            [productName, productDes, categoryId, productPrice, imageUrl]
+        );
+        productId = result1.rows[0].id;
     } catch (err) {
-        console.log("Insert failed:", err.message);
-        
-        try {
-            const existing = await db.query("SELECT id FROM products WHERE name = $1 AND description = $2 AND category_id = $3 AND price = $4", [pName, description, categoryId, price]);
-            
-            if (!existing.rows[0]) {
-                console.log("No existing product found");
-                return res.status(500).send("Database error: product not found");
+        //any other error
+        console.log("Insert failed:", err);
+
+        //duplicate error
+        if (err.code === '23505') { //check for duplicate
+            console.log("Duplicate entry, fetching existing product...")
+            try {
+                const existing = await db.query(
+                    `SELECT id FROM products 
+                    WHERE name = $1 AND category_id = $2`,
+                    [productName, categoryId]
+                );
+                if (existing.rowCount > 0) {
+                    productId = existing.rows[0].id;
+                }
+            } catch (fetchErr) {
+                console.log("Failed to fetch existing product:", fetchErr)
+                return res.redirect("/admin?msg=Issue adding product to database") 
             }
-            
-            productId = existing.rows[0].id;
-        } catch (selectErr) {
-            console.log("Select failed:", selectErr.message);
-            return res.status(500).send("Database error");
         }
     }
 
     if (!productId) {
         console.log("productId is still undefined!");
-        return res.status(500).send("Failed to get product ID");
+        return res.redirect("/admin?msg=Issue adding product to database")
     }
-        
 
-        //product_variants table query
-        if (color) {
 
-            if (color.length !== varianceImage.length || color.length !== stockByColor.length) {
-                return res.status(400).send('Mismatch: number of colors, images, and stocks must match');
-            }
-            try {
-                for (let i = 0; i < color.length; i++) {
-                    await db.query("INSERT INTO product_variants (product_id, size, color, image, stock) VALUES ($1, $2, $3, $4, $5) RETURNING id", [productId, size, color[i], varianceImage[i], stockByColor[i]])
-                }
-                return res.redirect("/product")
-            } catch (err) {
-                console.log(err)
-                return res.status(400).send("error adding product details to database, check if product already exist");
-            }
-            
-        } else {
-            try {
-                await db.query("INSERT INTO product_variants (product_id, size, color, image, stock) VALUES ($1, $2, $3, $4, $5) RETURNING id", [productId, size, color, noVarianceImage, stock])
-                return res.redirect("/product")
-            } catch(err) {
-                console.log(err)
-                return res.status(400).send("error adding product details to database");
+    //variants details
+    const sizeArray = [].concat(req.body.sizes || []); //['S', 'M', 'XL'] or ['S'] or []
+    const stocks = [].concat(req.body.stock || []); //['10', '25', '5'] OR ['10'] or []
+    const size = sizeArray.length ? sizeArray : ""; //checker for availability of size(variant)
+    console.log(size);
+    console.log(stocks)
+
+    //variants query 
+    if (size) {
+        if (size.length !== stocks.length) {
+                return res.redirect("/admin?msg=Mismatch: number of sizes, and stocks must match")
             }
 
+        try {
+            for (let i = 0; i < size.length; i++) {
+                await db.query(`
+                    INSERT INTO product_variants (product_id, size, stock)
+                    VALUES ($1, $2, $3)
+                    RETURNING id`,
+                    [productId, size[i], stocks[i]]
+                );
+            } 
+            console.log("sucess")
+            res.redirect("/admin?msg=Product added sucessfully")
+        } catch (err) {
+            console.log(err);
+            return res.redirect("/admin?msg=Issue adding product to database")
         }
-   
-    
+          
+    } else {
+        try {
+            await db.query(`
+                INSERT INTO product_variants (product_id, size, stock)
+                VALUES ($1, $2, $3)
+                RETURNING id`,
+                [productId, size, singleStock]
+            );
+            console.log("sucess")
+            res.redirect("/admin?msg=Product added sucessfully")
+        } catch (err) {
+            console.log(err);
+            return res.redirect("/admin?msg=Issue adding product to database")
+        }
 
-    
-    
+    }
+
 })
 
 passport.use(new Strategy (

@@ -724,9 +724,12 @@ header.scrolled .main-header {
     height: fit-content;
     max-height: calc(100vh - 4rem);
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
-.p-page-nav p {
+.p-page-nav a {
+    text-decoration: none;
     font-size: 0.938rem;
     color: var(--color-text);
     padding: 0.75rem 1rem;
@@ -736,12 +739,12 @@ header.scrolled .main-header {
     margin-bottom: 0.5rem;
 }
 
-.p-page-nav p:hover {
+.p-page-nav a:hover {
     background: var(--color-primary-light);
     color: var(--color-primary);
 }
 
-.p-page-nav p.active {
+.p-page-nav a.active {
     background: var(--color-primary);
     color: var(--color-white);
     font-weight: 600;
@@ -958,23 +961,20 @@ header.scrolled .main-header {
 }
 
 /* Size and Color Selection */
-.a-size,
-.a-color {
+.a-size{
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
 
-.a-size h4,
-.a-color h4 {
+.a-size h4{
     font-size: 0.938rem;
     font-weight: 600;
     color: var(--color-dark);
     margin-bottom: 0.5rem;
 }
 
-.a-size > div:last-child,
-.a-color > div:last-child {
+.a-size > div:last-child {
     display: flex;
     gap: 0.75rem;
     flex-wrap: wrap;
@@ -3015,6 +3015,111 @@ footer {
 .bottom-footer > div > div:hover p {
     color: var(--color-primary);
 }
+/*Pop up*/
+        .xyz-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            z-index: 150;
+        }
+
+        .xyz-overlay.active { display: flex; }
+
+        .xyz-popup {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .xyz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .xyz-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-dark);
+        }
+
+        .xyz-close {
+            background: var(--color-bg-gray);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.25rem;
+        }
+
+        .xyz-size-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 2px solid var(--color-border);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+
+        .xyz-size-name {
+            font-weight: 600;
+            color: var(--color-dark);
+            font-size: 1rem;
+        }
+
+        .xyz-qty-control {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .xyz-qty-btn {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--color-border);
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .xyz-qty-btn:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .xyz-qty-value {
+            min-width: 30px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--color-dark);
+        }
+
+        .xyz-add-btn {
+            width: 100%;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .xyz-add-btn:hover { opacity: 0.9; }
 
 /* ==========================================================================
    RESPONSIVE DESIGN
@@ -3188,9 +3293,10 @@ footer {
         overflow-x: auto;
         padding: 1rem;
         gap: 0.5rem;
+        flex-direction: row;
     }
     
-    .p-page-nav p {
+    .p-page-nav a {
         white-space: nowrap;
         margin-bottom: 0;
     }

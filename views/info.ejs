@@ -2,9 +2,8 @@
 
 <section class="project-info">
     <div class="info-card">
-        <% if (variants && variants.length > 0) { %>
             <div class="info-card-img">
-                <img id="product-image-in-info" src="<%= variants[0].image %>" alt="<%= product.name %>">
+                <img id="product-image-in-info" src="<%= product.image %>" alt="<%= product.name %>">
             </div>
             <div class="info-card-writeup">
                 <a href="/product" class="close-x">
@@ -12,42 +11,28 @@
                 </a>
                 <h4><%= product.name %></h4>
                 <p><%= product.description %></p>
-                <% if(variants[0].color) {%>
-                    <div class="icw-color">
-                        <p>Colors</p>
-                        <div class="a-color flex-c gap05">
-                            <% variants.forEach(variant => { %>
-                                <button onclick="changeImage('<%= variant.image %>')" 
-                                        data-color="<%= variant.color %>">
-                                    <%= variant.color %>
-                                </button>
-                            <% }); %>
-                        </div>
-                    </div>
-                <% } %>
-                <% if(variants[0].color) {%>
+                
+                <% if(variants.length > 0 && variants[0].size !== "") {%>
                     <div class="icw-size">
                         <p>Size Available</p>
                         <div class="a-size flex-c gap025">
-                            <% const sizes = (variants[0].size).split(",") %>
-                            <% sizes.forEach(size => { %>
+                            <% variants.forEach(variant => { %>
                                 <label class="size-checkbox">
-                                    <input type="checkbox" name="size" value="<%= size %>" id="size-<%= size %>">
-                                    <span class="checkmark"><%= size %></span>
+                                    <input type="checkbox" name="size" value="<%= variant.size %>" id="size-<%= variant.size %>">
+                                    <span class="checkmark"><%= variant.size %></span>
                                 </label>
                             <% }) %>
                         </div>
                     </div>
+                <% } else { %>
+
                 <% } %>
+
                 <h4>#<%= product.price %></h4>
-                
+
                 <button onclick="addToCart(<%= product.id %>); return false;">Add to cart</button>
                 <button>Add to Favourite</button>
             </div>
-        <% } else { %>
-            <img src="/default-product.jpg" alt="<%= product.name %>">
-            <p>No variants available</p>
-        <% } %>
     </div>
     <div class="product-center">
             <div class="product-sect">
