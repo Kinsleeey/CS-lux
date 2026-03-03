@@ -4,8 +4,10 @@
     <div class="fav">
         <h3>My Archieve</h3>
         <div class="fav-center">
+            <% if (!products) { %>
+                <h4>Wishlist is empty</h4>
+            <% } %>
             <% for (let i = 0; i < products.length; i++) { %>
-
                     <div class="item">
                         <div class="item-img">
                             <a href="#" onclick="removeFromWishlist(<%= products[i].id %>); return false;">
@@ -57,8 +59,6 @@
                         <!-- <button class="xyz-add-btn" onclick="addToCart(<%= products[i].id %>)">Add to Cart</button> -->
                     </div>
                 </div>
-
-
             <% } %>
         </div>
     </div>

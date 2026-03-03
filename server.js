@@ -8,8 +8,10 @@ import passport from "passport";
 import { Strategy } from "passport-local";
 import bcrypt from "bcrypt"
 import env from "dotenv"
+import axios from "axios";
 
 env.config();
+
 const { Pool } = pg;
 const db = new Pool({
   user: process.env.DB_USER,
@@ -18,7 +20,6 @@ const db = new Pool({
   password: process.env.DB_PASSWORD,
   port: process.env.DB_PORT,
 });
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/uploads/');
@@ -27,10 +28,16 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
-
 const upload = multer({ storage: storage });
 const app = express();
 const port = 3000;
+const saltRounds = 3;
+
+const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET_KEY;
+const paystackHeaders = {
+  Authorization: `Bearer ${PAYSTACK_SECRET}`,
+  "Content-Type": "application/json",
+};
 
 app.use(
   session({
@@ -38,42 +45,18 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: {
-        maxAge: 1000*60*60*24
+        maxAge: 1000*60*60*72
     }
   })
 );
-
 app.use(passport.initialize());
 app.use(passport.session());
-
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
-
 
 app.set('view engine', 'ejs');
 app.set('views', './views')
 
-const saltRounds = 3;
-
-async function getProductPreviewDetails() {
-    try {
-        const result = await db.query(`
-            SELECT 
-                p.id,
-                p.name,
-                p.price,
-                c.name AS category,
-                p.image
-                FROM products p
-                JOIN categories c ON p.category_id = c.id
-            `)
-            return result.rows;
-        } catch (err) {
-            console.error(err);
-            return null;
-        }
-};
 
 async function getProductDetails(id) {
 
@@ -103,6 +86,7 @@ async function getVariantDetails(productId) {
         const result = await db.query(`
             SELECT 
                 pv.id,
+                pv.product_id,
                 pv.size,
                 pv.stock
                 FROM product_variants pv
@@ -115,38 +99,6 @@ async function getVariantDetails(productId) {
         }
 };
 
-/*
-async function getProductInfo(id) {
-    try {
-        const result = await db.query(`
-            SELECT 
-                p.id,
-                p.name,
-                p.price
-                p.description,
-                c.name AS category,
-                (SELECT image 
-                FROM product_variants 
-                WHERE product_id = p.id 
-                ORDER BY id 
-                LIMIT 1) as image
-                pv.size,
-                pv.color,
-                pv.stock
-            FROM products p
-            JOIN categories c ON p.category_id = c.id
-            JOIN product_variants pv ON p.id = pv.product_id
-            WHERE p.id = $1
-        `, [id]);
-        
-        return result.rows;
-    } catch (err) {
-        console.error(err);
-        return null;  // or throw error, or return []
-    }
-}
-*/
-
 app.get("/", async(req, res) => {
     if(req.user) {
         console.log("Logged in")
@@ -157,16 +109,31 @@ app.get("/", async(req, res) => {
     try {
         const result1 = await db.query("SELECT * FROM categories");
         const categories =  result1.rows;
-
         
-        const products = await getProductPreviewDetails();
 
+        const result = await db.query(`
+            SELECT 
+                p.id,
+                p.name,
+                p.image,
+                p.price,
+                c.name AS category
+                FROM products p
+                JOIN categories c ON p.category_id = c.id
+            `, )
+        
+        const products = result.rows;
 
-        if(products.length === 0) {
-            return res.render("index.ejs", { msg: "No Products Available", products: [], categories })
+        let variants = [];
+        const productIdArr = products.map(product => product.id);
+
+        for (let productId of productIdArr) {
+            const variant = await getVariantDetails(productId);    
+            variants.push(variant);
         }
 
-        res.render("index.ejs", { msg: "", products, categories });
+
+        res.render("index.ejs", { msg: "", products, categories, variants });
 
     } catch(err) {
         console.log(err)
@@ -256,11 +223,29 @@ app.get("/sign-in", (req, res) => {
     res.render("sign-in.ejs", {msg: ""})
 })
 
-app.post("/login", 
-    passport.authenticate('local', {
-        successRedirect: '/',
-        failureRedirect: '/sign-in',
-    })
+app.post("/login",
+  passport.authenticate("local", { failureRedirect: "/sign-in", keepSessionInfo: true }),
+  async (req, res) => {
+
+    const cart = req.session.cart;
+
+    if (cart && cart.length > 0) {
+        for (let i = 0; i < cart.length; i++) {
+            await db.query(
+                `INSERT INTO cart (user_id, variant_id, qty) 
+                VALUES ($1, $2, $3)
+                ON CONFLICT (user_id, variant_id) 
+                DO UPDATE SET qty = cart.qty + EXCLUDED.qty`,
+                [req.user.id, cart[i].variant_id, cart[i].qty]
+            );
+        }
+        req.session.cart = [];
+    }
+
+    const redirectTo = req.session.returnTo || "/";
+    delete req.session.returnTo;
+    res.redirect(redirectTo);
+  }
 );
 
 app.get("/sign-up", (req, res) => {
@@ -286,14 +271,36 @@ app.post("/register", async(req, res) => {
         
         const newUser = insertResult.rows[0];
 
-        req.login(newUser, (err) => {
+        const cart = req.session.cart ? [...req.session.cart] : [];
+        const redirectUrl = req.session.returnTo;
+
+        req.login(newUser, async (err) => {
+
             if (err) {
                 console.error("Auto-login error:", err);
                 return res.render("sign-up", { 
                     msg: "Registration successful! Please login." 
                 });
             }
-            res.redirect("/");
+
+
+            if (cart && cart.length > 0) {
+                for (let i = 0; i < cart.length; i++) {
+                    await db.query(
+                        `INSERT INTO cart (user_id, variant_id, qty) 
+                        VALUES ($1, $2, $3)
+                        ON CONFLICT (user_id, variant_id) 
+                        DO UPDATE SET qty = cart.qty + EXCLUDED.qty`,
+                        [newUser.id, cart[i].variant_id, cart[i].qty]
+                    );
+                }
+                req.session.cart = [];
+            }
+
+            const redirectTo = redirectUrl || "/";
+            delete req.session.returnTo;
+            res.redirect(redirectTo);
+
         });
 
     } catch (err) {
@@ -329,6 +336,38 @@ app.get("/info/:category/:id", async(req, res) => {
 })
 
 app.get("/cart", async(req, res) => {
+
+    console.log(req.session.cart);
+
+    if(!req.user) {
+        const productsIncart = req.session.cart || [];
+        let cartedProducts = [];
+
+        for (let v of productsIncart) {
+
+            const result = await db.query(`
+                SELECT 
+                    p.name,
+                    p.image,
+                    p.price,
+                    pv.id,
+                    pv.size,
+                    pv.stock
+                    FROM product_variants pv
+                    JOIN products p ON pv.product_id = p.id
+                    WHERE pv.id = $1`,
+                [v.variant_id]
+            );
+
+            let actualResult = result.rows;
+            actualResult[0].qty = v.qty;
+            cartedProducts.push(actualResult[0]);
+            
+        }
+
+        return res.render("cart.ejs", { cartedProducts });
+    }
+
     const userId = req.user.id;
 
     const result = await db.query(`
@@ -389,7 +428,6 @@ app.post("/cart/:id/:qty/:stock", async(req, res) => {
 
         const currentQty = cartResult.rows.length > 0 ? cartResult.rows[0].qty : 0;
 
-        // Check if adding qty would exceed stock
         if (parseInt(currentQty) + parseInt(qty) > parseInt(stock)) {
             return res.status(409).json({ message: 'Product out of stock' });
         }
@@ -408,6 +446,7 @@ app.post("/cart/:id/:qty/:stock", async(req, res) => {
     } else {
         // User not logged in - save to session
         const existing = req.session.cart.find(item => item.variant_id === variantId);
+
         if (existing) {
             existing.qty = parseInt(existing.qty) + parseInt(qty);
         } else {
@@ -493,7 +532,14 @@ app.delete("/cart/:id", async(req, res) => {
 });
 
 app.get("/checkout", (req, res) => {
-    res.render("checkout.ejs")
+  if (req.isAuthenticated()) {
+    return res.render("checkout.ejs")
+  }
+  req.session.returnTo = "/checkout";
+  req.session.save(() => {
+
+    res.redirect("/sign-in");
+  });
 })
 
 app.get("/track-order", (req, res) => {
@@ -501,8 +547,39 @@ app.get("/track-order", (req, res) => {
 })
 
 app.get("/wishlist", async(req, res) => {
-    // add this at the top of the route
-    if (!req.user) return res.redirect("/sign-in");
+
+    if (!req.user) {
+        const wishlistProducts = req.session.wishlist || [];
+        let products = [];
+        let variants = [];
+
+        for (let w of wishlistProducts) {
+
+            const result = await db.query(`
+            SELECT 
+                p.id,
+                p.name,
+                p.image,
+                p.price
+                FROM products p
+                WHERE p.id = $1
+            `, [w.product_id]);
+            const actualResult = result.rows;
+            products.push(actualResult[0]);
+
+            const variant = await getVariantDetails(w.product_id);    
+            variants.push(variant);
+
+        }
+
+        if(products.length === 0) {
+            return res.render("wishlist.ejs", { msg: "No Products Available", products: [], variants })
+        }
+
+        return res.render("wishlist.ejs", { msg: "", products, variants });
+
+    } 
+
     try {
         const result = await db.query(`
             SELECT 
@@ -581,7 +658,8 @@ app.delete("/wishlist/:id", async(req, res) => {
         }
 
     } else {
-        res.redirect("/sign-in")
+        req.session.wishlist = req.session.wishlist.filter(item => item.product_id !== productId);
+        res.json({ success: true, message: "Product deleted from wishlist" });
     }
 
 })
@@ -785,6 +863,99 @@ passport.deserializeUser(async (id, done) => {
     }
 })
 
+// Initiate payment
+app.post("/payment/initiate", async (req, res) => {
+  const { full_name, amount } = req.body;
+  const email = req.user.email;
+
+  try {
+    const response = await axios.post(
+      "https://api.paystack.co/transaction/initialize",
+      {
+        email,
+        amount: amount * 100,
+        metadata: { full_name },
+        callback_url: "http://localhost:3000/payment/verify",
+      },
+      { headers: paystackHeaders }
+    );
+
+    const { authorization_url } = response.data.data;
+    res.redirect(authorization_url);
+
+  } catch (err) {
+    console.error("Initiation error:", err.response?.data || err.message);
+    res.status(500).send("Payment initiation failed");
+  }
+});
+
+// Verify payment (Paystack redirects here after payment)
+app.get("/payment/verify", async (req, res) => {
+  const { reference } = req.query;
+
+  try {
+    const response = await axios.get(
+      `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
+      { headers: paystackHeaders }
+    );
+
+    const { status, metadata } = response.data.data;
+    const amount = parseInt(response.data.data.amount);
+    const full_name = metadata?.full_name || "Unknown";
+
+    // 1. Save to payments table
+    await db.query(
+      `INSERT INTO payments (user_id, full_name, amount, reference, status)
+       VALUES ($1, $2, $3, $4, $5)
+       ON CONFLICT (reference) DO NOTHING`,
+      [req.user.id, full_name, Math.floor(amount / 100), reference, status]
+    );
+
+    // 2. Only create order if payment was successful
+    if (status === "success") {
+
+      // 3. Get cart items
+      const cartResult = await db.query(
+        `SELECT c.variant_id, c.qty, p.price
+         FROM cart c
+         JOIN product_variants pv ON c.variant_id = pv.id
+         JOIN products p ON pv.product_id = p.id
+         WHERE c.user_id = $1`,
+        [req.user.id]
+      );
+
+      const cartItems = cartResult.rows;
+
+      // 4. Create order
+      const orderResult = await db.query(
+        `INSERT INTO orders (user_id, full_name, total_amount, payment_reference, status)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING id`,
+        [req.user.id, full_name, Math.floor(amount / 100), reference, "processing"]
+      );
+
+      const orderId = orderResult.rows[0].id;
+
+      // 5. Save each cart item to order_items
+      for (let item of cartItems) {
+        await db.query(
+          `INSERT INTO order_details (order_id, variant_id, qty, price)
+           VALUES ($1, $2, $3, $4)`,
+          [orderId, item.variant_id, item.qty, parseInt(item.price)]
+        );
+      }
+
+      // 6. Clear the cart
+      await db.query(`DELETE FROM cart WHERE user_id = $1`, [req.user.id]);
+    }
+
+    res.render("receipt.ejs", { full_name, amount: Math.floor(amount / 100), reference, status });
+
+  } catch (err) {
+    console.error("Verification error:", err.response?.data || err.message);
+    res.status(500).send("Payment verification failed");
+  }
+});
 
 app.listen(3000, () => {
     console.log(`app is running on port ${port}`)
