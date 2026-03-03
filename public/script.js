@@ -10,13 +10,17 @@
     const total = document.querySelector(".total");
     let cartCount = 0;
 
-    let totalPrice = 0;
-    productPrices.forEach(price => {
-        totalPrice += Number(price.textContent);
-    })
+    let sub = 0;
 
-    subTotal.textContent = "₦" + totalPrice;
-    total.textContent = "₦" + totalPrice;
+    if (subTotal && total && productPrices.length > 0) {
+        let totalPrice = 0;
+        productPrices.forEach(price => {
+            totalPrice += Number(price.textContent);
+        });
+        subTotal.textContent = "₦" + totalPrice;
+        total.textContent = "₦" + totalPrice;
+    }
+   
 
     //cart//
     async function loadCartCount() {
@@ -34,15 +38,18 @@
 
     //profile//
 
-    profile.addEventListener("click", () => {
-        profileNav.classList.toggle("hide")
-    })
+    if (profile) {
+        profile.addEventListener("click", () => {
+            profileNav.classList.toggle("hide");
+        });
+    }
 
     if (cancelEdit) {
-    cancelEdit.addEventListener("click", () => {
-        edit.classList.add("hide")
-    })
-}
+        cancelEdit.addEventListener("click", () => {
+            edit.classList.add("hide");
+        });
+    }
+    
 
 
     //cart//
