@@ -1,35 +1,54 @@
 <%- include('partials/header') %>
 
 <section class="edit-section">
-    <div class="edit">
-        <div class="edit-head">
-            <div class="yo">
-                <div class="edit-pic"></div>
-                <h4>Hello Kingsley</h4>
-            </div>
-        </div>
-        <div class="edit-body">
-            <div >
-                <p>Name</p>
-                <div class="flex-c gap05">
-                    <input type="text" placeholder="first-name"/>
-                    <input type="text" placeholder="last-name"/>
+    <form method="post" action="/update-user-details">
+        <div class="edit">
+            <div class="edit-head">
+                <div class="yo">
+                    <div class="edit-pic"></div>
+                    <h4>Hello <%= user.first_name || 'there' %></h4>
                 </div>
             </div>
-            <div class="c">
-                <p>Email</p>
-                <input type="text"/>    
+            <div class="edit-body">
+                <h4 style="text-align: center;">Personal Information</h4>
+                <div >
+                    <p>Name</p>
+                    <div class="flex-c gap05">
+                        <input type="text" name="first_name" placeholder="first-name" value="<%= user.first_name || '' %>" />
+                        <input type="text" name="last_name" placeholder="last-name" value="<%= user.last_name || '' %>" />
+                    </div>
+                </div>
+                <div class="c">
+                    <p>Email</p>
+                    <input type="text" name="email" value="<%= user.email || '' %>"/>    
+                </div>
+                <div>
+                    <p>Contact</p>
+                    <input type="number" name="phone" value="<%= user.phone || '' %>" />    
+                </div>
             </div>
-            <div>
-                <p>Contact</p>
-                <input type="number"/>    
+            <div class="edit-body">
+                <h4 style="text-align: center;">Shipping Address</h4>
+                <div >
+                    <p>Country</p>
+                    <input type="text" name="country" value="<%= user.country || '' %>" />
+                </div>
+                <div class="c">
+                        <input type="text" name="state" placeholder="state" value="<%= user.state || '' %>" />    
+                        <input type="text" name="city" placeholder="city" value="<%= user.city || '' %>" />
+                
+                </div>
+                <div>
+                    <p>Address</p>
+                    <input type="text" name="address" value="<%= user.address || '' %>" />    
+                </div>
+            </div>
+            <div class="edit-footer ">
+                <a href="/"><button id="cancel-edit">Cancel</button></a>
+                <button type="submit">Save Changes</button>
             </div>
         </div>
-        <div class="edit-footer ">
-            <a href="/"><button id="cancel-edit">Cancel</button></a>
-            <button>Save Changes</button>
-        </div>
-    </div>
+    </form>
 </section>
 
 <%- include('partials/footer') %>

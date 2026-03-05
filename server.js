@@ -57,6 +57,20 @@ app.use(express.static("public"));
 app.set('view engine', 'ejs');
 app.set('views', './views')
 
+async function calculateCartTotal(userId) {
+    const result = await db.query(`
+        SELECT 
+            p.price,
+            c.qty
+        FROM cart c
+        JOIN product_variants pv ON c.variant_id = pv.id
+        JOIN products p ON pv.product_id = p.id
+        WHERE c.user_id = $1`,
+        [userId]);
+
+    const sum = result.rows.reduce((acc, current) => acc + (Number(current.price) * current.qty), 0);
+    return sum;
+}
 
 async function getProductDetails(id) {
 
@@ -531,20 +545,89 @@ app.delete("/cart/:id", async(req, res) => {
     res.json({ success: true, count: count });
 });
 
-app.get("/checkout", (req, res) => {
-  if (req.isAuthenticated()) {
-    return res.render("checkout.ejs")
+app.get("/checkout", async (req, res) => {
+  if (!req.isAuthenticated()) {
+    req.session.returnTo = "/checkout";
+    req.session.save(() => {
+        res.redirect("/sign-in");
+    });
+    return;
+  };
+
+  const userId = req.user.id;
+  
+  try {
+    const subtotal = await calculateCartTotal(userId);
+    const shippingFee = 2000;
+    const total = subtotal + shippingFee;
+
+    const userResult = await db.query(
+      `SELECT first_name, last_name, email, phone, address, city, state, country 
+       FROM users WHERE id = $1`,
+      [userId]
+    );
+    const user = userResult.rows[0];
+
+    res.render("checkout.ejs", { subtotal, shippingFee, total, user });
+  } catch (err) {
+    console.log(err);
   }
-  req.session.returnTo = "/checkout";
-  req.session.save(() => {
+});
 
-    res.redirect("/sign-in");
-  });
-})
+app.get("/track-order", async (req, res) => {
+  if (!req.isAuthenticated()) {
+    req.session.returnTo = "/track-order";
+    req.session.save(() => {
+      res.redirect("/sign-in");
+    });
+    return;
+  }
 
-app.get("/track-order", (req, res) => {
-    res.render("track-order.ejs")
-})
+  try {
+    const userId = req.user.id;
+
+    const ordersResult = await db.query(
+      `SELECT 
+        o.id,
+        o.total_amount,
+        o.status,
+        o.delivery_location,
+        o.created_at,
+        d.name AS delivery_type
+      FROM orders o
+      JOIN delivery_options d ON o.delivery_option_id = d.id
+      WHERE o.user_id = $1
+      ORDER BY o.created_at DESC`,
+      [userId]
+    );
+
+    const orders = ordersResult.rows;
+
+    // Get items for each order
+    for (let order of orders) {
+      const itemsResult = await db.query(
+        `SELECT 
+          p.name,
+          p.image,
+          pv.size,
+          oi.qty,
+          oi.price
+        FROM order_details oi
+        JOIN product_variants pv ON oi.variant_id = pv.id
+        JOIN products p ON pv.product_id = p.id
+        WHERE oi.order_id = $1`,
+        [order.id]
+      );
+      order.items = itemsResult.rows;
+    }
+
+    res.render("track-order.ejs", { orders });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching orders");
+  }
+});
 
 app.get("/wishlist", async(req, res) => {
 
@@ -664,29 +747,113 @@ app.delete("/wishlist/:id", async(req, res) => {
 
 })
 
-app.get("/edit-profile", (req, res) => {
-    res.render("edit-profile.ejs")
-})
+app.get("/edit-profile", async (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect("/sign-in");
+  }
+
+  try {
+    const result = await db.query(
+      `SELECT id, email, first_name, last_name, phone, address, city, state, country 
+       FROM users WHERE id = $1`,
+      [req.user.id]
+    );
+    const user = result.rows[0];
+    res.render("edit-profile.ejs", { user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error fetching profile");
+  }
+});
+
+app.post("/update-user-details", async (req, res) => {
+
+  const { first_name, last_name, email, phone, address, city, state, country } = req.body;
+
+  try {
+    await db.query(
+      `UPDATE users SET 
+        first_name = $1,
+        last_name = $2,
+        email = $3,
+        phone = $4,
+        address = $5,
+        city = $6,
+        state = $7,
+        country = $8
+      WHERE id = $9`,
+      [first_name, last_name, email, phone, address, city, state, country, req.user.id]
+    );
+    res.redirect("/");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error updating profile");
+  }
+});
 
 app.get("/admin", async(req, res) => {
-    try {
-        const result = await db.query("SELECT * FROM categories");
-        const categories =  result.rows;
-        const msg = req.query.msg || null;
+  try {
+    const result = await db.query("SELECT * FROM categories");
+    const categories = result.rows;
+    const msg = req.query.msg || null;
 
-        if (categories.length === 0) {
-            return res.render("admin", { msg: "Kindly create a new category", categories: [] });
-        } 
-        res.render("admin", { msg: msg, categories: categories})
+    const ordersResult = await db.query(`
+      SELECT 
+        o.id,
+        o.total_amount,
+        o.status,
+        o.delivery_location,
+        o.created_at,
+        d.name AS delivery_type,
+        u.email,
+        u.first_name,
+        u.last_name
+      FROM orders o
+      JOIN delivery_options d ON o.delivery_option_id = d.id
+      JOIN users u ON o.user_id = u.id
+      ORDER BY o.created_at DESC
+    `);
+    const orders = ordersResult.rows;
 
-    } catch (err) {
-        console.error("Admin page error:", err);
-        res.render("admin", {
-        msg: "Failed to load categories",
-        categories: []
-        });
+    // Get items for each order
+    for (let order of orders) {
+      const itemsResult = await db.query(`
+        SELECT 
+          p.name,
+          p.image,
+          pv.size,
+          oi.qty,
+          oi.price
+        FROM order_details oi
+        JOIN product_variants pv ON oi.variant_id = pv.id
+        JOIN products p ON pv.product_id = p.id
+        WHERE oi.order_id = $1`,
+        [order.id]
+      );
+      order.items = itemsResult.rows;
+    }
+
+    res.render("admin", { msg, categories, orders });
+
+  } catch (err) {
+    console.error("Admin page error:", err);
+    res.render("admin", { msg: "Failed to load", categories: [], orders: [] });
   }
-})
+});
+
+app.post("/admin/order/status", async (req, res) => {
+  const { order_id, status } = req.body;
+  try {
+    await db.query(
+      `UPDATE orders SET status = $1 WHERE id = $2`,
+      [status, order_id]
+    );
+    res.redirect("/admin");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error updating order status");
+  }
+});
 
 app.post("/new-category", async (req, res) => {
   const { category } = req.body;
@@ -865,16 +1032,49 @@ passport.deserializeUser(async (id, done) => {
 
 // Initiate payment
 app.post("/payment/initiate", async (req, res) => {
-  const { full_name, amount } = req.body;
+  const { first_name, last_name, delivery_type, within_lagos_location, address, city, state, country, is_save } = req.body;
+
+    if (is_save) {
+        await db.query(
+            `UPDATE users SET first_name = $1, last_name = $2, phone = $3, address = $4, city = $5, state = $6, country = $7 WHERE id = $8`,
+            [first_name, last_name, req.body.phone, address, city, state, country, req.user.id]
+        );
+    }
+
   const email = req.user.email;
 
+  // Build delivery location string based on type
+  let delivery_location = '';
+
+  if (delivery_type === 'within_lagos') {
+    delivery_location = within_lagos_location;
+  } else if (delivery_type === 'outside_lagos') {
+    delivery_location = `${address}, ${city}, ${state}, ${country}`;
+  }
+
   try {
+    // Get delivery option id and fee from DB
+    const deliveryResult = await db.query(
+      `SELECT id, fee FROM delivery_options WHERE name = $1`,
+      [delivery_type]
+    );
+
+    if (deliveryResult.rows.length === 0) {
+      return res.status(400).send("Invalid delivery type");
+    }
+
+    const { id: delivery_option_id, fee: shippingFee } = deliveryResult.rows[0];
+
+    // Calculate total
+    const subtotal = await calculateCartTotal(req.user.id);
+    const total = subtotal + shippingFee;
+
     const response = await axios.post(
       "https://api.paystack.co/transaction/initialize",
       {
         email,
-        amount: amount * 100,
-        metadata: { full_name },
+        amount: total * 100,
+        metadata: { delivery_option_id, delivery_location },
         callback_url: "http://localhost:3000/payment/verify",
       },
       { headers: paystackHeaders }
@@ -891,70 +1091,69 @@ app.post("/payment/initiate", async (req, res) => {
 
 // Verify payment (Paystack redirects here after payment)
 app.get("/payment/verify", async (req, res) => {
-  const { reference } = req.query;
+    const { reference } = req.query;
 
-  try {
-    const response = await axios.get(
-      `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
-      { headers: paystackHeaders }
-    );
-
-    const { status, metadata } = response.data.data;
-    const amount = parseInt(response.data.data.amount);
-    const full_name = metadata?.full_name || "Unknown";
-
-    // 1. Save to payments table
-    await db.query(
-      `INSERT INTO payments (user_id, full_name, amount, reference, status)
-       VALUES ($1, $2, $3, $4, $5)
-       ON CONFLICT (reference) DO NOTHING`,
-      [req.user.id, full_name, Math.floor(amount / 100), reference, status]
-    );
-
-    // 2. Only create order if payment was successful
-    if (status === "success") {
-
-      // 3. Get cart items
-      const cartResult = await db.query(
-        `SELECT c.variant_id, c.qty, p.price
-         FROM cart c
-         JOIN product_variants pv ON c.variant_id = pv.id
-         JOIN products p ON pv.product_id = p.id
-         WHERE c.user_id = $1`,
-        [req.user.id]
-      );
-
-      const cartItems = cartResult.rows;
-
-      // 4. Create order
-      const orderResult = await db.query(
-        `INSERT INTO orders (user_id, full_name, total_amount, payment_reference, status)
-         VALUES ($1, $2, $3, $4, $5)
-         RETURNING id`,
-        [req.user.id, full_name, Math.floor(amount / 100), reference, "processing"]
-      );
-
-      const orderId = orderResult.rows[0].id;
-
-      // 5. Save each cart item to order_items
-      for (let item of cartItems) {
-        await db.query(
-          `INSERT INTO order_details (order_id, variant_id, qty, price)
-           VALUES ($1, $2, $3, $4)`,
-          [orderId, item.variant_id, item.qty, parseInt(item.price)]
+    try {
+        const response = await axios.get(
+            `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
+            { headers: paystackHeaders }
         );
-      }
 
-      // 6. Clear the cart
-      await db.query(`DELETE FROM cart WHERE user_id = $1`, [req.user.id]);
+        const { status, metadata } = response.data.data;
+        const amount = parseInt(response.data.data.amount);
+
+        // 1. Save to payments table
+        await db.query(
+            `INSERT INTO payments (user_id, amount, reference, status)
+            VALUES ($1, $2, $3, $4)
+            ON CONFLICT (reference) DO NOTHING`,
+            [req.user.id, Math.floor(amount / 100), reference, status]
+        );
+
+        // 2. Only create order if payment was successful
+        if (status === "success") {
+
+            // 3. Get cart items
+            const cartResult = await db.query(
+                `SELECT c.variant_id, c.qty, p.price
+                    FROM cart c
+                    JOIN product_variants pv ON c.variant_id = pv.id
+                    JOIN products p ON pv.product_id = p.id
+                    WHERE c.user_id = $1`,
+                [req.user.id]
+            );
+
+            const cartItems = cartResult.rows;
+
+            // 4. Create order
+            const orderResult = await db.query(
+                `INSERT INTO orders (user_id, total_amount, payment_reference, status, delivery_option_id, delivery_location)
+                VALUES ($1, $2, $3, $4, $5, $6)
+                RETURNING id`,
+                [req.user.id, Math.floor(amount / 100), reference, "processing", metadata.delivery_option_id, metadata.delivery_location]
+            );
+
+            const orderId = orderResult.rows[0].id;
+
+            // 5. Save each cart item to order_items
+            for (let item of cartItems) {
+                await db.query(
+                    `INSERT INTO order_details (order_id, variant_id, qty, price)
+                    VALUES ($1, $2, $3, $4)`,
+                    [orderId, item.variant_id, item.qty, parseInt(item.price)]
+                );
+            }
+
+            // 6. Clear the cart
+            await db.query(`DELETE FROM cart WHERE user_id = $1`, [req.user.id]);
+        }
+
+        res.render("receipt.ejs", { amount: Math.floor(amount / 100), reference, status });
+
+    } catch (err) {
+        console.error("Verification error:", err.response?.data || err.message);
+        res.status(500).send("Payment verification failed");
     }
-
-    res.render("receipt.ejs", { full_name, amount: Math.floor(amount / 100), reference, status });
-
-  } catch (err) {
-    console.error("Verification error:", err.response?.data || err.message);
-    res.status(500).send("Payment verification failed");
-  }
 });
 
 app.listen(3000, () => {

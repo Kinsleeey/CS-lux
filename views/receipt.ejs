@@ -1,12 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head><title>Payment Receipt</title></head>
-<body>
-  <h2>Payment Successful 🎉</h2>
-  <p><strong>Name:</strong> <%= full_name %></p>
-  <p><strong>Amount:</strong> ₦<%= amount %></p>
-  <p><strong>Reference:</strong> <%= reference %></p>
-  <p><strong>Status:</strong> <%= status %></p>
-  <a href="/">Back to Home</a>
-</body>
-</html>
+<%- include('partials/header') %>
+
+  <section class="receipt-section">
+    <div class="receipt-card">
+      
+      <div class="receipt-head">
+        <div class="receipt-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#ffffff" viewBox="0 0 256 256">
+            <path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"></path>
+          </svg>
+        </div>
+        <h3>Payment Successful!</h3>
+        <p>Your order has been confirmed and is being processed.</p>
+      </div>
+
+      <div class="receipt-body">
+        <div class="receipt-row">
+          <p>Amount Paid</p>
+          <p class="receipt-value">₦<%= amount.toLocaleString() %></p>
+        </div>
+        <div class="receipt-row">
+          <p>Reference</p>
+          <p class="receipt-value"><%= reference %></p>
+        </div>
+        <div class="receipt-row">
+          <p>Status</p>
+          <p class="receipt-status"><%= status %></p>
+        </div>
+      </div>
+
+      <div class="receipt-footer">
+        <a href="/track-order" class="c-button receipt-btn-primary">Track Order</a>
+        <a href="/" class="c-button receipt-btn-secondary">Back to Home</a>
+      </div>
+
+    </div>
+  </section>
+
+<%- include('partials/footer') %>
