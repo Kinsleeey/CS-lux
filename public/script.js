@@ -10,8 +10,8 @@
     const total = document.querySelector(".total");
     let cartCount = 0;
 
-    let sub = 0;
 
+    
     if (subTotal && total && productPrices.length > 0) {
         let totalPrice = 0;
         productPrices.forEach(price => {
