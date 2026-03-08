@@ -1,0 +1,683 @@
+/* ==========================================================================
+   TRACK ORDER
+   ========================================================================== */
+
+.track-order {
+    max-width: 1440px;
+    margin: 7rem auto 0 auto;
+    padding: 3rem 2rem;
+    min-height: calc(100vh - 7.3125rem);
+}
+
+/* Order Card */
+.to-card {
+    background: var(--color-white);
+    border: 1px solid var(--color-border-lighter);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.track-order .to-card + .to-card {
+    margin-top: 2rem;
+}
+
+/* Order Top Section */
+.to-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    gap: 2rem;
+}
+
+.to-top-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.to-top-left > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.to-top h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-dark);
+}
+
+.to-top .sm {
+    font-size: 0.875rem;
+    color: var(--color-text);
+}
+
+.to-top .sm span {
+    font-weight: 600;
+    color: var(--color-dark);
+}
+
+/* View Products Button */
+.view-products-link {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.813rem;
+    font-weight: 600;
+    color: var(--color-white);
+    background: var(--color-primary);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    width: fit-content;
+    height: fit-content;
+}
+
+.view-products-link:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-primary);
+}
+
+/* Order Info Section */
+.order-info {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.order-info span {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    min-width: 200px;
+    flex: 1;
+}
+
+.order-info span > p:first-of-type {
+    font-size: 0.813rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+}
+
+.order-info span > p:not(:first-child) {
+    font-size: 0.875rem;
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+/* Order List (Product Table) */
+.order-list {
+    margin: 1.25rem 0;
+    background: var(--color-bg-light);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+}
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+}
+
+table thead {
+    border-bottom: 2px solid var(--color-border);
+}
+
+table th {
+    text-align: left;
+    font-size: 0.813rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    padding: 0.75rem 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+table tbody tr {
+    border-bottom: 1px solid var(--color-border-light);
+    transition: background var(--transition-fast);
+}
+
+table tbody tr:hover {
+    background: var(--color-white);
+}
+
+table tbody tr:last-child {
+    border-bottom: none;
+}
+
+table td {
+    padding: 1rem;
+    color: var(--color-text);
+}
+
+table td:first-child {
+    font-weight: 500;
+    color: var(--color-dark);
+}
+
+.ol-img {
+    width: 54px;
+    height: 64px;
+    border-radius: var(--radius-sm);
+    background: var(--color-bg-dark);
+    border: 1px solid var(--color-border);
+    flex-shrink: 0;
+}
+
+.ol-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+table th:nth-last-child(-n+3),
+table td:nth-last-child(-n+3) {
+    text-align: right;
+}
+
+table td:last-child {
+    font-weight: 600;
+    color: var(--color-primary);
+}
+
+/* Divider */
+.to-card hr {
+    margin: 1.25rem 0;
+    border: none;
+    border-top: 1px solid var(--color-border-lighter);
+}
+
+/* Order Bottom - Progress Section */
+.to-bottom {
+    margin-top: 0.5rem;
+}
+
+.progress {
+    position: relative;
+    height: 3px;
+    background: var(--color-bg-dark);
+    border-radius: 2px;
+    margin-bottom: 0.75rem;
+    overflow: hidden;
+}
+
+.progress::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 33%;
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+.progress.step-2::before { width: 50%; }
+.progress.step-3::before { width: 75%; }
+.progress.step-4::before { width: 100%; }
+
+/* Progress Icons */
+.progress-icons {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.progress-icons > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    flex: 1;
+}
+
+.progress-icon {
+    width: 30px;
+    height: 30px;
+    background: var(--color-bg-dark);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-normal);
+}
+
+.progress-icon svg {
+    width: 14px;
+    height: 14px;
+    fill: var(--color-text-light);
+    transition: fill var(--transition-normal);
+}
+
+.progress-icon.done {
+    background: var(--color-primary);
+    box-shadow: var(--shadow-primary);
+}
+
+.progress-icon.done svg {
+    fill: var(--color-white);
+}
+
+.progress-icon.active {
+    background: var(--color-primary);
+    animation: pulse 2s infinite;
+}
+
+.progress-icon.active svg {
+    fill: var(--color-white);
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(2, 159, 174, 0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(2, 159, 174, 0); }
+}
+
+.progress-icons > div > p {
+    font-size: 0.688rem;
+    color: var(--color-text);
+    text-align: center;
+    font-weight: 500;
+}
+
+.progress-icon.done ~ p,
+.progress-icon.active ~ p {
+    color: var(--color-dark);
+    font-weight: 600;
+}
+
+/* Hide Button */
+.order-list .view-products-link {
+    margin-top: 0.75rem;
+    background: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+}
+
+.order-list .view-products-link:hover {
+    background: var(--color-bg-gray);
+    color: var(--color-dark);
+    border-color: var(--color-dark);
+    box-shadow: none;
+}
+
+/* Order Summary Stats */
+.order-summary {
+    display: flex;
+    justify-content: flex-end;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border-lighter);
+}
+
+.order-summary > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 150px;
+}
+
+.order-summary p:first-child {
+    font-size: 0.875rem;
+    color: var(--color-text);
+}
+
+.order-summary p:last-child {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-dark);
+}
+
+.order-summary .total p:last-child {
+    color: var(--color-primary);
+    font-size: 1.5rem;
+}
+
+/* Empty State */
+.track-order-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+    min-height: 400px;
+}
+
+.track-order-empty svg {
+    width: 80px;
+    height: 80px;
+    fill: var(--color-bg-dark);
+    margin-bottom: 1.5rem;
+}
+
+.track-order-empty h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    margin-bottom: 0.5rem;
+}
+
+.track-order-empty p {
+    font-size: 0.938rem;
+    color: var(--color-text);
+    margin-bottom: 2rem;
+}
+
+.track-order-empty a {
+    padding: 0.75rem 1.5rem;
+    background: var(--color-primary);
+    color: var(--color-white);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    transition: all var(--transition-fast);
+}
+
+.track-order-empty a:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-primary);
+}
+
+/* Toggle Animation */
+.order-list.hidden { display: none; }
+
+.order-list.visible {
+    display: block;
+    animation: slideDown var(--transition-normal);
+}
+
+@keyframes slideDown {
+    from { opacity: 0; max-height: 0; }
+    to { opacity: 1; max-height: 2000px; }
+}
+
+/* ==========================================================================
+   RECEIPT
+   ========================================================================== */
+
+.receipt-section {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 109px);
+}
+
+.receipt-card {
+    width: 100%;
+    max-width: 480px;
+    background: var(--color-white);
+    border: 1px solid var(--color-border-lighter);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.receipt-head {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+}
+
+.receipt-icon {
+    width: 72px;
+    height: 72px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.receipt-head h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-white);
+    margin: 0;
+}
+
+.receipt-head p {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+}
+.progress-icons > div:first-child {
+    align-items: flex-start;
+}
+
+.progress-icons > div:last-child {
+    align-items: flex-end;
+}
+.progress::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: var(--progress-width, 0%);
+    background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+.receipt-body {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.receipt-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--color-border-lighter);
+}
+
+.receipt-row:last-child { border-bottom: none; }
+
+.receipt-row > p:first-child {
+    font-size: 0.938rem;
+    color: var(--color-text);
+}
+
+.receipt-value {
+    font-size: 0.938rem;
+    font-weight: 600;
+    color: var(--color-dark);
+}
+
+.receipt-status {
+    font-size: 0.813rem;
+    font-weight: 600;
+    color: var(--color-success-text);
+    background: var(--color-success-bg);
+    border: 1px solid var(--color-success-border);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    text-transform: capitalize;
+}
+
+.receipt-footer {
+    padding: 1.5rem 2rem;
+    background: var(--color-bg-light);
+    border-top: 1px solid var(--color-border-lighter);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.receipt-btn-primary {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.938rem;
+    transition: all var(--transition-fast);
+}
+
+.receipt-btn-primary:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-primary);
+}
+
+.receipt-btn-secondary {
+    background: transparent;
+    color: var(--color-dark);
+    border: 1px solid var(--color-border);
+    height: 48px;
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.938rem;
+    transition: all var(--transition-fast);
+}
+
+.receipt-btn-secondary:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* ==========================================================================
+   TRACK ORDER RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .track-order {
+        padding: 2rem 1rem;
+    }
+
+    .to-card {
+        padding: 1.25rem;
+    }
+
+    .order-info {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .order-info span {
+        min-width: auto;
+    }
+
+    .order-list {
+        padding: 1rem;
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 480px;
+    }
+
+    .order-summary {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .order-summary > div {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .track-order {
+        padding: 1.5rem 0.75rem;
+    }
+
+    .to-card {
+        padding: 1rem;
+    }
+
+    .to-top {
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .to-top-left {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .to-top h3 {
+        font-size: 1rem;
+    }
+
+    .to-top .sm {
+        font-size: 0.75rem;
+    }
+
+    .view-products-link {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.625rem;
+    }
+
+    .order-list {
+        padding: 0.75rem;
+        margin: 1rem 0;
+    }
+
+    .to-card hr {
+        margin: 1rem 0;
+    }
+
+    .progress-icon {
+        width: 26px;
+        height: 26px;
+    }
+
+    .progress-icon svg {
+        width: 12px;
+        height: 12px;
+    }
+
+    .progress-icons > div > p {
+        font-size: 0.563rem;
+    }
+
+    .receipt-section {
+        padding: 1.5rem 1rem;
+    }
+
+    .receipt-head {
+        padding: 2rem 1.5rem;
+    }
+
+    .receipt-body {
+        padding: 1.5rem;
+    }
+
+    .receipt-footer {
+        padding: 1.25rem 1.5rem;
+    }
+}

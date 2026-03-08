@@ -4,12 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CS-Luxury</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2300aaaa'/><text x='50' y='72' font-size='60' font-family='Arial' font-weight='bold' fill='white' text-anchor='middle'>C</text></svg>">
+    <link rel="stylesheet" href="/css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
     <link
   href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap"
   rel="stylesheet"
 />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 
 
 </head>
@@ -26,6 +30,7 @@
             </div>
         </div>
         <div class="main-header flex-sb-c">
+            
             <div class="brand flex-sb-c gap05">
                 <div class="brand-img"></div>
                 <p>CS Luxury</p>
@@ -41,7 +46,7 @@
             </nav>
             <div class="flex-sb-c gap05">
                 <!-- Add this where you marked "//space for toggle btn" -->
-                <div class="theme-toggle" id="theme-toggle">
+                <div class="theme-toggle" id="theme-toggle" style="display: none;">
                     <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"></path></svg>
                     <svg class="moon-icon hide" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 256 256"><path d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z"></path></svg>
                 </div>
@@ -56,6 +61,32 @@
                 <div class="whiteback" id="user-profile">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z"></path></svg>
                 </div>
+                <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            
+
+        </div>
+        <div class="mobile-nav" id="mobile-nav" onclick="closeMobileNav(event)">
+            <div class="mobile-nav-content">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2rem;">
+                    <div class="brand flex-sb-c gap05">
+                        <div class="brand-img"></div>
+                        <p>CS Luxury</p>
+                    </div>
+                    <div onclick="toggleMobileNav()" style="cursor:pointer; font-size:1.5rem; color:var(--color-text);">×</div>
+                </div>
+                <ul style="display:flex; flex-direction:column; gap:0.25rem; list-style:none;">
+                    <li><a href="/" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Home</a></li>
+                    <li><a href="/product" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Product</a></li>
+                    <li><a href="/cart" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Cart</a></li>
+                    <li><a href="/wishlist" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Wishlist</a></li>
+                    <li><a href="/track-order" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Track Order</a></li>
+                    <li><a href="/sign-in" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Sign In</a></li>
+                </ul>
             </div>
         </div>
     </header>
@@ -101,6 +132,20 @@
         <hr />
         <a href="/logout">Log out</a>
     </div>
+
+    <script>
+        function toggleMobileNav() {
+            const nav = document.getElementById('mobile-nav');
+            nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+            document.body.style.overflow = nav.style.display === 'flex' ? 'hidden' : '';
+        }
+
+        function closeMobileNav(e) {
+            if (e.target === document.getElementById('mobile-nav')) {
+                toggleMobileNav();
+            }
+        }
+    </script>
 
     
 

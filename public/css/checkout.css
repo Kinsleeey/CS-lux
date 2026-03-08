@@ -1,0 +1,480 @@
+/* ==========================================================================
+   CHECKOUT
+   ========================================================================== */
+
+.checkout {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+.check-inner {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2rem;
+    align-items: start;
+}
+
+/* Checkout Info Container */
+.checkout-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Fieldsets */
+.c-edit-body,
+.delivery-type,
+.Payment-method {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+}
+
+.c-edit-body legend,
+.delivery-type legend,
+.user-address legend {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 0 0.5rem;
+}
+
+/* Personal Details Fields */
+.c-edit-body > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin-bottom: 1rem;
+}
+
+.c-edit-body > div > p {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.c-edit-body input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    color: var(--color-dark);
+    background: var(--color-bg-light);
+    transition: border-color var(--transition-fast);
+}
+
+.c-edit-body input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.c-edit-body input::placeholder {
+    color: var(--color-text-light);
+}
+
+.c-edit-body .flex-c {
+    gap: 0.75rem;
+}
+
+/* ==========================================================================
+   DELIVERY OPTIONS
+   ========================================================================== */
+
+.delivery-type {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.delivery-type legend {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 0 0.5rem;
+}
+
+.delivery-type > label.bord {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    cursor: pointer;
+    margin: 0;
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    transition: all var(--transition-fast);
+}
+
+.delivery-type > label.bord:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+}
+
+.delivery-type > label.bord > p:first-of-type {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-dark);
+}
+.psha {
+    font-size: 0.813rem;
+    color: var(--color-primary-dark);
+    line-height: 1.5;
+}
+
+.delivery-type > label.bord > p:last-of-type {
+    font-size: 0.875rem;
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+.delivery-type > label.bord > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.25rem;
+}
+
+/* Select */
+.delivery-type select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    color: var(--color-dark);
+    background: var(--color-white);
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+}
+
+.delivery-type select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+/* ==========================================================================
+   SHIPPING ADDRESS
+   ========================================================================== */
+
+.user-address {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: var(--color-bg-light);
+    margin: 0;
+}
+
+.user-address legend {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 0 0.5rem;
+}
+
+.user-address .flex-sb-c {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    align-items: start;
+}
+
+.user-address > div,
+.user-address .flex-sb-c > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.user-address label {
+    font-size: 0.813rem;
+    font-weight: 600;
+    color: var(--color-text);
+}
+
+.user-address input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    color: var(--color-dark);
+    background: var(--color-white);
+    transition: border-color var(--transition-fast);
+}
+
+.user-address input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+/* ==========================================================================
+   PAYMENT METHOD
+   ========================================================================== */
+
+.Payment-method {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.Payment-method h4 {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 0.25rem;
+}
+
+.Payment-method label {
+    display: block;
+    cursor: pointer;
+}
+
+.Payment-method .bord {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin: 0;
+    transition: all var(--transition-fast);
+}
+
+.Payment-method .bord:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+}
+
+.pm {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pm span {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.pm span p:first-child {
+    font-size: 0.938rem;
+    font-weight: 600;
+    color: var(--color-dark);
+}
+
+.pm span p:last-child {
+    font-size: 0.813rem;
+    color: var(--color-text);
+}
+
+.pm svg {
+    width: 28px;
+    height: 28px;
+    fill: var(--color-text-light);
+    opacity: 0.7;
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   ORDER SUMMARY
+   ========================================================================== */
+
+.checkout .order-sum {
+    background: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    position: sticky;
+    top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.checkout .order-sum h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-dark);
+}
+
+.checkout .cal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border-lighter);
+}
+.delivery-type > label.bord > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin: 0.25rem 0 0 0 ;
+    background: var(--color-bg-light);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem;
+}
+
+.delivery-type > label.bord > div > p {
+    font-size: 0.813rem;
+    line-height: 1.5;
+}
+
+.checkout .cal > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.checkout .cal p:first-child {
+    font-size: 0.875rem;
+    color: var(--color-text);
+}
+
+.checkout .cal p:last-child {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-dark);
+}
+
+.checkout .order-sum > .flex-sb-c {
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border-lighter);
+}
+
+.checkout .order-sum > .flex-sb-c h4 {
+    font-size: 1rem;
+}
+
+.checkout .order-sum .c-button {
+    width: 100%;
+    height: 46px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.938rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-fast);
+    border: none;
+}
+
+.checkout .order-sum button.c-button {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.checkout .order-sum button.c-button:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-primary);
+}
+
+.checkout .order-sum a.c-button {
+    background-color: transparent;
+    color: var(--color-dark);
+    border: 1px solid var(--color-border);
+}
+
+.checkout .order-sum a.c-button:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* ==========================================================================
+   CHECKOUT RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    .check-inner {
+        grid-template-columns: 1fr 320px;
+    }
+}
+
+@media (max-width: 768px) {
+    .checkout {
+        padding: 2rem 1rem;
+    }
+
+    .check-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout .order-sum {
+        position: static;
+    }
+
+    .user-address .flex-sb-c {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .pm svg {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    .checkout {
+        padding: 1.5rem 0.75rem;
+    }
+
+    .c-edit-body,
+    .delivery-type,
+    .Payment-method {
+        padding: 1rem;
+    }
+
+    .c-edit-body .flex-c {
+        flex-direction: column;
+    }
+
+    .delivery-type > label.bord {
+        padding: 1rem;
+    }
+
+    .delivery-type > label.bord > p:first-of-type {
+        font-size: 0.938rem;
+    }
+
+    .user-address {
+        padding: 1rem;
+    }
+
+    .user-address .flex-sb-c {
+        grid-template-columns: 1fr;
+    }
+
+    .pm {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .pm svg {
+        align-self: flex-end;
+    }
+
+    .checkout .order-sum {
+        padding: 1rem;
+    }
+}

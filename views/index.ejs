@@ -1,23 +1,18 @@
 <%- include('partials/header') %>
 
-<section class="hero">
+<section class="hero-section">
+    <div class="hero">
         <div class="hero-text">
             <p>Welcome to CS-Luxury</p>
-            <h1>Best Store<br />For Your Wears<br />And Gadgets.</h1>
-            <a class="ht-button" href="/product">Shop Now</a>
+            <h1 class="bebas-neue-regular"><span class="blue">Best</span> Store For Your<br />Wears And Gadgets.</h1>
+            <p>Quality wears and essential gadgets in one convinient place.</p>
+            <p class="ht-button"><a href="/product">Shop Now</a></p>
         </div>
         <div class="hero-img-div">
-            <div></div>
-            <div><img /></div>
+            <img src="/image/heroimg.svg"/>
         </div>
-        <div class="absolute hide"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H59.31l58.35,58.34a8,8,0,0,1-11.32,11.32l-72-72a8,8,0,0,1,0-11.32l72-72a8,8,0,0,1,11.32,11.32L59.31,120H216A8,8,0,0,1,224,128Z"></path></svg></div>
-        <div class="absolute hide"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></div>
-        <div class="absolute hide three-dots flex-sb-c">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-        <div class="absolute overlap">
+        
+        <div class="absolute overlap hide">
             <div class="flex">
                 <div class="flex-sb-c gap05">
                     <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" fill="#000000" viewBox="0 0 256 256"><path d="M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51s-18.75-7.85-28.51-8c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C146.28,23.51,138.44,16,128,16s-18.27,7.51-25.18,14.14c-3.94,3.77-8,7.67-11.57,9.14C88,40.64,82.56,40.72,77.31,40.8c-9.76.15-20.82.31-28.51,8S41,67.55,40.8,77.31c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C23.51,109.73,16,117.56,16,128s7.51,18.27,14.14,25.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C109.72,232.49,117.56,240,128,240s18.27-7.51,25.18-14.14c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C232.49,146.27,240,138.44,240,128S232.49,109.73,225.86,102.82Zm-11.55,39.29c-4.79,5-9.75,10.17-12.38,16.52-2.52,6.1-2.63,13.07-2.73,19.82-.1,7-.21,14.33-3.32,17.43s-10.39,3.22-17.43,3.32c-6.75.1-13.72.21-19.82,2.73-6.35,2.63-11.52,7.59-16.52,12.38S132,224,128,224s-9.15-4.92-14.11-9.69-10.17-9.75-16.52-12.38c-6.1-2.52-13.07-2.63-19.82-2.73-7-.1-14.33-.21-17.43-3.32s-3.22-10.39-3.32-17.43c-.1-6.75-.21-13.72-2.73-19.82-2.63-6.35-7.59-11.52-12.38-16.52S32,132,32,128s4.92-9.14,9.69-14.11,9.75-10.17,12.38-16.52c2.52-6.1,2.63-13.07,2.73-19.82.1-7,.21-14.33,3.32-17.43S70.51,56.9,77.55,56.8c6.75-.1,13.72-.21,19.82-2.73,6.35-2.63,11.52-7.59,16.52-12.38S124,32,128,32s9.15,4.92,14.11,9.69,10.17,9.75,16.52,12.38c6.1,2.52,13.07,2.63,19.82,2.73,7,.1,14.33.21,17.43,3.32s3.22,10.39,3.32,17.43c.1,6.75.21,13.72,2.73,19.82,2.63,6.35,7.59,11.52,12.38,16.52S224,124,224,128,219.08,137.14,214.31,142.11ZM120,96a24,24,0,1,0-24,24A24,24,0,0,0,120,96ZM88,96a8,8,0,1,1,8,8A8,8,0,0,1,88,96Zm72,40a24,24,0,1,0,24,24A24,24,0,0,0,160,136Zm0,32a8,8,0,1,1,8-8A8,8,0,0,1,160,168Zm13.66-74.34-80,80a8,8,0,0,1-11.32-11.32l80-80a8,8,0,0,1,11.32,11.32Z"></path></svg>
@@ -43,86 +38,85 @@
                 </div>
             </div>
         </div>
+    </div>
 </section>
-    <section class="product">
-        <span>
-            <h2>Our Products</h2>
-            <p>Society has put up so many boundaries, so many limitations on what's right<br />and wrong that it's almost impossible</p>
-        </span>
-        <% for(let c of categories) { %>
-                <div class="product-center">
-                    <div class="product-sect">
-                        <span class="product-sect-header flex-sb-c">
-                            <h3><%= c.name %></h3>
-                            <span class=" flex-sb-c gap025">
-                                <p>See All</p>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg>
-                            </span>
-                        </span>
-                        <% const productsInThisCategory = products.filter(p => p.category === c.name); %>
-                        <div class="grid-x4">
-                            <% for(let p of productsInThisCategory) { %>
-                                <% const variantOfProduct = variants.find(v => v[0].product_id === p.id); %>
-                                <div class="item">
-                                    <a href="/info/<%= p.category %>/<%= p.id %>">
-                                        <div class="item-img">
-                                            <a onclick="addToWishlist(<%= p.id %>)">
-                                                <div class="greyback"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000000" viewBox="0 0 256 256"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path></svg></div>
-                                            </a>    
-                                            <img src="<%= p.image %>"/>
-                                        </div>
-                                        <div class="item-footer flex-sb-c">
-                                            <span>
-                                                <p><%= p.name %></p>
-                                                <p>#<%= p.price %></p>
-                                            </span>
-                                            <a href="#" onclick="openPopup(<%= p.id %>); return false;">
-                                                <div class="gback"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000000" viewBox="0 0 256 256"><path d="M230.14,58.87A8,8,0,0,0,224,56H62.68L56.6,22.57A8,8,0,0,0,48.73,16H24a8,8,0,0,0,0,16h18L67.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42A27.75,27.75,0,0,0,160,204a28,28,0,1,0,28-28H91.17a8,8,0,0,1-7.87-6.57L80.13,152h116a24,24,0,0,0,23.61-19.71l12.16-66.86A8,8,0,0,0,230.14,58.87ZM104,204a12,12,0,1,1-12-12A12,12,0,0,1,104,204Zm96,0a12,12,0,1,1-12-12A12,12,0,0,1,200,204Zm4-74.57A8,8,0,0,1,196.1,136H77.22L65.59,72H214.41Z"></path></svg></div>
-                                            </a>
-                                        </div>
+<section class="product" >
+    <span>
+        <h2 class="bebas-neue-regular">Our Products</h2>
+        <p>Find something you'll love, from fresh fits to the latest gadgets</p>
+    </span>
+    <% for(let c of categories) { %>
+            <div class="product-sect">
+                <span class="product-sect-header">
+                    <p class="bebas-neue-regular" style="font-size: 1.6rem; font-weight: bold;"><%= c.name %></p>
+                    <span  class=" flex-sb-c gap025">
+                        <p>See All</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg>
+                    </span>
+                </span>
+                <% const productsInThisCategory = products.filter(p => p.category === c.name); %>
+                <div class="grid-x4">
+                    <% for(let p of productsInThisCategory) { %>
+                        <% const variantOfProduct = variants.find(v => v[0].product_id === p.id); %>
+                        <div class="item">
+                            <a href="/info/<%= p.category %>/<%= p.id %>">
+                                <div class="item-img">
+                                    <a onclick="addToWishlist(<%= p.id %>)">
+                                        <div class="greyback"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000000" viewBox="0 0 256 256"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path></svg></div>
+                                    </a>    
+                                    <img src="<%= p.image %>"/>
+                                </div>
+                                <div class="item-footer flex-sb-c">
+                                    <span>
+                                        <p><%= p.name %></p>
+                                        <p>#<%= p.price %></p>
+                                    </span>
+                                    <a href="#" onclick="openPopup(<%= p.id %>); return false;">
+                                        <div class="gback"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000000" viewBox="0 0 256 256"><path d="M230.14,58.87A8,8,0,0,0,224,56H62.68L56.6,22.57A8,8,0,0,0,48.73,16H24a8,8,0,0,0,0,16h18L67.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42A27.75,27.75,0,0,0,160,204a28,28,0,1,0,28-28H91.17a8,8,0,0,1-7.87-6.57L80.13,152h116a24,24,0,0,0,23.61-19.71l12.16-66.86A8,8,0,0,0,230.14,58.87ZM104,204a12,12,0,1,1-12-12A12,12,0,0,1,104,204Zm96,0a12,12,0,1,1-12-12A12,12,0,0,1,200,204Zm4-74.57A8,8,0,0,1,196.1,136H77.22L65.59,72H214.41Z"></path></svg></div>
                                     </a>
                                 </div>
-
-                                <div class="xyz-overlay" id="xyz-overlay<%= p.id %>">
-                                    <div class="xyz-popup">
-                                        <div class="xyz-header">
-                                            <h3 class="xyz-title">Select Quantity</h3>
-                                            <button class="xyz-close" onclick="closePopup(<%= p.id %>)">×</button>
-                                        </div>
-                                        <% if (variantOfProduct.length === 1 & variantOfProduct[0].size === "") {%>
-                                                <div class="xyz-size-row">
-                                                    <div class="xyz-qty-control">
-                                                        <button class="xyz-qty-btn" onclick="changeQty(this, -1)">-</button>
-                                                        <span class="xyz-qty-value" data-stock="<%= variantOfProduct[0].stock %>">0</span>
-                                                        <button class="xyz-qty-btn" onclick="changeQty(this, 1); addToCart(<%= variantOfProduct[0].id %>, 1, <%= variantOfProduct[0].stock %>)">+</button>
-                                                    </div>
-                                                </div>
-                                        <% } else { %>
-                                                <% variantOfProduct.forEach(variant => { %>
-                                                    <div class="xyz-size-row">
-                                                        <span class="xyz-size-name"><%= variant.size %></span>
-                                                        <div class="xyz-qty-control">
-                                                            <button class="xyz-qty-btn" onclick="changeQty(this, -1); reduceFromCart(<%= variant.id %>)">-</button>
-                                                            <span class="xyz-qty-value" data-stock="<%= variant.stock %>">0</span>
-                                                            <button class="xyz-qty-btn" onclick="changeQty(this, 1); addToCart(<%= variant.id %>, 1, <%= variant.stock %>)">+</button>
-                                                        </div>
-                                                    </div>
-                                                <% }) %>
-                                        <% } %>
-                                        <div class="flex-c gap1">
-                                            <a href="/cart"><button class="xyz-add-btn">View Cart</button></a>
-                                            <a href="/product"><button class="xyz-add-btn">Continue Shopping</button></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            <% } %>
+                            </a>
                         </div>
-                        
-                          
-                    </div>
+
+                        <div class="xyz-overlay" id="xyz-overlay<%= p.id %>">
+                            <div class="xyz-popup">
+                                <div class="xyz-header">
+                                    <h3 class="xyz-title">Select Quantity</h3>
+                                    <button class="xyz-close" onclick="closePopup(<%= p.id %>)">×</button>
+                                </div>
+                                <% if (variantOfProduct.length === 1 & variantOfProduct[0].size === "") {%>
+                                        <div class="xyz-size-row">
+                                            <div class="xyz-qty-control">
+                                                <button class="xyz-qty-btn" onclick="changeQty(this, -1)">-</button>
+                                                <span class="xyz-qty-value" data-stock="<%= variantOfProduct[0].stock %>">0</span>
+                                                <button class="xyz-qty-btn" onclick="changeQty(this, 1); addToCart(<%= variantOfProduct[0].id %>, 1, <%= variantOfProduct[0].stock %>)">+</button>
+                                            </div>
+                                        </div>
+                                <% } else { %>
+                                        <% variantOfProduct.forEach(variant => { %>
+                                            <div class="xyz-size-row">
+                                                <span class="xyz-size-name"><%= variant.size %></span>
+                                                <div class="xyz-qty-control">
+                                                    <button class="xyz-qty-btn" onclick="changeQty(this, -1); reduceFromCart(<%= variant.id %>)">-</button>
+                                                    <span class="xyz-qty-value" data-stock="<%= variant.stock %>">0</span>
+                                                    <button class="xyz-qty-btn" onclick="changeQty(this, 1); addToCart(<%= variant.id %>, 1, <%= variant.stock %>)">+</button>
+                                                </div>
+                                            </div>
+                                        <% }) %>
+                                <% } %>
+                                <div class="flex-c gap1">
+                                    <a href="/cart"><button class="xyz-add-btn">View Cart</button></a>
+                                    <a href="/product"><button class="xyz-add-btn">Continue Shopping</button></a>
+                                </div>
+                            </div>
+                        </div>
+                    <% } %>
                 </div>
-        <% } %>
-        
-    </section>
+                
+                    
+            </div>
+    <% } %>
+    
+</section>
 
 <%- include('partials/footer') %>

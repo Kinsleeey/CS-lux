@@ -1,0 +1,310 @@
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+header {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-md);
+}
+
+/* Pre-Header (Top Banner) */
+.pre-header {
+    height: 45px;
+    background: var(--color-dark);
+    color: var(--color-white);
+    font-size: 0.813rem;
+    padding: 0 5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pre-header > div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pre-header p {
+    margin: 0;
+    font-weight: 500;
+}
+
+.pre-header svg {
+    width: 14px;
+    height: 14px;
+    fill: var(--color-white);
+    flex-shrink: 0;
+}
+
+.pre-header > div:last-child {
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.pre-header > div:last-child:hover {
+    opacity: 0.8;
+}
+
+/* Main Header */
+.main-header {
+    background: var(--color-bg-light);
+    padding: 1rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-bg-dark);
+}
+
+/* Brand/Logo */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.brand:hover {
+    opacity: 0.8;
+}
+
+.brand-img {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--color-primary);
+}
+
+.brand p {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin: 0;
+}
+
+/* Navigation */
+nav {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav li {
+    margin: 0;
+}
+
+.nav a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 0.938rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    position: relative;
+    transition: color var(--transition-fast);
+}
+
+.nav a:hover {
+    color: var(--color-primary);
+}
+
+.nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--color-primary);
+    transition: width var(--transition-normal);
+}
+
+.nav a:hover::after,
+.nav a.active::after {
+    width: 100%;
+}
+
+/* Header Icons/Actions */
+.main-header > div:last-child {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.whiteback {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-bg-dark);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.whiteback:hover {
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+}
+
+.whiteback svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-dark);
+    transition: fill var(--transition-fast);
+}
+
+.whiteback:hover svg {
+    fill: var(--color-primary);
+}
+
+.whiteback p {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-dark);
+}
+
+/* Cart Badge */
+.greenback {
+    min-width: 20px;
+    height: 20px;
+    background: var(--color-primary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.375rem;
+}
+
+.greenback p {
+    font-size: 0.688rem;
+    font-weight: 700;
+    color: var(--color-white);
+    margin: 0;
+}
+
+/* User Profile Icon */
+#user-profile {
+    padding: 0.625rem;
+    position: relative;
+}
+
+/* Hamburger Menu (Hidden on Desktop) */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.hamburger span {
+    width: 24px;
+    height: 2px;
+    background: var(--color-dark);
+    border-radius: 2px;
+    transition: all var(--transition-normal);
+}
+
+/* Mobile Menu */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 200;
+}
+
+.mobile-nav-content {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100%;
+    background: var(--color-white);
+    padding: 2rem;
+    box-shadow: -4px 0 16px rgba(0, 0, 0, 0.1);
+    animation: slideInRight var(--transition-normal);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Sticky Header Effect */
+header.scrolled .main-header {
+    padding: 0.75rem 3rem;
+    box-shadow: var(--shadow-md);
+}
+
+
+@media (max-width: 768px) {
+    .pre-header {
+        padding: 0 1.5rem;
+        font-size: 0.75rem;
+    }
+
+    .main-header {
+        padding: 0.875rem 1.5rem;
+    }
+
+    nav {
+        display: none;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    /* Hide cart text and some icons on mobile */
+    .whiteback > p {
+        display: none;
+    }
+
+    .whiteback {
+        padding: 0.625rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .pre-header {
+        padding: 0 1rem;
+    }
+
+    .pre-header > div:first-child p {
+        display: none;
+    }
+
+    .main-header {
+        padding: 0.75rem 1rem;
+    }
+
+    .brand p {
+        font-size: 1.25rem;
+    }
+}
