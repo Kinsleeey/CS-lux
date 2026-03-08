@@ -13,13 +13,21 @@ import axios from "axios";
 env.config();
 
 const { Pool } = pg;
-const db = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
+const db = new Pool(
+    process.env.DATABASE_URL
+        ? {
+            connectionString: process.env.DATABASE_URL,
+            ssl: { rejectUnauthorized: false }
+          }
+        : {
+            user: process.env.DB_USER,
+            host: process.env.DB_HOST,
+            database: process.env.DB_NAME,
+            password: process.env.DB_PASSWORD,
+            port: process.env.DB_PORT,
+          }
+);
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/uploads/');
@@ -30,7 +38,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 const saltRounds = 3;
 
 const PAYSTACK_SECRET = process.env.PAYSTACK_SECRET_KEY;
@@ -1156,6 +1164,6 @@ app.get("/payment/verify", async (req, res) => {
     }
 });
 
-app.listen(3000, () => {
-    console.log(`app is running on port ${port}`)
+app.listen(PORT, () => {
+    console.log(`app is running on port ${PORT}`)
 });
