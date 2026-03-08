@@ -8,10 +8,12 @@
   <% orders.forEach(order => { %>
   <div class="to-card">
     <div class="to-top">
-      <div>
-        <h3>Order Id #223<%= order.id %></h3>
-        <p class="sm">Order placed on <span><%= new Date(order.created_at).toDateString() %></span></p>
-        <button class="view-products-link" onclick="toggleOrderList(<%= order.id %>)">View products</button>
+      <div class="to-top-left">
+        <div>
+          <h3>Order Id #223<%= order.id %></h3>
+          <p class="sm">Order placed on <span><%= new Date(order.created_at).toDateString() %></span></p>
+        </div>
+        <button class="view-products-link" onclick="toggleOrderList(<%= order.id %>)">View</button>
       </div>
       <div class="order-info">
         <span>
@@ -34,7 +36,7 @@
         <tr>
           <td>
             <div class="flex-c gap05">
-              <div class="ol-img" ><img src="<%= item.image %>"></div>
+              <div class="ol-img"><img src="<%= item.image %>"></div>
               <p><%= item.name %></p>
             </div>
           </td>
@@ -83,10 +85,40 @@
 </section>
 
 <script>
-  function toggleOrderList(orderId) {
-    const list = document.getElementById('order-list-' + orderId);
-    list.style.display = list.style.display === 'none' ? 'block' : 'none';
-  }
+    function toggleOrderList(orderId) {
+        const list = document.getElementById('order-list-' + orderId);
+        list.style.display = list.style.display === 'none' ? 'block' : 'none';
+    }
+
+    document.querySelectorAll('.to-card').forEach(card => {
+        const icons = card.querySelectorAll('.progress-icon');
+        const progressBar = card.querySelector('.progress');
+
+        let doneCount = 0;
+        icons.forEach(icon => {
+            if (icon.classList.contains('done')) doneCount++;
+        });
+
+        if (progressBar && doneCount > 0) {
+            if (doneCount === icons.length) {
+                progressBar.style.setProperty('--progress-width', '100%');
+            } else {
+                const lastDoneIcon = icons[doneCount - 1];
+                const barRect = progressBar.getBoundingClientRect();
+                const iconRect = lastDoneIcon.getBoundingClientRect();
+
+                const iconCenter = iconRect.left + iconRect.width / 2;
+                const barStart = barRect.left;
+                const barWidth = barRect.width;
+
+                const percentage = ((iconCenter - barStart) / barWidth) * 100;
+                progressBar.style.setProperty('--progress-width', percentage + '%');
+            }
+        } else if (progressBar && doneCount === 0) {
+            progressBar.style.setProperty('--progress-width', '0%');
+        }
+    });
 </script>
+
 
 <%- include('partials/footer') %>
