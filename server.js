@@ -1102,6 +1102,22 @@ app.get("/payment/verify", async (req, res) => {
     const { reference } = req.query;
 
     try {
+        // Check if order already exists for this reference
+        const existingOrder = await db.query(
+            `SELECT id FROM orders WHERE payment_reference = $1`,
+            [reference]
+        );
+
+        if (existingOrder.rows.length > 0) {
+            // Order already created, just render receipt
+            const existingPayment = await db.query(
+                `SELECT amount, status FROM payments WHERE reference = $1`,
+                [reference]
+            );
+            const { amount, status } = existingPayment.rows[0];
+            return res.render("receipt.ejs", { amount, reference, status });
+        }
+
         const response = await axios.get(
             `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
             { headers: paystackHeaders }
@@ -1110,7 +1126,6 @@ app.get("/payment/verify", async (req, res) => {
         const { status, metadata } = response.data.data;
         const amount = parseInt(response.data.data.amount);
 
-        // 1. Save to payments table
         await db.query(
             `INSERT INTO payments (user_id, amount, reference, status)
             VALUES ($1, $2, $3, $4)
@@ -1118,10 +1133,7 @@ app.get("/payment/verify", async (req, res) => {
             [req.user.id, Math.floor(amount / 100), reference, status]
         );
 
-        // 2. Only create order if payment was successful
         if (status === "success") {
-
-            // 3. Get cart items
             const cartResult = await db.query(
                 `SELECT c.variant_id, c.qty, p.price
                     FROM cart c
@@ -1133,7 +1145,6 @@ app.get("/payment/verify", async (req, res) => {
 
             const cartItems = cartResult.rows;
 
-            // 4. Create order
             const orderResult = await db.query(
                 `INSERT INTO orders (user_id, total_amount, payment_reference, status, delivery_option_id, delivery_location)
                 VALUES ($1, $2, $3, $4, $5, $6)
@@ -1143,7 +1154,6 @@ app.get("/payment/verify", async (req, res) => {
 
             const orderId = orderResult.rows[0].id;
 
-            // 5. Save each cart item to order_items
             for (let item of cartItems) {
                 await db.query(
                     `INSERT INTO order_details (order_id, variant_id, qty, price)
@@ -1152,7 +1162,6 @@ app.get("/payment/verify", async (req, res) => {
                 );
             }
 
-            // 6. Clear the cart
             await db.query(`DELETE FROM cart WHERE user_id = $1`, [req.user.id]);
         }
 
