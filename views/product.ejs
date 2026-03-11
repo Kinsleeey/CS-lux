@@ -11,7 +11,7 @@
     <div class="p-stuff">
         <div class="p-page-nav"> 
             <% categories.forEach(c => { %>
-                <a href="/p-cat/<%= c.id %>"><%= c.name %></a>
+                <a href="/p-cat/<%= c.id %>"><%= c.name.charAt(0).toUpperCase() + c.name.slice(1) %></a>
             <% }) %>
         </div>
         <div class="p-page-display">
