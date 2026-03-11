@@ -10,7 +10,12 @@
     const total = document.querySelector(".total");
     let cartCount = 0;
 
-
+    function toggleSearch() {
+        const bar = document.getElementById('search-bar');
+        const isVisible = bar.style.display === 'block';
+        bar.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) document.getElementById('search-input').focus();
+    }
     
     if (subTotal && total && productPrices.length > 0) {
         let totalPrice = 0;
