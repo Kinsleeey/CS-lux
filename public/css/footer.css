@@ -139,13 +139,9 @@ footer {
 
 /* Bottom Footer */
 .bottom-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 2rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-    gap: 1.5rem;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    text-align: center;
 }
 
 .bottom-footer > p {
@@ -159,49 +155,6 @@ footer {
     color: var(--color-primary);
 }
 
-/* Payment Methods */
-.bottom-footer > div {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.bottom-footer > div > div {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-sm);
-    transition: all var(--transition-fast);
-}
-
-.bottom-footer > div > div:hover {
-    background: rgba(2, 159, 174, 0.1);
-    border-color: rgba(2, 159, 174, 0.3);
-}
-
-.bottom-footer svg {
-    width: 20px;
-    height: 20px;
-    fill: rgba(255, 255, 255, 0.7);
-    transition: fill var(--transition-fast);
-}
-
-.bottom-footer > div > div:hover svg {
-    fill: var(--color-primary);
-}
-
-.bottom-footer p {
-    font-size: 0.813rem;
-    color: rgba(255, 255, 255, 0.7);
-    margin: 0;
-}
-
-.bottom-footer > div > div:hover p {
-    color: var(--color-primary);
-}
 
 
 
@@ -240,24 +193,6 @@ footer {
     .top-footer > div:last-child {
         grid-column: 1;
     }
-
-    .bottom-footer {
-        flex-direction: column;
-        align-items: flex-start;
-        text-align: center;
-        padding-top: 1.5rem;
-        margin-top: 1.5rem;
-    }
-
-    .bottom-footer > p {
-        width: 100%;
-    }
-
-    .bottom-footer > div {
-        width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
 }
 
 @media (max-width: 480px) {
@@ -292,18 +227,6 @@ footer {
         height: 18px;
     }
 
-    .bottom-footer > div {
-        gap: 1rem;
-    }
-
-    .bottom-footer > div > div {
-        padding: 0.375rem 0.625rem;
-    }
-
-    .bottom-footer svg {
-        width: 18px;
-        height: 18px;
-    }
 
     .bottom-footer p {
         font-size: 0.75rem;

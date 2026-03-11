@@ -62,6 +62,19 @@ app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+// middleware runs before all routes
+app.use(async (req, res, next) => {
+  try {
+    const result = await db.query("SELECT * FROM categories");
+    const categories =  result.rows;
+    res.locals.categories = categories;
+    next();
+  } catch (err) {
+    next(err);
+  }
+});
+
+
 app.set('view engine', 'ejs');
 app.set('views', './views')
 
@@ -183,6 +196,44 @@ app.get("/product", async(req, res) => {
         
         const products = result.rows;
 
+        let variants = [];
+        const varArr = products.map(product => product.id);
+
+        for (let v of varArr) {
+            const variant = await getVariantDetails(v);    
+            variants.push(variant);
+        }
+
+        if(products.length === 0) {
+            return res.render("product.ejs", { msg: "No Products Available", products: [], categories, variants })
+        }
+
+        res.render("product.ejs", { msg: "", products, categories, variants });
+
+    } catch(err) {
+        console.log(err)
+        res.status(404).send("error retrieving products info")
+
+    }
+})
+
+app.get("/product/:cat", async(req, res) => {
+    const specificCategory = req.params.cat;
+    try {
+        const result1 = await db.query("SELECT * FROM categories");
+        const categories =  result1.rows;
+        
+        const result = await db.query(`
+            SELECT 
+                p.id,
+                p.name,
+                p.image,
+                p.price
+                FROM products p
+                WHERE category_id = $1
+            `, [specificCategory])
+        
+        const products = result.rows;
         let variants = [];
         const varArr = products.map(product => product.id);
 
