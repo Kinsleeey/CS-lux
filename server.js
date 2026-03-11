@@ -62,7 +62,6 @@ app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-// middleware runs before all routes
 app.use(async (req, res, next) => {
   try {
     const result = await db.query("SELECT * FROM categories");
@@ -142,10 +141,6 @@ app.get("/", async(req, res) => {
         console.log("Not Logged in")
     }
     try {
-        const result1 = await db.query("SELECT * FROM categories");
-        const categories =  result1.rows;
-        
-
         const result = await db.query(`
             SELECT 
                 p.id,
@@ -168,7 +163,7 @@ app.get("/", async(req, res) => {
         }
 
 
-        res.render("index.ejs", { msg: "", products, categories, variants });
+        res.render("index.ejs", { msg: "", products, variants });
 
     } catch(err) {
         console.log(err)
@@ -181,16 +176,15 @@ app.get("/", async(req, res) => {
 app.get("/product", async(req, res) => {
 
     try {
-        const result1 = await db.query("SELECT * FROM categories");
-        const categories =  result1.rows;
-
         const result = await db.query(`
             SELECT 
                 p.id,
                 p.name,
                 p.image,
-                p.price
+                p.price,
+                c.name AS category
                 FROM products p
+                JOIN categories c ON p.category_id = c.id
                 WHERE category_id = 1
             `, )
         
@@ -205,10 +199,10 @@ app.get("/product", async(req, res) => {
         }
 
         if(products.length === 0) {
-            return res.render("product.ejs", { msg: "No Products Available", products: [], categories, variants })
+            return res.render("product.ejs", { msg: "No Products Available", products: [], variants })
         }
 
-        res.render("product.ejs", { msg: "", products, categories, variants });
+        res.render("product.ejs", { msg: "", products, variants });
 
     } catch(err) {
         console.log(err)
@@ -220,9 +214,6 @@ app.get("/product", async(req, res) => {
 app.get("/product/:cat", async(req, res) => {
     const specificCategory = req.params.cat;
     try {
-        const result1 = await db.query("SELECT * FROM categories");
-        const categories =  result1.rows;
-        
         const result = await db.query(`
             SELECT 
                 p.id,
@@ -243,10 +234,10 @@ app.get("/product/:cat", async(req, res) => {
         }
 
         if(products.length === 0) {
-            return res.render("product.ejs", { msg: "No Products Available", products: [], categories, variants })
+            return res.render("product.ejs", { msg: "No Products Available", products: [], variants })
         }
 
-        res.render("product.ejs", { msg: "", products, categories, variants });
+        res.render("product.ejs", { msg: "", products, variants });
 
     } catch(err) {
         console.log(err)
@@ -257,8 +248,6 @@ app.get("/product/:cat", async(req, res) => {
 
 app.get("/p-cat/:id", async(req, res) => {
     const specificId = req.params.id;
-    const result1 = await db.query("SELECT * FROM categories");
-        const categories =  result1.rows;
 
     const result = await db.query(`
         SELECT 
@@ -286,9 +275,9 @@ app.get("/p-cat/:id", async(req, res) => {
     
     console.log(variants);
     if(products.length === 0) {
-        return res.render("product.ejs", { msg: "No Products Available", products: [], categories })
+        return res.render("product.ejs", { msg: "No Products Available", products: [] })
     }
-    res.render("product.ejs", { msg: "", products, categories, variants });
+    res.render("product.ejs", { msg: "", products, variants });
 
 })
 
