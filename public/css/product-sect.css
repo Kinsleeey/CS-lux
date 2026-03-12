@@ -4,7 +4,7 @@
 
 .product-page {
     max-width: 1440px;
-    margin: 6rem auto 0 auto;
+    margin: 0 auto;
     padding: 3rem 2rem;
 }
 
@@ -104,6 +104,65 @@
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 1.5rem;
 }
+.p-page-display > h3:empty {
+    display: none;
+}
+
+/* SORT */
+.sort-wrapper {
+    position: relative;
+}
+
+.sort-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: 1px solid var(--color-bg-dark);
+    border-radius: var(--radius-sm);
+    padding: 0.5rem 1rem;
+    font-size: 0.938rem;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.sort-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.sort-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: var(--color-white);
+    border: 1px solid var(--color-border-lighter);
+    border-radius: var(--radius-sm);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    min-width: 170px;
+    z-index: 100;
+}
+
+.sort-dropdown.open {
+    display: block;
+}
+
+.sort-dropdown a {
+    display: block;
+    padding: 0.65rem 1rem;
+    font-size: 0.875rem;
+    color: var(--color-text);
+    text-decoration: none;
+    transition: background var(--transition-fast);
+}
+
+.sort-dropdown a:hover {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
 
 /* ==========================================================================
    RESPONSIVE BREAKPOINTS

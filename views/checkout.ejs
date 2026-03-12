@@ -29,7 +29,6 @@
                 
                 <fieldset class="delivery-type bord">
                     <legend>Delivery Details</legend>
-
                     
                     <label style="padding: 0;" class="bord" for="pickup">
                         <input type="radio" id="pickup" name="delivery_type" value="pickup" hidden checked/>
@@ -144,16 +143,16 @@
                 <div class="cal">
                     <div class="flex-sb-c">
                         <p>Subtotal</p>
-                        <p><%= subtotal  %></p>
+                        <p>₦<%= Number(subtotal).toLocaleString('en-NG') %></p>
                     </div>
                     <div class="flex-sb-c">
                         <p>Shipping Fee</p>
-                        <p><%= shippingFee  %></p>
+                        <p>₦<%= Number(shippingFee).toLocaleString('en-NG') %></p>
                     </div>
                 </div>
                 <div class="flex-sb-c">
                     <h4>Total</h4>
-                    <h4><%= total  %></h4>
+                    <h4>₦<%= Number(total).toLocaleString('en-NG') %></h4>
                 </div>
                 <button type="submit" class="c-button">Confirm Order</button>
                 <a href="/cart" class="c-button">Back to cart</a>

@@ -131,11 +131,12 @@ header {
     .search-bar {
         padding: 0.625rem 1rem;
     }
-
     .search-inner button {
-        display: none;
+        padding: 0.4rem 0.75rem;
+        font-size: 0.8rem;
     }
 }
+
 
 
 /* Brand/Logo */
