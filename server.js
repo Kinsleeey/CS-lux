@@ -173,81 +173,8 @@ app.get("/", async(req, res) => {
 
 })
 
-app.get("/product", async(req, res) => {
-
-    try {
-        const result = await db.query(`
-            SELECT 
-                p.id,
-                p.name,
-                p.image,
-                p.price,
-                c.name AS category
-                FROM products p
-                JOIN categories c ON p.category_id = c.id
-                WHERE category_id = 1
-            `, )
-        
-        const products = result.rows;
-
-        let variants = [];
-        const varArr = products.map(product => product.id);
-
-        for (let v of varArr) {
-            const variant = await getVariantDetails(v);    
-            variants.push(variant);
-        }
-
-        if(products.length === 0) {
-            return res.render("product.ejs", { msg: "No Products Available", products: [], variants })
-        }
-
-        res.render("product.ejs", { msg: "", products, variants });
-
-    } catch(err) {
-        console.log(err)
-        res.status(404).send("error retrieving products info")
-
-    }
-})
-
-app.get("/product/:cat", async(req, res) => {
-    const specificCategory = req.params.cat;
-    try {
-        const result = await db.query(`
-            SELECT 
-                p.id,
-                p.name,
-                p.image,
-                p.price
-                FROM products p
-                WHERE category_id = $1
-            `, [specificCategory])
-        
-        const products = result.rows;
-        let variants = [];
-        const varArr = products.map(product => product.id);
-
-        for (let v of varArr) {
-            const variant = await getVariantDetails(v);    
-            variants.push(variant);
-        }
-
-        if(products.length === 0) {
-            return res.render("product.ejs", { msg: "No Products Available", products: [], variants })
-        }
-
-        res.render("product.ejs", { msg: "", products, variants });
-
-    } catch(err) {
-        console.log(err)
-        res.status(404).send("error retrieving products info")
-
-    }
-})
-
-app.get("/p-cat/:id", async(req, res) => {
-    const specificId = req.params.id;
+app.get("/product/:categoryId", async(req, res) => {
+    const specificId = req.params.categoryId;
 
     const result = await db.query(`
         SELECT 
@@ -262,8 +189,6 @@ app.get("/p-cat/:id", async(req, res) => {
 
     const products = result.rows;
 
-    console.log(products)
-
     let variants = [];
     const varArr = products.map(product => product.id);
     
@@ -273,12 +198,11 @@ app.get("/p-cat/:id", async(req, res) => {
         variants.push(variant);
     }
     
-    console.log(variants);
     if(products.length === 0) {
         return res.render("product.ejs", { msg: "No Products Available", products: [] })
     }
-    res.render("product.ejs", { msg: "", products, variants });
 
+    res.render("product.ejs", { msg: "", products, variants });
 })
 
 app.get("/sign-in", (req, res) => {
