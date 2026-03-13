@@ -63,10 +63,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.use(async (req, res, next) => {
+    const user =  req.user;
+    var currentUser;
   try {
     const result = await db.query("SELECT * FROM categories");
-    const categories =  result.rows;
+    if (user) {
+        const result2 = await db.query("SELECT * FROM users WHERE id = $1", [user.id]);
+        currentUser = result2.rows;
+    } else {
+        currentUser = [];
+    }
+    
+    res.locals.currentUser = currentUser;
+    const categories = result.rows;
     res.locals.categories = categories;
+    
     next();
   } catch (err) {
     next(err);
@@ -163,7 +174,7 @@ app.get("/", async(req, res) => {
         }
 
 
-        res.render("index.ejs", { msg: "", products, variants });
+        res.render("index.ejs", {  msg: req.query.loginerror ? "Wrong email or password." : "", products, variants });
 
     } catch(err) {
         console.log(err)
@@ -207,38 +218,36 @@ app.get("/product/:categoryId", async(req, res) => {
     res.render("product.ejs", { msg: "", products, variants });
 })
 
-app.get("/sign-in", (req, res) => {
-    res.render("sign-in.ejs", {msg: ""})
-})
-
-app.post("/login",
-  passport.authenticate("local", { failureRedirect: "/sign-in", keepSessionInfo: true }),
-  async (req, res) => {
-
-    const cart = req.session.cart;
-
-    if (cart && cart.length > 0) {
-        for (let i = 0; i < cart.length; i++) {
-            await db.query(
-                `INSERT INTO cart (user_id, variant_id, qty) 
-                VALUES ($1, $2, $3)
-                ON CONFLICT (user_id, variant_id) 
-                DO UPDATE SET qty = cart.qty + EXCLUDED.qty`,
-                [req.user.id, cart[i].variant_id, cart[i].qty]
-            );
+app.post("/login", (req, res, next) => {
+    passport.authenticate("local", async (err, user) => {
+        if (!user) {
+            return res.redirect(req.headers.referer + '?loginerror=true');
         }
-        req.session.cart = [];
-    }
 
-    const redirectTo = req.session.returnTo || "/";
-    delete req.session.returnTo;
-    res.redirect(redirectTo);
-  }
-);
+        req.logIn(user, { keepSessionInfo: true }, async (err) => {
+            if (err) return next(err);
+            
+            const cart = req.session.cart;
 
-app.get("/sign-up", (req, res) => {
-    res.render("sign-up", { msg: "" })
-})
+            if (cart && cart.length > 0) {
+                for (let i = 0; i < cart.length; i++) {
+                    await db.query(
+                        `INSERT INTO cart (user_id, variant_id, qty) 
+                        VALUES ($1, $2, $3)
+                        ON CONFLICT (user_id, variant_id) 
+                        DO UPDATE SET qty = cart.qty + EXCLUDED.qty`,
+                        [req.user.id, cart[i].variant_id, cart[i].qty]
+                    );
+                }
+                req.session.cart = [];
+            }
+
+            const redirectTo = req.session.returnTo || "/";
+            delete req.session.returnTo;
+            res.redirect(redirectTo);
+        });
+    })(req, res, next);
+});
 
 app.post("/register", async(req, res) => {
     const userEmail = req.body.email;
@@ -352,7 +361,7 @@ app.get("/cart", async(req, res) => {
             
         }
 
-        return res.render("cart.ejs", { cartedProducts });
+        return res.render("cart.ejs", { cartedProducts, msg: "" });
     }
 
     const userId = req.user.id;
@@ -374,7 +383,7 @@ app.get("/cart", async(req, res) => {
 
     const cartedProducts = result.rows;
 
-    res.render("cart.ejs", { cartedProducts }); 
+    res.render("cart.ejs", { cartedProducts, msg: "" }); 
 })
 
 app.get("/cart/count", async(req, res) => {
@@ -539,7 +548,7 @@ app.get("/checkout", async (req, res) => {
     );
     const user = userResult.rows[0];
 
-    res.render("checkout.ejs", { subtotal, shippingFee, total, user });
+    res.render("checkout.ejs", { subtotal, shippingFee, total, user, msg: "" });
   } catch (err) {
     console.log(err);
   }
@@ -592,7 +601,7 @@ app.get("/track-order", async (req, res) => {
       order.items = itemsResult.rows;
     }
 
-    res.render("track-order.ejs", { orders });
+    res.render("track-order.ejs", { orders, msg: "" });
 
   } catch (err) {
     console.error(err);
@@ -730,7 +739,7 @@ app.get("/edit-profile", async (req, res) => {
       [req.user.id]
     );
     const user = result.rows[0];
-    res.render("edit-profile.ejs", { user });
+    res.render("edit-profile.ejs", { user, msg: "" });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error fetching profile");
@@ -1128,7 +1137,7 @@ app.get("/payment/verify", async (req, res) => {
             await db.query(`DELETE FROM cart WHERE user_id = $1`, [req.user.id]);
         }
 
-        res.render("receipt.ejs", { amount: Math.floor(amount / 100), reference, status });
+        res.render("receipt.ejs", { amount: Math.floor(amount / 100), reference, status, msg: "" });
 
     } catch (err) {
         console.error("Verification error:", err.response?.data || err.message);
