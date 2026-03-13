@@ -292,6 +292,17 @@
     color: var(--color-primary);
 }
 
+/* nothing in cart */
+
+.empty-cart {
+    margin: 1rem;
+}
+
+.empty-cart a {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
 /* Payment Security */
 .paym {
     display: flex;
@@ -300,8 +311,6 @@
     gap: 0.5rem;
     font-size: 0.813rem;
     color: var(--color-text);
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
 }
 
 .paym svg {
@@ -310,22 +319,30 @@
     fill: var(--color-text-light);
 }
 
+
+
+/* paystack */
 .pay {
+    margin: 1.5rem auto 0 auto;
+    justify-content: center;
+    align-items: center;
+}
+.paystack {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    flex-direction: row;
+    gap: 0.25rem;
 }
 
-.pay svg {
-    width: 32px;
-    height: 32px;
-    opacity: 0.6;
-    transition: opacity var(--transition-fast);
+.paystack img {
+    width: 10px;
+    height: 10px;
 }
 
-.pay svg:hover {
-    opacity: 1;
+.paystack p {
+    font-size: 0.813rem;
+    color: var(--color-text);
 }
 
 /* ==========================================================================
@@ -389,6 +406,7 @@
     .cart {
         padding: 1rem;
     }
+    
 
     .si-card {
         grid-template-columns: 100px 1fr;

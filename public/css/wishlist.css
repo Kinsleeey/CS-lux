@@ -3,7 +3,9 @@
    ========================================================================== */
 
 .favourite {
-    margin: 4rem;
+    min-height: 40vh ; /* 109px is your navbar height */
+    margin: 0 auto;
+    padding: 3rem 2rem;
 }
 
 .fav h3 {
@@ -18,6 +20,16 @@
 
 .fav-item {
     width: 15.625rem;
+}
+/* empty wishlist */
+.empty-wishlist {
+    margin: 1rem;
+    width: 100%;
+}
+
+.empty-wishlist a {
+    color: var(--color-primary);
+    text-decoration: underline;
 }
 
 .fav-item-img {

@@ -1,0 +1,238 @@
+/* ==========================================================================
+   PRODUCT DETAILS PAGE
+   ========================================================================== */
+
+.project-info {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+/* Product Info Card */
+.info-card-center {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+.info-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    background: var(--color-white);
+    border: 1px solid var(--color-border-lighter);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Product Image */
+.info-card-img {
+    
+    height: 450px;
+    aspect-ratio: 3 / 4;
+    max-height: 500px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-bg-light);
+}
+
+.info-card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Product Details */
+.info-card-writeup {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    height: fit-content;
+    width: 100%;
+}
+
+.close-x {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.close-x svg {
+    transition: opacity var(--transition-fast);
+}
+
+.close-x:hover svg {
+    opacity: 0.5;
+}
+
+.info-card-writeup h4 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    line-height: 1.3;
+}
+
+.info-card-writeup p {
+    font-size: 0.938rem;
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+/* Size Selection */
+.icw-size {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.icw-size > p {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-dark);
+}
+
+.a-size {
+    display: flex;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 0.5rem !important;
+}
+
+.size-checkbox {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+.size-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.size-checkbox .checkmark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    height: 48px;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    background: var(--color-white);
+    transition: all var(--transition-fast);
+}
+
+.size-checkbox:hover .checkmark {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.size-checkbox input:checked + .checkmark {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-primary);
+}
+
+/* Price */
+.info-card-writeup h4:last-of-type {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-primary);
+}
+
+/* Action Buttons - side by side */
+.info-btn-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.info-card-writeup button {
+    width: 100%;
+    height: 52px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.938rem;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+}
+
+.info-card-writeup button:first-of-type {
+    background: var(--color-primary);
+    border: none;
+    color: var(--color-white);
+}
+
+.info-card-writeup button:first-of-type:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-primary);
+}
+
+.info-card-writeup button:last-of-type {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    color: var(--color-dark);
+}
+
+.info-card-writeup button:last-of-type:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .project-info {
+        padding: 1.5rem;
+    }
+
+    .info-card {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1.25rem;
+    }
+
+    .info-card-writeup {
+        position: static;
+    }
+
+    
+}
+
+@media (max-width: 480px) {
+    .project-info {
+        padding: 1rem;
+    }
+
+    .info-card {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .info-btn-group {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+    }
+
+    .info-card-writeup button {
+        height: 44px;
+        font-size: 0.813rem;
+    }
+
+    .size-checkbox .checkmark {
+        min-width: 40px;
+        height: 40px;
+        font-size: 0.813rem;
+    }
+}

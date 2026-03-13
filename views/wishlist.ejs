@@ -4,9 +4,10 @@
     <div class="fav">
         <h3>My Wishlist</h3>
         <div class="fav-center">
-            <% if (!products) { %>
-                <h4>Wishlist is empty</h4>
+            <% if (products.length === 0) { %>
+                <h4 class="empty-wishlist">Wishlist is empty, add<a href="/product/1"> products</a>.</h4>
             <% } %>
+            
             <% for (let i = 0; i < products.length; i++) { %>
                     <div class="fav-item">
                         <div class="fav-item-img">

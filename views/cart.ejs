@@ -10,8 +10,12 @@
         
         
         <div class="si-cards">
+            <% if (cartedProducts.length === 0) { %>
+                <h4 class="empty-cart">Cart is empty, add <a href="/product/1">products</a>.</h4>
+            <% } %>
             <% for (let cartedProduct of cartedProducts) {%>
                 <div class="si-card flex-c">
+                    
                     <div class="si-img"><img src="<%= cartedProduct.image %>"/></div>
                     <div class="si-writeup">
                         <span class="si1 flex-sb-c">
@@ -56,18 +60,20 @@
                 <h4>Total</h4>
                 <h4 class="total">₦0</h4>
             </div>
-            <a href="/checkout" class="c-button">Checkout</a>
-            <a href="/product" class="c-button">continue Shopping</a>
-            <div>
-                <span class="paym flex-c gap05">
+            <a href="<%= cartedProducts.length > 0 ? '/checkout' : '#' %>" 
+                class="c-button" 
+                style="<%= cartedProducts.length === 0 ? 'opacity: 0.4; cursor: not-allowed;' : '' %>">
+                Checkout
+            </a>
+            <a href="/product/1" class="c-button">continue Shopping</a>
+            <div class="pay flex-c gap1">
+                <span class="paym flex-c gap025">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Zm-68-56a12,12,0,1,1-12-12A12,12,0,0,1,140,152Z"></path></svg>
                     <p>Secured Payment with:</p>
                 </span>
-                <div class="pay">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 256 256"><path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48Zm0,16V88H32V64Zm0,128H32V104H224v88Zm-16-24a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h32A8,8,0,0,1,208,168Zm-64,0a8,8,0,0,1-8,8H120a8,8,0,0,1,0-16h16A8,8,0,0,1,144,168Z"></path></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 256 256"><path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48Zm0,16V88H32V64Zm0,128H32V104H224v88Zm-16-24a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h32A8,8,0,0,1,208,168Zm-64,0a8,8,0,0,1-8,8H120a8,8,0,0,1,0-16h16A8,8,0,0,1,144,168Z"></path></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 256 256"><path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48Zm0,16V88H32V64Zm0,128H32V104H224v88Zm-16-24a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h32A8,8,0,0,1,208,168Zm-64,0a8,8,0,0,1-8,8H120a8,8,0,0,1,0-16h16A8,8,0,0,1,144,168Z"></path></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000000" viewBox="0 0 256 256"><path d="M224,48H32A16,16,0,0,0,16,64V192a16,16,0,0,0,16,16H224a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48Zm0,16V88H32V64Zm0,128H32V104H224v88Zm-16-24a8,8,0,0,1-8,8H168a8,8,0,0,1,0-16h32A8,8,0,0,1,208,168Zm-64,0a8,8,0,0,1-8,8H120a8,8,0,0,1,0-16h16A8,8,0,0,1,144,168Z"></path></svg>
+                <div class="paystack">
+                    <img src="/image/Paystack Logo Vector.svg .png">
+                    <p>Paystack</p>
                 </div>
             </div>
         </div>

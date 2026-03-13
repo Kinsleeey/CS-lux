@@ -182,8 +182,10 @@ app.get("/product/:categoryId", async(req, res) => {
             p.name,
             p.price,
             p.image,
-            p.price
+            p.price,
+            c.name AS category
             FROM products p
+            JOIN categories c ON p.category_id = c.id
             WHERE category_id = $1
         `, [specificId])
 
@@ -305,7 +307,8 @@ app.get("/info/:category/:id", async(req, res) => {
                 p.id,
                 p.name,
                 p.price,
-                p.image
+                p.image,
+                c.name AS category
                 FROM products p
                 JOIN categories c ON p.category_id = c.id
                 WHERE c.name = $1`, [specifiedCategory]
@@ -322,8 +325,6 @@ app.get("/info/:category/:id", async(req, res) => {
 })
 
 app.get("/cart", async(req, res) => {
-
-    console.log(req.session.cart);
 
     if(!req.user) {
         const productsIncart = req.session.cart || [];
@@ -441,8 +442,6 @@ app.post("/cart/:id/:qty/:stock", async(req, res) => {
         count = req.session.cart.length;
     }
     
-    console.log("Cart count:", count);
-    console.log(req.session.cart)
     res.json({ success: true, count: count });
 });
 

@@ -241,6 +241,23 @@ function sortProducts(order) {
     });
 }
 
+function sortRelatedProducts(order) {
+    var grid = document.querySelector('.info-page-display');
+    var items = Array.from(document.querySelectorAll('.item'));
+
+    items.sort(function(a, b) {
+        var priceA = Number(a.dataset.price);
+        var priceB = Number(b.dataset.price);
+        if (order === 'high-low') return priceB - priceA;
+        if (order === 'low-high') return priceA - priceB;
+    });
+
+    items.forEach(function(item) {
+        var overlay = item.nextElementSibling; // the xyz-overlay right after each item
+        grid.appendChild(item);
+        grid.appendChild(overlay);
+    });
+}
 //product sidebar active
 var currentPath = window.location.pathname;
 var navLinks = document.querySelectorAll('.p-page-nav a');
