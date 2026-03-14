@@ -8,6 +8,44 @@ const subTotal = document.querySelector(".subtotal");
 const total = document.querySelector(".total");
 let cartCount = 0;
 
+
+const TOAST_DURATION = 2000;
+ 
+    const TOAST_ICONS = {
+      success: '✓',
+      error:   '✕',
+      info:    'i'
+    };
+ 
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+    <div class="toast-icon">${TOAST_ICONS[type]}</div>
+    <div class="toast-content">
+        <div class="toast-message">${message}</div>
+    </div>
+    <button class="toast-close" onclick="dismissToast(this.closest('.toast'))">✕</button>
+    <div class="toast-progress" style="animation-duration: ${TOAST_DURATION}ms"></div>
+    `;
+
+    document.getElementById('toast-container').appendChild(toast);
+
+    requestAnimationFrame(() => {
+    requestAnimationFrame(() => toast.classList.add('show'));
+    });
+
+    toast._timer = setTimeout(() => dismissToast(toast), TOAST_DURATION);
+}
+ 
+function dismissToast(toast) {
+    if (!toast) return;
+    clearTimeout(toast._timer);
+    toast.classList.add('hide');
+    toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+}
+
+
 function toggleSearch() {
     const bar = document.getElementById('search-bar');
     const isVisible = bar.style.display === 'block';
@@ -59,16 +97,16 @@ async function addToCart(variantId, qty, stock) {
             const data = await response.json();
             cartCount = data.count;
             cartCountElement.textContent = cartCount;
-            alert('Product added to cart!');
+            showToast('Product added to cart!', 'info');
         } else if (response.status === 409) {
             const data = await response.json();
-            alert(data.message);
+            showToast(data.message, 'info');
         } else {
-            alert('Failed to add to cart');
+            showToast('Failed to add to cart', 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Failed to add to cart');
+        showToast('Failed to add to cart', 'error');
     }
 }
 
@@ -81,13 +119,13 @@ async function reduceFromCart(variantId) {
             const data = await response.json();
             cartCount = data.count;
             cartCountElement.textContent = cartCount;
-            alert('cart update sucessfull');
+            showToast('Cart updated successfully!', 'success');
         } else {
-            alert('Failed to update cart');
+            showToast('Failed to remove product from cart', 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Failed to update cart');
+        showToast('Failed to remove product from cart', 'error');
     }
 }
 
@@ -100,17 +138,20 @@ async function cAddToCart(variantId, qty, stock) {
             const data = await response.json();
             cartCount = data.count;
             cartCountElement.textContent = cartCount;
-            window.location.href = '/cart';
-            alert('Product added to cart!');
+            showToast('Product added to cart!', 'info');
+
+            setTimeout(() => {
+                window.location.href = '/cart';
+            }, 2000);
         } else if (response.status === 409) {
             const data = await response.json();
-            alert(data.message);
+            showToast(data.message, 'info'); // ← was alert()
         } else {
-            alert('Failed to add to cart');
+            showToast('Failed to add to cart', 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Failed to add to cart');
+        showToast('Failed to add to cart', 'error');
     }
 }
 
@@ -123,14 +164,17 @@ async function cReduceFromCart(variantId) {
             const data = await response.json();
             cartCount = data.count;
             cartCountElement.textContent = cartCount;
-            window.location.href = '/cart';
-            alert('cart update sucessfull');
+            showToast('Cart updated successfully!', 'success');
+
+            setTimeout(() => {
+                window.location.href = '/cart';
+            }, 2000); 
         } else {
-            alert('Failed to update cart');
+            showToast('Failed to remove product from cart', 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Failed to update cart');
+        showToast('Failed to remove product from cart', 'error');
     }
 }
 
@@ -144,13 +188,13 @@ async function removeFromCart(variantId) {
             cartCount = data.count;
             cartCountElement.textContent = cartCount;
             window.location.href = '/cart';
-            alert('Product removed from cart!');
+            showToast('Product removed from cart!', 'success');
         } else {
-            alert('Failed to remove from cart');
+            showToast('Failed to remove from cart!', 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Failed to remove from cart');
+        showToast('Failed to remove from cart!', 'error');
     }
 }
 
@@ -162,16 +206,17 @@ async function addToWishlist(productId) {
         if (response.ok) {
             const data = await response.json();
             if (data.message === "An error occured") {
-                alert('Product already exist in Wishlist!');
+                showToast('Product already exist in Wishlist!', 'info');
             } else {
-                alert('Product added to Wishlist!');
+                showToast('Product added to Wishlist!', 'success');
             }
         } else {
-            alert('Failed to add product to wishlist');
+            showToast('Failed to add product to wishlist', 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Failed to add product to wishlist');
+        showToast('Failed to add product to wishlist', 'error');
+        
     }
 }
 
@@ -182,14 +227,17 @@ async function removeFromWishlist(productId) {
         });
         if (response.ok) {
             const data = await response.json();
-            window.location.href = '/wishlist';
-            alert(data.message);
+            showToast(data.message, 'success');
+
+            setTimeout(() => {
+                window.location.href = '/wishlist';
+            }, TOAST_DURATION);
         } else {
-            alert('Failed to remove from wishlist');
+            showToast('Failed to remove from wishlist', 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Failed to remove from wishlist');
+        showToast('Failed to remove from wishlist', 'error');
     }
 }
 
@@ -217,6 +265,7 @@ function changeQty(btn, delta) {
 function toggleSortDropdown() {
     document.getElementById('sortDropdown').classList.toggle('open');
 }
+
 document.addEventListener('click', function(e) {
     if (!e.target.closest('.sort-wrapper')) {
         document.getElementById('sortDropdown').classList.remove('open');
@@ -267,3 +316,5 @@ navLinks.forEach(function(link) {
         link.classList.add('active');
     }
 });
+
+

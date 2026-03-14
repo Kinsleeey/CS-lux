@@ -623,8 +623,10 @@ app.get("/wishlist", async(req, res) => {
                 p.id,
                 p.name,
                 p.image,
-                p.price
+                p.price,
+                c.name AS category
                 FROM products p
+                JOIN categories c ON p.category_id = c.id
                 WHERE p.id = $1
             `, [w.product_id]);
             const actualResult = result.rows;
@@ -649,9 +651,11 @@ app.get("/wishlist", async(req, res) => {
                 p.id,
                 p.name,
                 p.image,
-                p.price
+                p.price,
+                c.name AS category
                 FROM wishlist w
                 JOIN products p ON w.product_id = p.id
+                JOIN categories c ON p.category_id = c.id
                 WHERE w.user_id = $1
             `, [req.user.id] );
         
