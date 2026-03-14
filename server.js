@@ -666,10 +666,10 @@ app.get("/wishlist", async(req, res) => {
         }
 
         if(products.length === 0) {
-            return res.render("wishlist.ejs", { msg: "No Products Available", products: [], variants })
+            return res.render("wishlist.ejs", { msg: "No Products Available", products: [], variants, popupmsg: "" })
         }
 
-        return res.render("wishlist.ejs", { msg: "", products, variants });
+        return res.render("wishlist.ejs", { msg: "", products, variants, popupmsg: "" });
 
     } catch(err) {
         console.log(err)
