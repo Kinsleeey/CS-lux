@@ -231,7 +231,7 @@ async function removeFromWishlist(productId) {
 
             setTimeout(() => {
                 window.location.href = '/wishlist';
-            }, TOAST_DURATION);
+            }, 2000);
         } else {
             showToast('Failed to remove from wishlist', 'error');
         }
