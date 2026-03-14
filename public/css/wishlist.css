@@ -3,7 +3,7 @@
    ========================================================================== */
 
 .favourite {
-    min-height: 40vh ; /* 109px is your navbar height */
+    min-height: 40vh;
     margin: 0 auto;
     padding: 3rem 2rem;
 }
@@ -20,7 +20,14 @@
 
 .fav-item {
     width: 15.625rem;
+    transition: box-shadow var(--transition-fast), transform var(--transition-fast);
 }
+
+.fav-item:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+}
+
 /* empty wishlist */
 .empty-wishlist {
     margin: 1rem;
@@ -46,6 +53,11 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform var(--transition-fast);
+}
+
+.fav-item:hover .fav-item-img img {
+    transform: scale(1.05);
 }
 
 .fav-remove {
@@ -80,8 +92,9 @@
     fill: var(--color-white);
 }
 
+
 .fav-item-footer {
-    padding: 1rem 0;
+    padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -106,9 +119,9 @@
 }
 
 .fav-cart-btn {
-    width: 38px;
-    height: 38px;
-    background: var(--color-primary);
+    width: 40px;
+    height: 40px;
+    background: var(--color-bg-gray);
     border-radius: var(--radius-md);
     display: flex;
     align-items: center;
@@ -118,12 +131,19 @@
 }
 
 .fav-cart-btn:hover {
-    background: var(--color-primary-dark);
+    background: var(--color-primary);
     transform: translateY(-2px);
     box-shadow: var(--shadow-primary);
 }
 
 .fav-cart-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: var(--color-dark);
+    transition: fill var(--transition-fast);
+}
+
+.fav-cart-btn:hover svg {
     fill: var(--color-white);
 }
 
