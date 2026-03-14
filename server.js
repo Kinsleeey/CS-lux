@@ -1087,7 +1087,7 @@ app.get("/payment/verify", async (req, res) => {
                 [reference]
             );
             const { amount, status } = existingPayment.rows[0];
-            return res.render("receipt.ejs", { amount, reference, status });
+            return res.render("receipt.ejs", { amount, reference, status, popupmsg: "" });
         }
 
         const response = await axios.get(
@@ -1137,7 +1137,7 @@ app.get("/payment/verify", async (req, res) => {
             await db.query(`DELETE FROM cart WHERE user_id = $1`, [req.user.id]);
         }
 
-        res.render("receipt.ejs", { amount: Math.floor(amount / 100), reference, status, msg: "" });
+        res.render("receipt.ejs", { amount: Math.floor(amount / 100), reference, status, msg: "", popupmsg: "" });
 
     } catch (err) {
         console.error("Verification error:", err.response?.data || err.message);
