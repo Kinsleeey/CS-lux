@@ -174,7 +174,7 @@ app.get("/", async(req, res) => {
         }
 
 
-        res.render("index.ejs", {  msg: req.query.loginerror ? "Wrong email or password." : "", products, variants });
+        res.render("index.ejs", { popupmsg: req.query.loginerror ? "Wrong email or password." : "", products, variants });
 
     } catch(err) {
         console.log(err)
@@ -212,10 +212,10 @@ app.get("/product/:categoryId", async(req, res) => {
     }
     
     if(products.length === 0) {
-        return res.render("product.ejs", { msg: "No Products Available", products: [] })
+        return res.render("product.ejs", { msg: "No Products Available", products: [], popupmsg: "" })
     }
 
-    res.render("product.ejs", { msg: "", products, variants });
+    res.render("product.ejs", { msg: "", products, variants, popupmsg: "" });
 })
 
 app.post("/login", (req, res, next) => {
@@ -330,7 +330,7 @@ app.get("/info/:category/:id", async(req, res) => {
     console.log(product)
     console.log(variants)
     
-    res.render("info.ejs", { product: product[0], variants, relatedProducts })
+    res.render("info.ejs", { product: product[0], variants, relatedProducts, popupmsg: "" })
 })
 
 app.get("/cart", async(req, res) => {
@@ -361,7 +361,7 @@ app.get("/cart", async(req, res) => {
             
         }
 
-        return res.render("cart.ejs", { cartedProducts, msg: "" });
+        return res.render("cart.ejs", { cartedProducts, popupmsg: "" });
     }
 
     const userId = req.user.id;
@@ -383,7 +383,7 @@ app.get("/cart", async(req, res) => {
 
     const cartedProducts = result.rows;
 
-    res.render("cart.ejs", { cartedProducts, msg: "" }); 
+    res.render("cart.ejs", { cartedProducts, popupmsg: "" }); 
 })
 
 app.get("/cart/count", async(req, res) => {
@@ -548,7 +548,7 @@ app.get("/checkout", async (req, res) => {
     );
     const user = userResult.rows[0];
 
-    res.render("checkout.ejs", { subtotal, shippingFee, total, user, msg: "" });
+    res.render("checkout.ejs", { subtotal, shippingFee, total, user, popupmsg: "" });
   } catch (err) {
     console.log(err);
   }
@@ -601,7 +601,7 @@ app.get("/track-order", async (req, res) => {
       order.items = itemsResult.rows;
     }
 
-    res.render("track-order.ejs", { orders, msg: "" });
+    res.render("track-order.ejs", { orders, popupmsg: "" });
 
   } catch (err) {
     console.error(err);
@@ -636,10 +636,10 @@ app.get("/wishlist", async(req, res) => {
         }
 
         if(products.length === 0) {
-            return res.render("wishlist.ejs", { msg: "No Products Available", products: [], variants })
+            return res.render("wishlist.ejs", { msg: "No Products Available", products: [], variants, popupmsg: "" })
         }
 
-        return res.render("wishlist.ejs", { msg: "", products, variants });
+        return res.render("wishlist.ejs", { msg: "", products, variants, popupmsg: "" });
 
     } 
 
@@ -739,7 +739,7 @@ app.get("/edit-profile", async (req, res) => {
       [req.user.id]
     );
     const user = result.rows[0];
-    res.render("edit-profile.ejs", { user, msg: "" });
+    res.render("edit-profile.ejs", { user, msg: "", popupmsg: "" });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error fetching profile");
@@ -813,11 +813,11 @@ app.get("/admin", async(req, res) => {
       order.items = itemsResult.rows;
     }
 
-    res.render("admin", { msg, categories, orders });
+    res.render("admin", { msg, categories, orders, popupmsg: "" });
 
   } catch (err) {
     console.error("Admin page error:", err);
-    res.render("admin", { msg: "Failed to load", categories: [], orders: [] });
+    res.render("admin", { msg: "Failed to load", categories: [], orders: [], popupmsg: "" });
   }
 });
 
