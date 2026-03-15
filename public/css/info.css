@@ -219,6 +219,9 @@
         padding: 1rem;
         gap: 1rem;
     }
+    .info-card-img {
+        height: 320px;
+    }
 
     .info-btn-group {
         grid-template-columns: 1fr 1fr;
