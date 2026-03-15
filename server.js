@@ -330,8 +330,7 @@ app.get("/info/:category/:id", async(req, res) => {
 
     const product = await getProductDetails(specificId); 
     const variants = await getVariantDetails(specificId); 
-    console.log(product)
-    console.log(variants)
+
     
     res.render("info.ejs", { product: product[0], variants, relatedProducts, popupmsg: "" })
 })
