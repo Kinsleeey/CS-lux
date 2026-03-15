@@ -57,6 +57,9 @@ function hidePageLoader() {
 window.addEventListener('load', function() {
   hidePageLoader();
 });
+document.addEventListener('DOMContentLoaded', function() {
+  hidePageLoader();
+});
 
 document.addEventListener('click', function(e) {
   // ignore if the click was stopped by something else
