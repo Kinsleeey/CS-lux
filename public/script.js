@@ -1,4 +1,5 @@
 const profile = document.querySelector("#user-profile");
+const closeProfile = document.getElementById("close-profile");
 const profileNav = document.querySelector(".profile-nav");
 const cancelEdit = document.querySelector("#cancel-edit");
 const edit = document.querySelector(".edit");
@@ -11,11 +12,11 @@ let cartCount = 0;
 
 const TOAST_DURATION = 2000;
  
-    const TOAST_ICONS = {
-      success: '✓',
-      error:   '✕',
-      info:    'i'
-    };
+const TOAST_ICONS = {
+    success: '✓',
+    error:   '✕',
+    info:    'i'
+};
  
 function showToast(message, type = 'info') {
     const toast = document.createElement('div');
@@ -44,6 +45,31 @@ function dismissToast(toast) {
     toast.classList.add('hide');
     toast.addEventListener('transitionend', () => toast.remove(), { once: true });
 }
+
+function showPageLoader() {
+  document.getElementById('page-loader').classList.add('active');
+}
+
+function hidePageLoader() {
+  document.getElementById('page-loader').classList.remove('active');
+}
+
+window.addEventListener('load', function() {
+  hidePageLoader();
+});
+
+document.addEventListener('click', function(e) {
+  // ignore if the click was stopped by something else
+  if (e.defaultPrevented) return;
+
+  var link = e.target.closest('a');
+  if (!link) return;
+  if (link.target === '_blank') return;
+  if (!link.href || link.href === '#' || link.href.startsWith('#')) return;
+
+  showPageLoader();
+});
+
 
 
 function toggleSearch() {
@@ -79,6 +105,11 @@ loadCartCount();
 if (profile) {
     profile.addEventListener("click", () => {
         profileNav.classList.toggle("hide");
+    });
+}
+if (closeProfile ) {
+    closeProfile.addEventListener("click", () => {
+        profileNav.classList.add("hide");
     });
 }
 
@@ -307,14 +338,15 @@ function sortRelatedProducts(order) {
         grid.appendChild(overlay);
     });
 }
-//product sidebar active
-var currentPath = window.location.pathname;
-var navLinks = document.querySelectorAll('.p-page-nav a');
 
-navLinks.forEach(function(link) {
-    if (link.getAttribute('href') === currentPath) {
-        link.classList.add('active');
-    }
-});
+// //product sidebar active
+// var currentPath = window.location.pathname;
+// var navLinks = document.querySelectorAll('.p-page-nav a');
+
+// navLinks.forEach(function(link) {
+//     if (link.getAttribute('href') === currentPath) {
+//         link.classList.add('active');
+//     }
+// });
 
 

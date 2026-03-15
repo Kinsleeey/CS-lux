@@ -89,4 +89,12 @@
     
 </section>
 
+<script>
+    
+    if (window.location.search.includes('login=true')) {
+        document.getElementById('signin-overlay').style.display = 'flex';
+    }
+
+</script>
+
 <%- include('partials/footer') %>
