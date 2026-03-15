@@ -77,6 +77,7 @@ app.use(async (req, res, next) => {
     res.locals.currentUser = currentUser;
     const categories = result.rows;
     res.locals.categories = categories;
+    res.locals.user = req.user
     
     next();
   } catch (err) {
@@ -218,36 +219,38 @@ app.get("/product/:categoryId", async(req, res) => {
     res.render("product.ejs", { msg: "", products, variants, popupmsg: "" });
 })
 
-app.post("/login", (req, res, next) => {
-    passport.authenticate("local", async (err, user) => {
-        if (!user) {
-            return res.redirect(req.headers.referer + '?loginerror=true');
-        }
+app.get("/sign-in", (req, res) => {
+    res.render("sign-in.ejs", { message: req.session.messages?.[0] || "" })
+})
 
-        req.logIn(user, { keepSessionInfo: true }, async (err) => {
-            if (err) return next(err);
-            
-            const cart = req.session.cart;
+app.post("/login",
+  passport.authenticate("local", { failureRedirect: "/sign-in", failureMessage: true, keepSessionInfo: true }),
+  async (req, res) => {
 
-            if (cart && cart.length > 0) {
-                for (let i = 0; i < cart.length; i++) {
-                    await db.query(
-                        `INSERT INTO cart (user_id, variant_id, qty) 
-                        VALUES ($1, $2, $3)
-                        ON CONFLICT (user_id, variant_id) 
-                        DO UPDATE SET qty = cart.qty + EXCLUDED.qty`,
-                        [req.user.id, cart[i].variant_id, cart[i].qty]
-                    );
-                }
-                req.session.cart = [];
-            }
+    const cart = req.session.cart;
 
-            const redirectTo = req.session.returnTo || "/";
-            delete req.session.returnTo;
-            res.redirect(redirectTo);
-        });
-    })(req, res, next);
-});
+    if (cart && cart.length > 0) {
+        for (let i = 0; i < cart.length; i++) {
+            await db.query(
+                `INSERT INTO cart (user_id, variant_id, qty) 
+                VALUES ($1, $2, $3)
+                ON CONFLICT (user_id, variant_id) 
+                DO UPDATE SET qty = cart.qty + EXCLUDED.qty`,
+                [req.user.id, cart[i].variant_id, cart[i].qty]
+            );
+              }
+        req.session.cart = [];
+    }
+       const redirectTo = req.session.returnTo || "/";
+    delete req.session.returnTo;
+    res.redirect(redirectTo);
+  }
+);
+
+
+app.get("/sign-up", (req, res) => {
+    res.render("sign-up.ejs", { msg: "" })
+})
 
 app.post("/register", async(req, res) => {
     const userEmail = req.body.email;
@@ -526,13 +529,12 @@ app.delete("/cart/:id", async(req, res) => {
 });
 
 app.get("/checkout", async (req, res) => {
-  if (!req.isAuthenticated()) {
-    req.session.returnTo = "/checkout";
-    req.session.save(() => {
-        res.redirect("/sign-in");
-    });
-    return;
-  };
+
+    if (!req.isAuthenticated()) {
+
+        return res.redirect('/cart?login=true');
+
+    }
 
   const userId = req.user.id;
   
@@ -558,8 +560,9 @@ app.get("/track-order", async (req, res) => {
   if (!req.isAuthenticated()) {
     req.session.returnTo = "/track-order";
     req.session.save(() => {
-      res.redirect("/sign-in");
+        res.redirect("/sign-in")        
     });
+
     return;
   }
 
@@ -960,6 +963,13 @@ app.post("/upload", upload.single("product-img"), async(req, res) => {
 
     }
 
+})
+
+
+app.get("/logout", (req, res) => {
+  req.logout(() => {
+    res.redirect("/")
+  })
 })
 
 passport.use(new Strategy (

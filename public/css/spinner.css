@@ -1,0 +1,40 @@
+    /* The dark overlay that covers the whole page */
+    #page-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.80);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+ 
+      /* hidden by default */
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+ 
+    /* When we add the "active" class, it becomes visible
+       and blocks all clicks on the page */
+    #page-loader.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+ 
+    /* The spinning circle */
+    .loader-ring {
+      width: 48px;
+      height: 48px;
+      border: 4px solid var(--color-bg-dark);
+      border-top-color: var(--color-primary);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+ 
+    /* The spin animation */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
