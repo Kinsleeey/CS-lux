@@ -62,6 +62,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('click', function(e) {
+  // ignore if the click was stopped by something else
+  if (e.defaultPrevented) return;
 
   var link = e.target.closest('a');
   if (!link) return;
