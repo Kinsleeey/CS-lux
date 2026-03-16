@@ -63,18 +63,15 @@ window.addEventListener('pageshow', function() {
 document.addEventListener('DOMContentLoaded', function() {
   hidePageLoader();
 });
-
-document.addEventListener('click', function(e) {
+function handleSpinner(e) {
   if (e.target.closest('.spinner')) {
     showPageLoader();
   }
-});
+}
 
-document.addEventListener('touchstart', function(e) {
-  if (e.target.closest('.spinner')) {
-    showPageLoader();
-  }
-});
+document.addEventListener('click', handleSpinner);
+document.addEventListener('touchstart', handleSpinner, { passive: true });
+
 
 function toggleSearch() {
     const bar = document.getElementById('search-bar');
