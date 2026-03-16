@@ -70,6 +70,11 @@ document.addEventListener('click', function(e) {
   }
 });
 
+document.addEventListener('touchstart', function(e) {
+  if (e.target.closest('.spinner')) {
+    showPageLoader();
+  }
+});
 
 function toggleSearch() {
     const bar = document.getElementById('search-bar');
