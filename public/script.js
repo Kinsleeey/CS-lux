@@ -70,6 +70,7 @@ document.addEventListener('click', function(e) {
   }
 });
 
+
 function toggleSearch() {
     const bar = document.getElementById('search-bar');
     const isVisible = bar.style.display === 'block';
