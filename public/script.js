@@ -57,18 +57,20 @@ function hidePageLoader() {
 window.addEventListener('load', function() {
   hidePageLoader();
 });
+window.addEventListener('pageshow', function() {
+  hidePageLoader();
+});
 document.addEventListener('DOMContentLoaded', function() {
   hidePageLoader();
 });
 
 document.addEventListener('click', function(e) {
-  // ignore if the click was stopped by something else
-  if (e.defaultPrevented) return;
 
   var link = e.target.closest('a');
   if (!link) return;
   if (link.target === '_blank') return;
   if (!link.href || link.href === '#' || link.href.startsWith('#')) return;
+  if (e.target.closest('[onclick]')) return;
 
   showPageLoader();
 });
