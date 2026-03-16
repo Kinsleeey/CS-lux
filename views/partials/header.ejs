@@ -91,13 +91,13 @@
                     <div onclick="toggleMobileNav()" style="cursor:pointer; font-size:1.5rem; color:var(--color-text);">×</div>
                 </div>
                 <ul style="display:flex; flex-direction:column; gap:0.25rem; list-style:none;">
-                    <li><a href="/" class="spin" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Home</a></li>
-                    <li><a href="/product/1" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Product</a></li>
-                    <li><a href="/cart" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Cart</a></li>
-                    <li><a href="/wishlist" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Wishlist</a></li>
-                    <li><a href="/track-order" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Track Order</a></li>
+                    <li><a href="/" class="spinner" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Home</a></li>
+                    <li><a href="/product/1" class="spinner" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Product</a></li>
+                    <li><a href="/cart" class="spinner" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Cart</a></li>
+                    <li><a href="/wishlist" class="spinner" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Wishlist</a></li>
+                    <li><a href="/track-order" class="spinner" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Track Order</a></li>
                     <% if (!user) { %>
-                        <li><a href="/sign-in" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Sign In</a></li>
+                        <li><a href="/sign-in" class="spinner" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Sign In</a></li>
                     <% } %>
                 </ul>
             </div>
