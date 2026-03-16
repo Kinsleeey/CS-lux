@@ -65,17 +65,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('click', function(e) {
-
-  var link = e.target.closest('a');
-  if (!link) return;
-  if (link.target === '_blank') return;
-  if (!link.href || link.href === '#' || link.href.startsWith('#')) return;
-  if (e.target.closest('[onclick]')) return;
-
-  showPageLoader();
+  if (e.target.closest('.spinner')) {
+    showPageLoader();
+  }
 });
-
-
 
 function toggleSearch() {
     const bar = document.getElementById('search-bar');
