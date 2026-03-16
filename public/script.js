@@ -60,17 +60,15 @@ window.addEventListener('load', function() {
 window.addEventListener('pageshow', function() {
   hidePageLoader();
 });
+
 document.addEventListener('DOMContentLoaded', function() {
   hidePageLoader();
 });
-function handleSpinner(e) {
-  if (e.target.closest('.spinner')) {
-    showPageLoader();
-  }
-}
 
-document.addEventListener('click', handleSpinner);
-document.addEventListener('touchstart', handleSpinner, { passive: true });
+window.addEventListener('beforeunload', function() {
+  showPageLoader();
+});
+
 
 
 function toggleSearch() {
