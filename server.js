@@ -531,7 +531,7 @@ app.get("/checkout", async (req, res) => {
 
     if (!req.isAuthenticated()) {
 
-        return res.redirect('/cart?login=true');
+        return res.redirect('/sign-in');
 
     }
 
