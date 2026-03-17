@@ -118,6 +118,25 @@ if (cancelEdit) {
     });
 }
 
+document.querySelectorAll('.wait').forEach(item => {
+  // Create and append spinner without touching existing content
+  const spinner = document.createElement('span');
+  spinner.classList.add('spinner');
+  spinner.hidden = true;
+  item.appendChild(spinner);
+
+  item.addEventListener('click', () => {
+    spinner.hidden = false;
+    item.style.pointerEvents = 'none'; // prevent double clicks
+
+    // Replace with your actual logic
+    setTimeout(() => {
+      spinner.hidden = true;
+      item.style.pointerEvents = 'auto';
+    }, 2000);
+  });
+});
+
 async function addToCart(variantId, qty, stock) {
     try {
         const response = await fetch(`/cart/${variantId}/${qty}/${stock}`, {

@@ -36,11 +36,11 @@
             </div>
             <nav>
                 <ul class="nav flex-sb-c gap1">
-                    <li><a href="/" class="spinner">Home</a></li>
-                    <li><a href="/product/1" class="spinner">Product</a></li>
-                    <li><a href="/cart" class="spinner">Cart</a></li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/product/1">Product</a></li>
+                    <li><a href="/cart">Cart</a></li>
                     <% if (!user) { %>
-                        <li><a href="/sign-in" class="spinner">Sign-in</a></li>
+                        <li><a href="/sign-in">Sign-in</a></li>
                     <% } %>
                 </ul>
             </nav>
@@ -50,12 +50,12 @@
                 <div class="whiteback" id="search-toggle" onclick="toggleSearch()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.07a88,88,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.31ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"></path></svg>
                 </div>
-                <a href="/cart" class="spinner"><div class="whiteback flex-sb-c gap05">
+                <a href="/cart" ><div class="whiteback flex-sb-c gap05">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M230.14,58.87A8,8,0,0,0,224,56H62.68L56.6,22.57A8,8,0,0,0,48.73,16H24a8,8,0,0,0,0,16h18L67.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42A27.75,27.75,0,0,0,160,204a28,28,0,1,0,28-28H91.17a8,8,0,0,1-7.87-6.57L80.13,152h116a24,24,0,0,0,23.61-19.71l12.16-66.86A8,8,0,0,0,230.14,58.87ZM104,204a12,12,0,1,1-12-12A12,12,0,0,1,104,204Zm96,0a12,12,0,1,1-12-12A12,12,0,0,1,200,204Zm4-74.57A8,8,0,0,1,196.1,136H77.22L65.59,72H214.41Z"></path></svg>
                     <p>Cart</p>
                     <div class="greenback"><p id="cart-count">0</p></div>
                 </div></a>
-                <a href="/wishlist" class="spinner"><div class="whiteback">
+                <a href="/wishlist"><div class="whiteback">
                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="32" fill="#000000" viewBox="0 0 256 256"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path></svg>
                 </div></a>
                 <div class="whiteback" id="user-profile">
@@ -119,7 +119,7 @@
             <div>
                 <div class="flex-sb-c">
                     <h4>Personal Details</h4>
-                    <a href="/edit-profile" class="spinner">
+                    <a href="/edit-profile">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z"></path></svg>
                     </a>
                 </div>
@@ -127,22 +127,20 @@
                     <p class="flex-c gap1" >
                         <span class="text-blue">Name:</span>
                         <span >
-                            <%- currentUser[0].first_name && currentUser[0].last_name ? currentUser[0].first_name + " " + currentUser[0].last_name : '<a href="/edit-profile" class="center spinner"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
+                            <%- currentUser[0].first_name && currentUser[0].last_name ? currentUser[0].first_name + " " + currentUser[0].last_name : '<a href="/edit-profile" class="center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
                         </span>
-
                     </p>
                     <p class="flex-c gap1" >
                         <span class="text-blue">Email:</span>
                         <span >
-                            <%- currentUser[0].email ? currentUser[0].email : '<a href="/edit-profile" class="center spinner"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
+                            <%- currentUser[0].email ? currentUser[0].email : '<a href="/edit-profile"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
                         </span>
                     </p>
                     <p class="flex-c gap1" >
                         <span class="text-blue">Contact:</span>
                         <span >
-                            <%- currentUser[0].phone ? "+234" + " " + currentUser[0].phone : '<a href="/edit-profile" class="center spinner"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
+                            <%- currentUser[0].phone ? "+234" + " " + currentUser[0].phone : '<a href="/edit-profile" class="center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
                         </span>
-
                     </p>
                 </div>
             </div>
@@ -158,25 +156,25 @@
                     <p class="flex-c gap1" >
                         <span class="text-blue">Country:</span>
                         <span >
-                            <%- currentUser[0].country ? currentUser[0].country : '<a href="/edit-profile" class="center spinner"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
+                            <%- currentUser[0].country ? currentUser[0].country : '<a href="/edit-profile" class="center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
                         </span>
                     </p>
                     <p class="flex-c gap1" >
                         <span class="text-blue">State:</span>
                         <span >
-                            <%- currentUser[0].state ? currentUser[0].state : '<a href="/edit-profile" class="center spinner"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
+                            <%- currentUser[0].state ? currentUser[0].state : '<a href="/edit-profile" class="center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
                         </span>
                     </p>
                     <p class="flex-c gap1" >
                         <span class="text-blue">City:</span>
                         <span >
-                            <%- currentUser[0].city ? currentUser[0].city : '<a href="/edit-profile" class="center spinner"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
+                            <%- currentUser[0].city ? currentUser[0].city : '<a href="/edit-profile" class="center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
                         </span>
                     </p>
                     <p class="flex-c gap1" >
                         <span class="text-blue">Address:</span>
                         <span >
-                            <%- currentUser[0].address ? currentUser[0].address : '<a href="/edit-profile" class="center spinner"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
+                            <%- currentUser[0].address ? currentUser[0].address : '<a href="/edit-profile" class="center"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="#029FAE" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg></a>' %>
                         </span>
 
                     </p>
@@ -219,7 +217,10 @@
         <hr />
         <a href="/edit-profile" class="spinner">Edit Profile</a>
         <hr />
-        <a href="/logout" class="spinner">Log out</a>
+        <% if (user) { %>
+            <a href="/logout" class="spinner">Log out</a>
+        <% } %>
+        
     </div>
 
     <script>

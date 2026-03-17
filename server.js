@@ -89,6 +89,17 @@ app.use(async (req, res, next) => {
 app.set('view engine', 'ejs');
 app.set('views', './views')
 
+async function deductStock(cartItems) {
+  for (let item of cartItems) {
+    await db.query(
+      `UPDATE product_variants 
+       SET stock = stock - $1 
+       WHERE id = $2 AND stock >= $1`,
+      [item.qty, item.variant_id]
+    );
+  }
+}
+
 async function calculateCartTotal(userId) {
     const result = await db.query(`
         SELECT 
@@ -818,12 +829,24 @@ app.get("/admin", async(req, res) => {
       );
       order.items = itemsResult.rows;
     }
+    const productsResult = await db.query(`
+        SELECT 
+            p.id,
+            p.name,
+            pv.id AS variant_id,
+            pv.size,
+            pv.stock
+        FROM products p
+        JOIN product_variants pv ON pv.product_id = p.id
+        ORDER BY p.name, pv.size
+        `);
+        const products = productsResult.rows;
 
-    res.render("admin", { msg, categories, orders, popupmsg: "" });
+    res.render("admin", { msg, categories, orders, products });
 
   } catch (err) {
     console.error("Admin page error:", err);
-    res.render("admin", { msg: "Failed to load", categories: [], orders: [], popupmsg: "" });
+   res.render("admin", { msg: "Failed to load", categories: [], orders: [], products: [] });
   }
 });
 

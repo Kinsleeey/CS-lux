@@ -556,6 +556,193 @@
 
         .empty-state svg { width: 48px; height: 48px; fill: var(--color-bg-dark); margin-bottom: 1rem; }
         .empty-state p { font-size: 0.938rem; }
+
+        /* ── Stock Section ── */
+        .stock-search-bar {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .stock-search-bar input {
+            flex: 1;
+            padding: 0.625rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            font-family: inherit;
+            color: var(--color-dark);
+            transition: border-color var(--transition-fast);
+        }
+
+        .stock-search-bar input:focus { outline: none; border-color: var(--color-primary); }
+        .stock-search-bar input::placeholder { color: var(--color-text-light); }
+
+        .stock-filter-btns { display: flex; gap: 0.5rem; }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            border: 1px solid var(--color-border);
+            background: var(--color-white);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-text);
+            cursor: pointer;
+            font-family: inherit;
+            transition: all var(--transition-fast);
+            white-space: nowrap;
+        }
+
+        .filter-btn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+        .filter-btn.active-filter {
+            background: var(--color-primary);
+            color: var(--color-white);
+            border-color: var(--color-primary);
+        }
+
+        .stock-table-wrap {
+            border: 1px solid var(--color-border-lighter);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        .stock-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        .stock-table th {
+            padding: 0.75rem 1.25rem;
+            background: var(--color-bg-light);
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--color-border-lighter);
+        }
+
+        .stock-table td {
+            padding: 0.875rem 1.25rem;
+            color: var(--color-text);
+            border-bottom: 1px solid var(--color-border-lighter);
+            vertical-align: middle;
+        }
+
+        .stock-table tr:last-child td { border-bottom: none; }
+        .stock-table tbody tr:hover td { background: var(--color-bg-light); }
+
+        .stock-product-name {
+            font-weight: 600;
+            color: var(--color-dark);
+            font-size: 0.875rem;
+        }
+
+        .stock-size-badge {
+            display: inline-block;
+            background: var(--color-bg-gray);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+            padding: 0.2rem 0.6rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* stock number pill */
+        .stock-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.813rem;
+            font-weight: 700;
+        }
+
+        .stock-pill.healthy {
+            background: var(--color-success-bg);
+            color: var(--color-success-text);
+            border: 1px solid var(--color-success-border);
+        }
+
+        .stock-pill.low {
+            background: #FEF9C3;
+            color: #854D0E;
+            border: 1px solid #FDE68A;
+        }
+
+        .stock-pill.out {
+            background: var(--color-error-bg);
+            color: var(--color-error-text);
+            border: 1px solid #FECACA;
+        }
+
+        .stock-pill-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .healthy .stock-pill-dot { background: var(--color-success); }
+        .low .stock-pill-dot { background: #CA8A04; }
+        .out .stock-pill-dot { background: var(--color-error); }
+
+        /* stock bar */
+        .stock-bar-wrap { display: flex; align-items: center; gap: 0.75rem; }
+        .stock-bar-track {
+            flex: 1;
+            height: 6px;
+            background: var(--color-bg-dark);
+            border-radius: 999px;
+            overflow: hidden;
+            min-width: 80px;
+        }
+        .stock-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.4s ease;
+        }
+        .stock-bar-fill.healthy { background: var(--color-success); }
+        .stock-bar-fill.low { background: #CA8A04; }
+        .stock-bar-fill.out { background: var(--color-error); }
+
+        .stock-summary-chips {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+            flex-wrap: wrap;
+        }
+
+        .summary-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.813rem;
+            font-weight: 600;
+            border: 1px solid transparent;
+        }
+
+        .summary-chip.all { background: var(--color-primary-light); color: var(--color-primary-dark); border-color: rgba(2,159,174,0.2); }
+        .summary-chip.low-chip { background: #FEF9C3; color: #854D0E; border-color: #FDE68A; }
+        .summary-chip.out-chip { background: var(--color-error-bg); color: var(--color-error-text); border-color: #FECACA; }
+
+        .summary-chip span { font-size: 1rem; font-weight: 800; }
+
+        .stock-empty {
+            text-align: center;
+            padding: 2.5rem;
+            color: var(--color-text-light);
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body>
@@ -593,6 +780,16 @@
                 Orders
                 <% if (typeof orders !== 'undefined' && orders.length > 0) { %>
                 <span style="margin-left:auto; background:var(--color-primary); color:white; font-size:0.688rem; font-weight:700; padding:0.125rem 0.5rem; border-radius:999px;"><%= orders.length %></span>
+                <% } %>
+            </div>
+            <div class="sidebar-item" onclick="showSection('stock')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M240,208H224V96a16,16,0,0,0-16-16H144V40a16,16,0,0,0-24.88-13.26L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,40V208H48ZM112,112a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,112Zm0,40a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,152Zm0,40a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,192Z"/></svg>
+                Stock
+                <% if (typeof products !== 'undefined') { %>
+                    <% const lowCount = products.filter(p => p.stock <= 2).length; %>
+                    <% if (lowCount > 0) { %>
+                    <span style="margin-left:auto; background:#DC2626; color:white; font-size:0.688rem; font-weight:700; padding:0.125rem 0.5rem; border-radius:999px;"><%= lowCount %></span>
+                    <% } %>
                 <% } %>
             </div>
         </aside>
@@ -652,7 +849,6 @@
                 </div>
                 <div class="admin-card-body">
                     <form action="/upload" method="post" enctype="multipart/form-data" class="product-form">
-
                         <div class="form-group">
                             <label class="form-label">Category</label>
                             <select name="category-id" class="form-input">
@@ -803,16 +999,127 @@
                 </div>
             </div>
 
+            <!-- ── Stock Section ── -->
+            <div class="admin-card" id="section-stock" style="display:none;">
+                <div class="admin-card-header">
+                    <h4>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M240,208H224V96a16,16,0,0,0-16-16H144V40a16,16,0,0,0-24.88-13.26L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,40V208H48ZM112,112a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,112Zm0,40a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,152Zm0,40a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,192Z"/></svg>
+                        Stock Overview
+                    </h4>
+                    <span style="font-size:0.813rem; color:var(--color-text);"><%= typeof products !== 'undefined' ? products.length : 0 %> variants total</span>
+                </div>
+                <div class="admin-card-body">
+
+                    <% if (typeof products !== 'undefined') { %>
+                    <%
+                        const totalVariants = products.length;
+                        const lowItems = products.filter(p => p.stock > 0 && p.stock <= 2);
+                        const outItems  = products.filter(p => p.stock <= 0);
+                    %>
+
+                    <!-- Summary chips -->
+                    <div class="stock-summary-chips">
+                        <div class="summary-chip all">
+                            <span><%= totalVariants %></span> Total variants
+                        </div>
+                        <div class="summary-chip low-chip">
+                            <span><%= lowItems.length %></span> Low stock
+                        </div>
+                        <div class="summary-chip out-chip">
+                            <span><%= outItems.length %></span> Out of stock
+                        </div>
+                    </div>
+
+                    <!-- Search + filter -->
+                    <div class="stock-search-bar">
+                        <input type="text" id="stockSearch" placeholder="Search product name..." oninput="filterStock()" />
+                        <div class="stock-filter-btns">
+                            <button class="filter-btn active-filter" onclick="setFilter('all', this)">All</button>
+                            <button class="filter-btn" onclick="setFilter('low', this)">Low stock</button>
+                            <button class="filter-btn" onclick="setFilter('out', this)">Out of stock</button>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="stock-table-wrap">
+                        <table class="stock-table" id="stockTable">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Size</th>
+                                    <th>Status</th>
+                                    <th>Stock level</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stockBody">
+                                <% products.forEach(p => {
+                                    let statusClass = 'healthy';
+                                    let statusLabel = p.stock + ' in stock';
+                                    if (p.stock <= 0) {
+                                        statusClass = 'out';
+                                        statusLabel = 'Out of stock';
+                                    } else if (p.stock <= 2) {
+                                        statusClass = 'low';
+                                        statusLabel = p.stock + ' left — low';
+                                    }
+                                %>
+                                <tr
+                                    class="stock-row-item"
+                                    data-name="<%= p.name.toLowerCase() %>"
+                                    data-status="<%= statusClass %>"
+                                >
+                                    <td><span class="stock-product-name"><%= p.name %></span></td>
+                                    <td>
+                                        <% if (p.size) { %>
+                                            <span class="stock-size-badge"><%= p.size %></span>
+                                        <% } else { %>
+                                            <span style="color:var(--color-text-light); font-size:0.813rem;">—</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <span class="stock-pill <%= statusClass %>">
+                                            <span class="stock-pill-dot"></span>
+                                            <%= statusLabel %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="stock-bar-wrap">
+                                            <%
+                                                const maxForBar = 50;
+                                                const pct = Math.min(100, Math.round((p.stock / maxForBar) * 100));
+                                            %>
+                                            <div class="stock-bar-track">
+                                                <div
+                                                    class="stock-bar-fill <%= statusClass %>"
+                                                    style="width:<%= pct %>%;"
+                                                ></div>
+                                            </div>
+                                            <span style="font-size:0.813rem; font-weight:600; color:var(--color-dark); min-width:2rem; text-align:right;"><%= p.stock %></span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                        <div id="stockEmpty" class="stock-empty" style="display:none;">No products match your filter.</div>
+                    </div>
+                    <% } else { %>
+                        <div class="stock-empty">No stock data available.</div>
+                    <% } %>
+
+                </div>
+            </div>
+
         </main>
     </div>
 
     <script>
         function showSection(name) {
-            ['categories', 'products', 'orders'].forEach(s => {
+            ['categories', 'products', 'orders', 'stock'].forEach(s => {
                 document.getElementById('section-' + s).style.display = s === name ? 'block' : 'none';
             });
             document.querySelectorAll('.sidebar-item').forEach((item, i) => {
-                item.classList.toggle('active', ['categories', 'products', 'orders'][i] === name);
+                item.classList.toggle('active', ['categories', 'products', 'orders', 'stock'][i] === name);
             });
         }
 
@@ -857,6 +1164,39 @@
             const list = document.getElementById('order-list-' + orderId);
             list.style.display = list.style.display === 'none' ? 'block' : 'none';
         }
+
+        // Stock filter logic
+        let activeFilter = 'all';
+
+        function setFilter(filter, btn) {
+            activeFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
+            btn.classList.add('active-filter');
+            filterStock();
+        }
+
+        function filterStock() {
+            const query = document.getElementById('stockSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('.stock-row-item');
+            let visible = 0;
+
+            rows.forEach(row => {
+                const name = row.dataset.name;
+                const status = row.dataset.status;
+                const matchesSearch = name.includes(query);
+                const matchesFilter = activeFilter === 'all' || status === activeFilter;
+
+                if (matchesSearch && matchesFilter) {
+                    row.style.display = '';
+                    visible++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            document.getElementById('stockEmpty').style.display = visible === 0 ? 'block' : 'none';
+        }
     </script>
 </body>
 </html>
+

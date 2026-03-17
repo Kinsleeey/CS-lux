@@ -368,6 +368,23 @@
     box-shadow: var(--shadow-primary);
 }
 
+/* button spinner */
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #ffffff55;
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+}
+.spinner[hidden] {
+  display: none;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
 
 
 /*Pop up*/
