@@ -175,7 +175,7 @@ app.get("/", async(req, res) => {
         }
 
 
-        res.render("index.ejs", { popupmsg: req.query.loginerror ? "Wrong email or password." : "", products, variants });
+        res.render("index.ejs", {  products, variants });
 
     } catch(err) {
         console.log(err)

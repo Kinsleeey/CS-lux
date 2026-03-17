@@ -54,21 +54,23 @@ function hidePageLoader() {
   document.getElementById('page-loader').classList.remove('active');
 }
 
-window.addEventListener('load', function() {
-  hidePageLoader();
-});
-window.addEventListener('pageshow', function() {
-  hidePageLoader();
+window.addEventListener('load', hidePageLoader);
+
+window.addEventListener('pageshow', function (event) {
+  if (event.persisted) {
+    hidePageLoader();
+  }
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-  hidePageLoader();
+document.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", function () {
+    showPageLoader();
+  });
 });
 
-window.addEventListener('beforeunload', function() {
-  showPageLoader();
-});
 
+document.addEventListener('click', handleSpinner);
+document.addEventListener('touchstart', handleSpinner, { passive: true });
 
 
 function toggleSearch() {
@@ -175,7 +177,7 @@ async function cAddToCart(variantId, qty, stock) {
             }, 2000);
         } else if (response.status === 409) {
             const data = await response.json();
-            showToast(data.message, 'info'); // ← was alert()
+            showToast(data.message, 'info');
         } else {
             showToast('Failed to add to cart', 'error');
         }
@@ -290,15 +292,15 @@ function changeQty(btn, delta) {
 }
 
 
-
 //sort
 function toggleSortDropdown() {
     document.getElementById('sortDropdown').classList.toggle('open');
 }
 
 document.addEventListener('click', function(e) {
-    if (!e.target.closest('.sort-wrapper')) {
-        document.getElementById('sortDropdown').classList.remove('open');
+    const sortDropdown = document.getElementById('sortDropdown');
+    if (sortDropdown && !e.target.closest('.sort-wrapper')) {
+        sortDropdown.classList.remove('open');
     }
 });
 
@@ -314,7 +316,7 @@ function sortProducts(order) {
     });
 
     items.forEach(function(item) {
-        var overlay = item.nextElementSibling; // the xyz-overlay right after each item
+        var overlay = item.nextElementSibling;
         grid.appendChild(item);
         grid.appendChild(overlay);
     });
@@ -332,20 +334,8 @@ function sortRelatedProducts(order) {
     });
 
     items.forEach(function(item) {
-        var overlay = item.nextElementSibling; // the xyz-overlay right after each item
+        var overlay = item.nextElementSibling;
         grid.appendChild(item);
         grid.appendChild(overlay);
     });
 }
-
-// //product sidebar active
-// var currentPath = window.location.pathname;
-// var navLinks = document.querySelectorAll('.p-page-nav a');
-
-// navLinks.forEach(function(link) {
-//     if (link.getAttribute('href') === currentPath) {
-//         link.classList.add('active');
-//     }
-// });
-
-
