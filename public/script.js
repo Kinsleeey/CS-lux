@@ -46,31 +46,29 @@ function dismissToast(toast) {
     toast.addEventListener('transitionend', () => toast.remove(), { once: true });
 }
 
-function showPageLoader() {
-  document.getElementById('page-loader').classList.add('active');
-}
+// function showPageLoader() {
+//   document.getElementById('page-loader').classList.add('active');
+// }
 
-function hidePageLoader() {
-  document.getElementById('page-loader').classList.remove('active');
-}
+// function hidePageLoader() {
+//   document.getElementById('page-loader').classList.remove('active');
+// }
 
-window.addEventListener('load', hidePageLoader);
+// window.addEventListener('load', hidePageLoader);
 
-window.addEventListener('pageshow', function (event) {
-  if (event.persisted) {
-    hidePageLoader();
-  }
-});
+// window.addEventListener('pageshow', function (event) {
+//   if (event.persisted) {
+//     hidePageLoader();
+//   }
+// });
 
-document.querySelectorAll("a").forEach(link => {
-  link.addEventListener("click", function () {
-    showPageLoader();
-  });
-});
+// document.querySelectorAll("a").forEach(link => {
+//   link.addEventListener("click", function () {
+//     showPageLoader();
+//   });
+// });
 
 
-document.addEventListener('click', handleSpinner);
-document.addEventListener('touchstart', handleSpinner, { passive: true });
 
 
 function toggleSearch() {
