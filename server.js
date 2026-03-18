@@ -744,6 +744,38 @@ app.delete("/wishlist/:id", async(req, res) => {
 
 })
 
+app.delete("/variant/:vId/:pId", async (req, res) => {
+    const variantId = parseInt(req.params.vId);
+    const productId = parseInt(req.params.pId);
+    if (isNaN(variantId)) {
+        return res.status(400).json({ success: false, message: "Invalid variant ID" });
+    }
+
+    try {
+        const result = await db.query(`DELETE FROM product_variants WHERE id = $1`, [variantId]);
+        
+        if (result.rowCount === 0) {
+            return res.status(404).json({ success: false, message: "Variant not found" });
+        }
+
+        // Check if any variants remain for this product
+        const remaining = await db.query(
+            `SELECT id FROM product_variants WHERE product_id = $1`, 
+            [productId]
+        );
+
+        // If no variants left, delete the product too
+        if (remaining.rows.length === 0) {
+            await db.query(`DELETE FROM products WHERE id = $1`, [productId]);
+        }
+
+
+        res.status(200).json({ success: true, message: "Product variant deleted" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "An error occurred" });
+    }
+});
 app.get("/edit-profile", async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.redirect("/sign-in");
@@ -833,6 +865,8 @@ app.get("/admin", async(req, res) => {
         SELECT 
             p.id,
             p.name,
+            p.price,
+            p.image,
             pv.id AS variant_id,
             pv.size,
             pv.stock
@@ -841,7 +875,7 @@ app.get("/admin", async(req, res) => {
         ORDER BY p.name, pv.size
         `);
         const products = productsResult.rows;
-
+    console.log(products[0].image);
     res.render("admin", { msg, categories, orders, products });
 
   } catch (err) {

@@ -6,1197 +6,398 @@
     <title>CS-Luxury | Admin</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <style>
-        :root {
-            --color-primary: #029FAE;
-            --color-primary-dark: #027a84;
-            --color-primary-light: #F7FCFD;
-            --color-dark: #272343;
-            --color-text: #636270;
-            --color-text-light: #9A9CAA;
-            --color-white: #FFFFFF;
-            --color-bg-light: #F7F8FA;
-            --color-bg-gray: #F0F2F3;
-            --color-bg-dark: #E8ECEF;
-            --color-border: #DDE0E5;
-            --color-border-light: #E8ECEF;
-            --color-border-lighter: #F0F2F3;
-            --color-success: #00B517;
-            --color-success-bg: #F0FDF4;
-            --color-success-border: #BBF7D0;
-            --color-success-text: #15803D;
-            --color-error: #DC2626;
-            --color-error-bg: #FEF2F2;
-            --color-error-text: #991B1B;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
-            --shadow-primary: 0 4px 12px rgba(2,159,174,0.3);
-            --radius-sm: 6px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --transition-fast: 0.2s ease;
-            --transition-normal: 0.3s ease;
-        }
-
-        * { box-sizing: border-box; padding: 0; margin: 0; }
-        html { font-size: 14px; }
-        body { font-family: "Inter", sans-serif; background: var(--color-bg-light); padding-top: 72px; }
-        li { list-style: none; }
-        a { text-decoration: none; color: inherit; }
-
-        /* Header */
-        header {
-            width: 100%;
-            position: fixed;
-            top: 0;
-            z-index: 100;
-            background: var(--color-white);
-            border-bottom: 1px solid var(--color-border-lighter);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .main-header {
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .brand { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
-        .brand-img {
-            width: 36px; height: 36px;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-            border-radius: var(--radius-md);
-        }
-        .brand p { font-size: 1.25rem; font-weight: 700; color: var(--color-dark); }
-
-        .nav { display: flex; gap: 1.5rem; list-style: none; }
-        .nav a { font-size: 0.875rem; font-weight: 500; color: var(--color-text); transition: color var(--transition-fast); }
-        .nav a:hover { color: var(--color-primary); }
-
-        .admin-badge {
-            background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-            color: var(--color-white);
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            letter-spacing: 0.5px;
-        }
-
-        /* Layout */
-        .admin-layout {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            gap: 2rem;
-            align-items: start;
-        }
-
-        /* Sidebar */
-        .admin-sidebar {
-            position: sticky;
-            top: 5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .sidebar-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.875rem 1rem;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--color-text);
-            transition: all var(--transition-fast);
-            border: 1px solid transparent;
-        }
-
-        .sidebar-item:hover {
-            background: var(--color-white);
-            color: var(--color-primary);
-            border-color: var(--color-border-lighter);
-        }
-
-        .sidebar-item.active {
-            background: var(--color-primary);
-            color: var(--color-white);
-            box-shadow: var(--shadow-primary);
-        }
-
-        .sidebar-item svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
-
-        /* Main Content */
-        .admin-main { display: flex; flex-direction: column; gap: 1.5rem; }
-
-        /* Welcome Banner */
-        .welcome-banner {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
-            border-radius: var(--radius-lg);
-            padding: 2rem;
-            color: var(--color-white);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .welcome-banner h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; }
-        .welcome-banner p { font-size: 0.875rem; opacity: 0.85; }
-
-        .banner-stats { display: flex; gap: 2rem; }
-        .banner-stat { text-align: center; }
-        .banner-stat p:first-child { font-size: 1.75rem; font-weight: 800; }
-        .banner-stat p:last-child { font-size: 0.75rem; opacity: 0.8; }
-
-        /* Section Cards */
-        .admin-card {
-            background: var(--color-white);
-            border: 1px solid var(--color-border-lighter);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .admin-card-header {
-            padding: 1.25rem 1.5rem;
-            border-bottom: 1px solid var(--color-border-lighter);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .admin-card-header h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--color-dark);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .admin-card-header h4 svg { width: 18px; height: 18px; fill: var(--color-primary); }
-        .admin-card-body { padding: 1.5rem; }
-
-        /* Category Section */
-        .category-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .category-tag {
-            background: var(--color-primary-light);
-            color: var(--color-primary-dark);
-            border: 1px solid rgba(2,159,174,0.2);
-            padding: 0.375rem 0.875rem;
-            border-radius: 999px;
-            font-size: 0.813rem;
-            font-weight: 500;
-        }
-
-        .category-form { display: flex; gap: 0.75rem; }
-
-        .category-form input {
-            flex: 1;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-sm);
-            font-size: 0.875rem;
-            color: var(--color-dark);
-            font-family: inherit;
-            transition: border-color var(--transition-fast);
-        }
-
-        .category-form input:focus { outline: none; border-color: var(--color-primary); }
-        .category-form input::placeholder { color: var(--color-text-light); }
-
-        .btn-primary {
-            padding: 0.75rem 1.5rem;
-            background: var(--color-primary);
-            color: var(--color-white);
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 0.875rem;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all var(--transition-fast);
-            white-space: nowrap;
-        }
-
-        .btn-primary:hover {
-            background: var(--color-primary-dark);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-primary);
-        }
-
-        .alert-msg {
-            font-size: 0.813rem;
-            color: var(--color-error);
-            margin-top: 0.75rem;
-            padding: 0.5rem 0.75rem;
-            background: var(--color-error-bg);
-            border-radius: var(--radius-sm);
-        }
-
-        /* Product Form */
-        .product-form { display: flex; flex-direction: column; gap: 1.25rem; }
-
-        .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
-
-        .form-label {
-            font-size: 0.813rem;
-            font-weight: 600;
-            color: var(--color-dark);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .form-input {
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-sm);
-            font-size: 0.875rem;
-            color: var(--color-dark);
-            font-family: inherit;
-            transition: border-color var(--transition-fast);
-            background: var(--color-white);
-        }
-
-        .form-input:focus { outline: none; border-color: var(--color-primary); }
-        .form-input::placeholder { color: var(--color-text-light); }
-
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-        /* Size Variants */
-        .variants-container {
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-        }
-
-        .variants-header {
-            padding: 0.75rem 1rem;
-            background: var(--color-bg-light);
-            border-bottom: 1px solid var(--color-border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .variants-header p { font-size: 0.875rem; font-weight: 500; color: var(--color-dark); }
-
-        .btn-add-variant {
-            padding: 0.375rem 0.875rem;
-            background: var(--color-primary);
-            color: var(--color-white);
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all var(--transition-fast);
-        }
-
-        .btn-add-variant:hover { background: var(--color-primary-dark); }
-
-        #rows { padding: 0.5rem; }
-
-        .row {
-            display: grid;
-            grid-template-columns: 1fr 1fr auto;
-            gap: 0.5rem;
-            align-items: center;
-            padding: 0.5rem;
-        }
-
-        .row input {
-            padding: 0.625rem 0.75rem;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-sm);
-            font-size: 0.875rem;
-            font-family: inherit;
-        }
-
-        .row input:focus { outline: none; border-color: var(--color-primary); }
-
-        .btn-remove {
-            width: 32px; height: 32px;
-            background: var(--color-error-bg);
-            color: var(--color-error);
-            border: none;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-fast);
-        }
-
-        .btn-remove:hover { background: var(--color-error); color: white; }
-
-        /* Image Upload */
-        .image-upload-area {
-            border: 2px dashed var(--color-border);
-            border-radius: var(--radius-md);
-            padding: 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            position: relative;
-        }
-
-        .image-upload-area:hover { border-color: var(--color-primary); background: var(--color-primary-light); }
-
-        .image-upload-area input {
-            position: absolute;
-            inset: 0;
-            opacity: 0;
-            cursor: pointer;
-            width: 100%;
-            height: 100%;
-        }
-
-        .image-upload-area svg { width: 32px; height: 32px; fill: var(--color-text-light); margin-bottom: 0.5rem; }
-        .image-upload-area p { font-size: 0.875rem; color: var(--color-text); }
-        .image-upload-area span { font-size: 0.75rem; color: var(--color-text-light); }
-
-        #image-preview {
-            width: 100%;
-            max-height: 200px;
-            object-fit: cover;
-            border-radius: var(--radius-sm);
-            margin-top: 1rem;
-            display: none;
-        }
-
-        /* Orders Section */
-        .order-card {
-            border: 1px solid var(--color-border-lighter);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            margin-bottom: 1rem;
-            transition: box-shadow var(--transition-fast);
-        }
-
-        .order-card:hover { box-shadow: var(--shadow-md); }
-        .order-card:last-child { margin-bottom: 0; }
-
-        .order-card-header {
-            padding: 1.25rem 1.5rem;
-            background: var(--color-bg-light);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .order-meta { display: flex; flex-direction: column; gap: 0.375rem; }
-
-        .order-id {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--color-dark);
-        }
-
-        .order-customer {
-            font-size: 0.875rem;
-            color: var(--color-text);
-        }
-
-        .order-details-row {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .order-detail-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.125rem;
-        }
-
-        .order-detail-item span:first-child {
-            font-size: 0.75rem;
-            color: var(--color-text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-        }
-
-        .order-detail-item span:last-child {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--color-dark);
-        }
-
-        .order-actions { display: flex; align-items: center; gap: 0.75rem; flex-shrink: 0; }
-
-        .status-select {
-            padding: 0.625rem 0.875rem;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-sm);
-            font-size: 0.813rem;
-            font-family: inherit;
-            color: var(--color-dark);
-            background: var(--color-white);
-            cursor: pointer;
-            transition: border-color var(--transition-fast);
-        }
-
-        .status-select:focus { outline: none; border-color: var(--color-primary); }
-
-        .btn-update {
-            padding: 0.625rem 1.25rem;
-            background: var(--color-primary);
-            color: var(--color-white);
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 0.813rem;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all var(--transition-fast);
-        }
-
-        .btn-update:hover { background: var(--color-primary-dark); }
-
-        .btn-view-items {
-            padding: 0.5rem 1rem;
-            background: transparent;
-            color: var(--color-primary);
-            border: 1px solid var(--color-primary);
-            border-radius: var(--radius-sm);
-            font-size: 0.813rem;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all var(--transition-fast);
-            margin: 0 1.5rem 1rem;
-        }
-
-        .btn-view-items:hover { background: var(--color-primary); color: white; }
-
-        /* Order Items Table */
-        .order-items-table {
-            margin: 0 1.5rem 1.5rem;
-            border: 1px solid var(--color-border-lighter);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-        }
-
-        .order-items-table table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.875rem;
-        }
-
-        .order-items-table th {
-            padding: 0.75rem 1rem;
-            background: var(--color-bg-light);
-            text-align: left;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--color-dark);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid var(--color-border-lighter);
-        }
-
-        .order-items-table td {
-            padding: 0.875rem 1rem;
-            color: var(--color-text);
-            border-bottom: 1px solid var(--color-border-lighter);
-        }
-
-        .order-items-table tr:last-child td { border-bottom: none; }
-        .order-items-table tr:hover td { background: var(--color-bg-light); }
-
-        .order-items-table td:last-child { font-weight: 600; color: var(--color-primary); }
-
-        .item-img-thumb {
-            width: 44px; height: 44px;
-            border-radius: var(--radius-sm);
-            object-fit: cover;
-            border: 1px solid var(--color-border);
-        }
-
-        .item-name-cell { display: flex; align-items: center; gap: 0.75rem; }
-
-        /* Status Badge */
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.25rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: capitalize;
-        }
-
-        .status-processing { background: #FFF7ED; color: #C2410C; border: 1px solid #FED7AA; }
-        .status-shipped { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
-        .status-delivered { background: var(--color-success-bg); color: var(--color-success-text); border: 1px solid var(--color-success-border); }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem 2rem;
-            color: var(--color-text-light);
-        }
-
-        .empty-state svg { width: 48px; height: 48px; fill: var(--color-bg-dark); margin-bottom: 1rem; }
-        .empty-state p { font-size: 0.938rem; }
-
-        /* ── Stock Section ── */
-        .stock-search-bar {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.25rem;
-        }
-
-        .stock-search-bar input {
-            flex: 1;
-            padding: 0.625rem 1rem;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-sm);
-            font-size: 0.875rem;
-            font-family: inherit;
-            color: var(--color-dark);
-            transition: border-color var(--transition-fast);
-        }
-
-        .stock-search-bar input:focus { outline: none; border-color: var(--color-primary); }
-        .stock-search-bar input::placeholder { color: var(--color-text-light); }
-
-        .stock-filter-btns { display: flex; gap: 0.5rem; }
-
-        .filter-btn {
-            padding: 0.5rem 1rem;
-            border-radius: 999px;
-            border: 1px solid var(--color-border);
-            background: var(--color-white);
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--color-text);
-            cursor: pointer;
-            font-family: inherit;
-            transition: all var(--transition-fast);
-            white-space: nowrap;
-        }
-
-        .filter-btn:hover { border-color: var(--color-primary); color: var(--color-primary); }
-
-        .filter-btn.active-filter {
-            background: var(--color-primary);
-            color: var(--color-white);
-            border-color: var(--color-primary);
-        }
-
-        .stock-table-wrap {
-            border: 1px solid var(--color-border-lighter);
-            border-radius: var(--radius-md);
-            overflow: hidden;
-        }
-
-        .stock-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.875rem;
-        }
-
-        .stock-table th {
-            padding: 0.75rem 1.25rem;
-            background: var(--color-bg-light);
-            text-align: left;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--color-dark);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid var(--color-border-lighter);
-        }
-
-        .stock-table td {
-            padding: 0.875rem 1.25rem;
-            color: var(--color-text);
-            border-bottom: 1px solid var(--color-border-lighter);
-            vertical-align: middle;
-        }
-
-        .stock-table tr:last-child td { border-bottom: none; }
-        .stock-table tbody tr:hover td { background: var(--color-bg-light); }
-
-        .stock-product-name {
-            font-weight: 600;
-            color: var(--color-dark);
-            font-size: 0.875rem;
-        }
-
-        .stock-size-badge {
-            display: inline-block;
-            background: var(--color-bg-gray);
-            color: var(--color-text);
-            border: 1px solid var(--color-border);
-            padding: 0.2rem 0.6rem;
-            border-radius: var(--radius-sm);
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        /* stock number pill */
-        .stock-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.3rem 0.75rem;
-            border-radius: 999px;
-            font-size: 0.813rem;
-            font-weight: 700;
-        }
-
-        .stock-pill.healthy {
-            background: var(--color-success-bg);
-            color: var(--color-success-text);
-            border: 1px solid var(--color-success-border);
-        }
-
-        .stock-pill.low {
-            background: #FEF9C3;
-            color: #854D0E;
-            border: 1px solid #FDE68A;
-        }
-
-        .stock-pill.out {
-            background: var(--color-error-bg);
-            color: var(--color-error-text);
-            border: 1px solid #FECACA;
-        }
-
-        .stock-pill-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
-        .healthy .stock-pill-dot { background: var(--color-success); }
-        .low .stock-pill-dot { background: #CA8A04; }
-        .out .stock-pill-dot { background: var(--color-error); }
-
-        /* stock bar */
-        .stock-bar-wrap { display: flex; align-items: center; gap: 0.75rem; }
-        .stock-bar-track {
-            flex: 1;
-            height: 6px;
-            background: var(--color-bg-dark);
-            border-radius: 999px;
-            overflow: hidden;
-            min-width: 80px;
-        }
-        .stock-bar-fill {
-            height: 100%;
-            border-radius: 999px;
-            transition: width 0.4s ease;
-        }
-        .stock-bar-fill.healthy { background: var(--color-success); }
-        .stock-bar-fill.low { background: #CA8A04; }
-        .stock-bar-fill.out { background: var(--color-error); }
-
-        .stock-summary-chips {
-            display: flex;
-            gap: 0.75rem;
-            margin-bottom: 1.25rem;
-            flex-wrap: wrap;
-        }
-
-        .summary-chip {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius-md);
-            font-size: 0.813rem;
-            font-weight: 600;
-            border: 1px solid transparent;
-        }
-
-        .summary-chip.all { background: var(--color-primary-light); color: var(--color-primary-dark); border-color: rgba(2,159,174,0.2); }
-        .summary-chip.low-chip { background: #FEF9C3; color: #854D0E; border-color: #FDE68A; }
-        .summary-chip.out-chip { background: var(--color-error-bg); color: var(--color-error-text); border-color: #FECACA; }
-
-        .summary-chip span { font-size: 1rem; font-weight: 800; }
-
-        .stock-empty {
-            text-align: center;
-            padding: 2.5rem;
-            color: var(--color-text-light);
-            font-size: 0.875rem;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/admin.css" />
 </head>
 <body>
-    <header>
-        <div class="main-header">
-            <div class="brand">
-                <div class="brand-img"></div>
-                <p>CS Luxury</p>
-            </div>
-            <nav>
-                <ul class="nav">
-                    <li><a href="/admin">Dashboard</a></li>
-                    <li><a href="/product">Store</a></li>
-                    <li><a href="/track-order">Orders</a></li>
-                </ul>
-            </nav>
-            <span class="admin-badge">ADMIN</span>
+
+<header>
+    <div class="main-header">
+        <div class="brand">
+            <div class="brand-img"></div>
+            <p>CS Luxury</p>
         </div>
-    </header>
+        <nav>
+            <ul class="nav">
+                <li><a href="/admin">Dashboard</a></li>
+                <li><a href="/product">Store</a></li>
+                <li><a href="/track-order">Orders</a></li>
+            </ul>
+        </nav>
+        <span class="admin-badge">ADMIN</span>
+    </div>
+</header>
 
-    <div class="admin-layout">
+<div class="admin-layout">
 
-        <!-- Sidebar -->
-        <aside class="admin-sidebar">
-            <div class="sidebar-item active" onclick="showSection('categories')">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM184,96a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,96Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,128Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,160Z"/></svg>
-                Categories
-            </div>
-            <div class="sidebar-item" onclick="showSection('products')">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.34,44-29.77,16.3-80.35-44ZM128,120,47.66,76l33.9-18.56,80.34,44ZM40,90l80,43.78v85.79L40,175.82Zm96,129.57V133.82L216,90v85.78Z"/></svg>
-                Add Product
-            </div>
-            <div class="sidebar-item" onclick="showSection('orders')">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M222.14,58.87l-96-32a8,8,0,0,0-5.09,0L24,58.87a8,8,0,0,0-5.44,7.56V176a8,8,0,0,0,5.44,7.56l96,32a8,8,0,0,0,5.09,0l96-32A8,8,0,0,0,227.56,176V66.43A8,8,0,0,0,222.14,58.87ZM128,42.93,207.57,69.5,128,96.07,48.43,69.5ZM40,83.63l80,26.67v97.07L40,180.7Zm96,123.74V110.3l80-26.67V180.7Z"/></svg>
-                Orders
-                <% if (typeof orders !== 'undefined' && orders.length > 0) { %>
-                <span style="margin-left:auto; background:var(--color-primary); color:white; font-size:0.688rem; font-weight:700; padding:0.125rem 0.5rem; border-radius:999px;"><%= orders.length %></span>
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-item active" onclick="showSection('categories')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM184,96a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,96Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,128Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,160Z"/></svg>
+            Categories
+        </div>
+        <div class="sidebar-item" onclick="showSection('products')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15ZM128,32l80.34,44-29.77,16.3-80.35-44ZM128,120,47.66,76l33.9-18.56,80.34,44ZM40,90l80,43.78v85.79L40,175.82Zm96,129.57V133.82L216,90v85.78Z"/></svg>
+            Add Product
+        </div>
+        <div class="sidebar-item" onclick="showSection('orders')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M222.14,58.87l-96-32a8,8,0,0,0-5.09,0L24,58.87a8,8,0,0,0-5.44,7.56V176a8,8,0,0,0,5.44,7.56l96,32a8,8,0,0,0,5.09,0l96-32A8,8,0,0,0,227.56,176V66.43A8,8,0,0,0,222.14,58.87ZM128,42.93,207.57,69.5,128,96.07,48.43,69.5ZM40,83.63l80,26.67v97.07L40,180.7Zm96,123.74V110.3l80-26.67V180.7Z"/></svg>
+            Orders
+            <% if (typeof orders !== 'undefined' && orders.length > 0) { %>
+                <span class="sidebar-badge"><%= orders.length %></span>
+            <% } %>
+        </div>
+        <div class="sidebar-item" onclick="showSection('stock')">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M240,208H224V96a16,16,0,0,0-16-16H144V40a16,16,0,0,0-24.88-13.26L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,40V208H48ZM112,112a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,112Zm0,40a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,152Zm0,40a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,192Z"/></svg>
+            Stock
+            <% if (typeof products !== 'undefined') { %>
+                <% const lowCount = products.filter(p => p.stock <= 2).length; %>
+                <% if (lowCount > 0) { %>
+                    <span class="sidebar-badge"><%= lowCount %></span>
                 <% } %>
-            </div>
-            <div class="sidebar-item" onclick="showSection('stock')">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M240,208H224V96a16,16,0,0,0-16-16H144V40a16,16,0,0,0-24.88-13.26L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,40V208H48ZM112,112a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,112Zm0,40a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,152Zm0,40a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,192Z"/></svg>
-                Stock
-                <% if (typeof products !== 'undefined') { %>
-                    <% const lowCount = products.filter(p => p.stock <= 2).length; %>
-                    <% if (lowCount > 0) { %>
-                    <span style="margin-left:auto; background:#DC2626; color:white; font-size:0.688rem; font-weight:700; padding:0.125rem 0.5rem; border-radius:999px;"><%= lowCount %></span>
-                    <% } %>
-                <% } %>
-            </div>
-        </aside>
+            <% } %>
+        </div>
+    </aside>
 
-        <!-- Main Content -->
-        <main class="admin-main">
+    <!-- Main Content -->
+    <main class="admin-main">
 
-            <!-- Welcome Banner -->
-            <div class="welcome-banner">
-                <div>
-                    <h1>Welcome back, Admin 👋</h1>
-                    <p>Manage your store, products, and orders from here.</p>
+        <!-- Banner -->
+        <div class="welcome-banner">
+            <div>
+                <h1>Welcome back, Admin 👋</h1>
+                <p>Manage your store, products, and orders from here.</p>
+            </div>
+            <div class="banner-stats">
+                <div class="banner-stat">
+                    <p class="stat-num"><%= categories.length %></p>
+                    <p class="stat-label">Categories</p>
                 </div>
-                <div class="banner-stats">
-                    <div class="banner-stat">
-                        <p><%= categories.length %></p>
-                        <p>Categories</p>
-                    </div>
-                    <div class="banner-stat">
-                        <p><%= orders.length %></p>
-                        <p>Orders</p>
-                    </div>
+                <div class="banner-stat">
+                    <p class="stat-num"><%= orders.length %></p>
+                    <p class="stat-label">Orders</p>
                 </div>
             </div>
+        </div>
 
-            <!-- Categories Section -->
-            <div class="admin-card" id="section-categories">
-                <div class="admin-card-header">
-                    <h4>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM184,96a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,96Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,128Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,160Z"/></svg>
-                        Categories
-                    </h4>
-                </div>
-                <div class="admin-card-body">
-                    <div class="category-list">
-                        <% categories.forEach(c => { %>
-                            <span class="category-tag"><%= c.name %></span>
-                        <% }) %>
-                    </div>
-                    <form action="/new-category" method="post" class="category-form">
-                        <input type="text" name="category" placeholder="New category name" class="form-input" style="margin:0;" />
-                        <button type="submit" class="btn-primary">Add Category</button>
-                    </form>
-                    <% if (msg) { %>
-                        <p class="alert-msg"><%= msg %></p>
-                    <% } %>
-                </div>
+        <!-- Categories -->
+        <div class="admin-card" id="section-categories">
+            <div class="admin-card-header">
+                <h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM184,96a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,96Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,128Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,160Z"/></svg>
+                    Categories
+                </h4>
             </div>
-
-            <!-- Add Product Section -->
-            <div class="admin-card" id="section-products" style="display:none;">
-                <div class="admin-card-header">
-                    <h4>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15Z"/></svg>
-                        Add New Product
-                    </h4>
-                </div>
-                <div class="admin-card-body">
-                    <form action="/upload" method="post" enctype="multipart/form-data" class="product-form">
-                        <div class="form-group">
-                            <label class="form-label">Category</label>
-                            <select name="category-id" class="form-input">
-                                <option value="">Select a category</option>
-                                <% categories.forEach(c => { %>
-                                    <option value="<%= c.id %>"><%= c.name %></option>
-                                <% }) %>
-                            </select>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Product Name</label>
-                                <input type="text" name="product-name" class="form-input" placeholder="e.g. Classic Polo Shirt" />
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Price (₦)</label>
-                                <input type="number" name="product-price" class="form-input" placeholder="e.g. 25000" />
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Description</label>
-                            <input type="text" name="product-des" class="form-input" placeholder="Brief product description" />
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Size Variants</label>
-                            <div class="variants-container">
-                                <div class="variants-header">
-                                    <p>Sizes & Stock (optional)</p>
-                                    <button type="button" class="btn-add-variant" onclick="addRow()">+ Add Size</button>
-                                </div>
-                                <div id="rows"></div>
-                            </div>
-                        </div>
-
-                        <div class="form-group" id="single-stock">
-                            <label class="form-label">Stock Quantity</label>
-                            <input type="number" name="single-stock" class="form-input" placeholder="e.g. 50" />
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Product Image</label>
-                            <div class="image-upload-area">
-                                <input type="file" name="product-img" accept="image/*" onchange="previewImage(this)" />
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-42.34-61.66a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L120,164.69V120a8,8,0,0,1,16,0v44.69l10.34-10.35A8,8,0,0,1,157.66,154.34Z"/></svg>
-                                <p>Click to upload image</p>
-                                <span>PNG, JPG up to 10MB</span>
-                                <img id="image-preview" src="" alt="Preview" />
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn-primary" style="align-self:flex-start; padding: 0.875rem 2rem;">
-                            Add to Website
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-            <!-- Orders Section -->
-            <div class="admin-card" id="section-orders" style="display:none;">
-                <div class="admin-card-header">
-                    <h4>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M222.14,58.87l-96-32a8,8,0,0,0-5.09,0L24,58.87a8,8,0,0,0-5.44,7.56V176a8,8,0,0,0,5.44,7.56l96,32a8,8,0,0,0,5.09,0l96-32A8,8,0,0,0,227.56,176V66.43A8,8,0,0,0,222.14,58.87Z"/></svg>
-                        All Orders
-                    </h4>
-                    <span style="font-size:0.813rem; color:var(--color-text);"><%= orders.length %> total</span>
-                </div>
-                <div class="admin-card-body">
-                    <% if (orders.length === 0) { %>
-                        <div class="empty-state">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M222.14,58.87l-96-32a8,8,0,0,0-5.09,0L24,58.87A8,8,0,0,0,18.56,66.43V176a8,8,0,0,0,5.44,7.56l96,32a8,8,0,0,0,5.09,0l96-32A8,8,0,0,0,227.44,176V66.43A8,8,0,0,0,222.14,58.87Z"/></svg>
-                            <p>No orders yet.</p>
-                        </div>
-                    <% } %>
-
-                    <% orders.forEach(order => { %>
-                    <div class="order-card">
-                        <div class="order-card-header">
-                            <div class="order-meta">
-                                <div style="display:flex; align-items:center; gap:0.75rem;">
-                                    <span class="order-id">Order #<%= order.id %></span>
-                                    <span class="status-badge status-<%= order.status %>"><%= order.status %></span>
-                                </div>
-                                <span class="order-customer"><%= order.first_name || '' %> <%= order.last_name || '' %> — <%= order.email %></span>
-                            </div>
-                            <div class="order-details-row">
-                                <div class="order-detail-item">
-                                    <span>Date</span>
-                                    <span><%= new Date(order.created_at).toDateString() %></span>
-                                </div>
-                                <div class="order-detail-item">
-                                    <span>Delivery</span>
-                                    <span><%= order.delivery_type %></span>
-                                </div>
-                                <div class="order-detail-item">
-                                    <span>Total</span>
-                                    <span style="color:var(--color-primary);">₦<%= order.total_amount.toLocaleString() %></span>
-                                </div>
-                            </div>
-                            <div class="order-actions">
-                                <form action="/admin/order/status" method="POST" style="display:flex; gap:0.5rem; align-items:center;">
-                                    <input type="hidden" name="order_id" value="<%= order.id %>" />
-                                    <select name="status" class="status-select">
-                                        <option value="processing" <%= order.status === 'processing' ? 'selected' : '' %>>Processing</option>
-                                        <option value="shipped" <%= order.status === 'shipped' ? 'selected' : '' %>>Shipped</option>
-                                        <option value="delivered" <%= order.status === 'delivered' ? 'selected' : '' %>>Delivered</option>
-                                    </select>
-                                    <button type="submit" class="btn-update">Update</button>
-                                </form>
-                            </div>
-                        </div>
-
-                        <button class="btn-view-items" onclick="toggleOrderList(<%= order.id %>)">View Items</button>
-
-                        <div id="order-list-<%= order.id %>" style="display:none;">
-                            <div class="order-items-table">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>Product</th>
-                                            <th>Size</th>
-                                            <th>Qty</th>
-                                            <th>Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% order.items.forEach(item => { %>
-                                        <tr>
-                                            <td>
-                                                <div class="item-name-cell">
-                                                    <img src="<%= item.image %>" class="item-img-thumb" alt="<%= item.name %>" />
-                                                    <span><%= item.name %></span>
-                                                </div>
-                                            </td>
-                                            <td><%= item.size || 'N/A' %></td>
-                                            <td><%= item.qty %></td>
-                                            <td>₦<%= parseInt(item.price).toLocaleString() %></td>
-                                        </tr>
-                                        <% }) %>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+            <div class="admin-card-body">
+                <div class="category-list">
+                    <% categories.forEach(c => { %>
+                        <span class="category-tag"><%= c.name %></span>
                     <% }) %>
                 </div>
+                <form action="/new-category" method="post" class="category-form">
+                    <input type="text" name="category" placeholder="New category name" class="form-input" />
+                    <button type="submit" class="btn-primary">Add Category</button>
+                </form>
+                <% if (msg) { %>
+                    <p class="alert-msg"><%= msg %></p>
+                <% } %>
             </div>
+        </div>
 
-            <!-- ── Stock Section ── -->
-            <div class="admin-card" id="section-stock" style="display:none;">
-                <div class="admin-card-header">
-                    <h4>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M240,208H224V96a16,16,0,0,0-16-16H144V40a16,16,0,0,0-24.88-13.26L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,40V208H48ZM112,112a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,112Zm0,40a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,152Zm0,40a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,192Z"/></svg>
-                        Stock Overview
-                    </h4>
-                    <span style="font-size:0.813rem; color:var(--color-text);"><%= typeof products !== 'undefined' ? products.length : 0 %> variants total</span>
-                </div>
-                <div class="admin-card-body">
-
-                    <% if (typeof products !== 'undefined') { %>
-                    <%
-                        const totalVariants = products.length;
-                        const lowItems = products.filter(p => p.stock > 0 && p.stock <= 2);
-                        const outItems  = products.filter(p => p.stock <= 0);
-                    %>
-
-                    <!-- Summary chips -->
-                    <div class="stock-summary-chips">
-                        <div class="summary-chip all">
-                            <span><%= totalVariants %></span> Total variants
+        <!-- Add Product -->
+        <div class="admin-card" id="section-products" style="display:none;">
+            <div class="admin-card-header">
+                <h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M223.68,66.15,135.68,18a15.88,15.88,0,0,0-15.36,0l-88,48.17a16,16,0,0,0-8.32,14v95.64a16,16,0,0,0,8.32,14l88,48.17a15.88,15.88,0,0,0,15.36,0l88-48.17a16,16,0,0,0,8.32-14V80.18A16,16,0,0,0,223.68,66.15Z"/></svg>
+                    Add New Product
+                </h4>
+            </div>
+            <div class="admin-card-body">
+                <form action="/upload" method="post" enctype="multipart/form-data" class="form-stack">
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select name="category-id" class="form-input">
+                            <option value="">Select a category</option>
+                            <% categories.forEach(c => { %>
+                                <option value="<%= c.id %>"><%= c.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Product Name</label>
+                            <input type="text" name="product-name" class="form-input" placeholder="e.g. Classic Polo Shirt" />
                         </div>
-                        <div class="summary-chip low-chip">
-                            <span><%= lowItems.length %></span> Low stock
-                        </div>
-                        <div class="summary-chip out-chip">
-                            <span><%= outItems.length %></span> Out of stock
+                        <div class="form-group">
+                            <label class="form-label">Price (₦)</label>
+                            <input type="number" name="product-price" class="form-input" placeholder="e.g. 25000" />
                         </div>
                     </div>
-
-                    <!-- Search + filter -->
-                    <div class="stock-search-bar">
-                        <input type="text" id="stockSearch" placeholder="Search product name..." oninput="filterStock()" />
-                        <div class="stock-filter-btns">
-                            <button class="filter-btn active-filter" onclick="setFilter('all', this)">All</button>
-                            <button class="filter-btn" onclick="setFilter('low', this)">Low stock</button>
-                            <button class="filter-btn" onclick="setFilter('out', this)">Out of stock</button>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <input type="text" name="product-des" class="form-input" placeholder="Brief product description" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Size Variants</label>
+                        <div class="variants-container">
+                            <div class="variants-header">
+                                <p>Sizes & Stock (optional)</p>
+                                <button type="button" class="btn-add-variant" onclick="addRow()">+ Add Size</button>
+                            </div>
+                            <div id="rows"></div>
                         </div>
                     </div>
+                    <div class="form-group" id="single-stock">
+                        <label class="form-label">Stock Quantity</label>
+                        <input type="number" name="single-stock" class="form-input" placeholder="e.g. 50" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Product Image</label>
+                        <div class="image-upload-area">
+                            <input type="file" name="product-img" accept="image/*" onchange="previewImage(this)" />
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Zm-42.34-61.66a8,8,0,0,1,0,11.32l-24,24a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L120,164.69V120a8,8,0,0,1,16,0v44.69l10.34-10.35A8,8,0,0,1,157.66,154.34Z"/></svg>
+                            <p>Click to upload image</p>
+                            <span>PNG, JPG up to 10MB</span>
+                            <img id="image-preview" src="" alt="Preview" />
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary btn-submit">Add to Website</button>
+                </form>
+            </div>
+        </div>
 
-                    <!-- Table -->
-                    <div class="stock-table-wrap">
-                        <table class="stock-table" id="stockTable">
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Size</th>
-                                    <th>Status</th>
-                                    <th>Stock level</th>
-                                </tr>
-                            </thead>
-                            <tbody id="stockBody">
-                                <% products.forEach(p => {
-                                    let statusClass = 'healthy';
-                                    let statusLabel = p.stock + ' in stock';
-                                    if (p.stock <= 0) {
-                                        statusClass = 'out';
-                                        statusLabel = 'Out of stock';
-                                    } else if (p.stock <= 2) {
-                                        statusClass = 'low';
-                                        statusLabel = p.stock + ' left — low';
-                                    }
-                                %>
-                                <tr
-                                    class="stock-row-item"
-                                    data-name="<%= p.name.toLowerCase() %>"
-                                    data-status="<%= statusClass %>"
-                                >
-                                    <td><span class="stock-product-name"><%= p.name %></span></td>
-                                    <td>
-                                        <% if (p.size) { %>
-                                            <span class="stock-size-badge"><%= p.size %></span>
-                                        <% } else { %>
-                                            <span style="color:var(--color-text-light); font-size:0.813rem;">—</span>
-                                        <% } %>
-                                    </td>
-                                    <td>
-                                        <span class="stock-pill <%= statusClass %>">
-                                            <span class="stock-pill-dot"></span>
-                                            <%= statusLabel %>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div class="stock-bar-wrap">
-                                            <%
-                                                const maxForBar = 50;
-                                                const pct = Math.min(100, Math.round((p.stock / maxForBar) * 100));
-                                            %>
-                                            <div class="stock-bar-track">
-                                                <div
-                                                    class="stock-bar-fill <%= statusClass %>"
-                                                    style="width:<%= pct %>%;"
-                                                ></div>
+        <!-- Orders -->
+        <div class="admin-card" id="section-orders" style="display:none;">
+            <div class="admin-card-header">
+                <h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M222.14,58.87l-96-32a8,8,0,0,0-5.09,0L24,58.87a8,8,0,0,0-5.44,7.56V176a8,8,0,0,0,5.44,7.56l96,32a8,8,0,0,0,5.09,0l96-32A8,8,0,0,0,227.56,176V66.43A8,8,0,0,0,222.14,58.87Z"/></svg>
+                    All Orders
+                </h4>
+                <span class="header-count"><%= orders.length %> total</span>
+            </div>
+            <div class="admin-card-body">
+                <% if (orders.length === 0) { %>
+                    <div class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M222.14,58.87l-96-32a8,8,0,0,0-5.09,0L24,58.87A8,8,0,0,0,18.56,66.43V176a8,8,0,0,0,5.44,7.56l96,32a8,8,0,0,0,5.09,0l96-32A8,8,0,0,0,227.44,176V66.43A8,8,0,0,0,222.14,58.87Z"/></svg>
+                        <p>No orders yet.</p>
+                    </div>
+                <% } %>
+                <% orders.forEach(order => { %>
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <div class="order-meta">
+                            <div class="order-top-row">
+                                <span class="order-id">Order #<%= order.id %></span>
+                                <span class="status-badge status-<%= order.status %>"><%= order.status %></span>
+                            </div>
+                            <span class="order-customer"><%= order.first_name || '' %> <%= order.last_name || '' %> — <%= order.email %></span>
+                        </div>
+                        <div class="order-details-row">
+                            <div class="order-detail-item">
+                                <span class="detail-label">Date</span>
+                                <span class="detail-value"><%= new Date(order.created_at).toDateString() %></span>
+                            </div>
+                            <div class="order-detail-item">
+                                <span class="detail-label">Delivery</span>
+                                <span class="detail-value"><%= order.delivery_type %></span>
+                            </div>
+                            <div class="order-detail-item">
+                                <span class="detail-label">Total</span>
+                                <span class="detail-value highlight">₦<%= order.total_amount.toLocaleString() %></span>
+                            </div>
+                        </div>
+                        <div class="order-actions">
+                            <form action="/admin/order/status" method="POST" class="order-status-form">
+                                <input type="hidden" name="order_id" value="<%= order.id %>" />
+                                <select name="status" class="status-select">
+                                    <option value="processing" <%= order.status === 'processing' ? 'selected' : '' %>>Processing</option>
+                                    <option value="shipped"    <%= order.status === 'shipped'    ? 'selected' : '' %>>Shipped</option>
+                                    <option value="delivered"  <%= order.status === 'delivered'  ? 'selected' : '' %>>Delivered</option>
+                                </select>
+                                <button type="submit" class="btn-update">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                    <button class="btn-view-items" onclick="toggleOrderList(<%= order.id %>)">View Items</button>
+                    <div id="order-list-<%= order.id %>" style="display:none;">
+                        <div class="order-items-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Size</th>
+                                        <th>Qty</th>
+                                        <th>Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% order.items.forEach(item => { %>
+                                    <tr>
+                                        <td>
+                                            <div class="item-name-cell">
+                                                <img src="<%= item.image %>" class="item-img-thumb" alt="<%= item.name %>" />
+                                                <span><%= item.name %></span>
                                             </div>
-                                            <span style="font-size:0.813rem; font-weight:600; color:var(--color-dark); min-width:2rem; text-align:right;"><%= p.stock %></span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <% }) %>
-                            </tbody>
-                        </table>
-                        <div id="stockEmpty" class="stock-empty" style="display:none;">No products match your filter.</div>
+                                        </td>
+                                        <td><%= item.size || 'N/A' %></td>
+                                        <td><%= item.qty %></td>
+                                        <td>₦<%= parseInt(item.price).toLocaleString() %></td>
+                                    </tr>
+                                    <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <% } else { %>
-                        <div class="stock-empty">No stock data available.</div>
-                    <% } %>
-
                 </div>
+                <% }) %>
             </div>
+        </div>
 
-        </main>
+        <!-- Stock -->
+        <div class="admin-card" id="section-stock" style="display:none;">
+            <div class="admin-card-header">
+                <h4>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M240,208H224V96a16,16,0,0,0-16-16H144V40a16,16,0,0,0-24.88-13.26L39.12,72A16,16,0,0,0,32,85.34V208H16a8,8,0,0,0,0,16H240a8,8,0,0,0,0-16ZM208,96V208H144V96ZM48,85.34,128,40V208H48ZM112,112a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,112Zm0,40a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,152Zm0,40a8,8,0,0,1-8,8H88a8,8,0,0,1,0-16h16A8,8,0,0,1,112,192Z"/></svg>
+                    Stock Overview
+                </h4>
+                <span class="header-count"><%= typeof products !== 'undefined' ? products.length : 0 %> variants total</span>
+            </div>
+            <div class="admin-card-body">
+                <% if (typeof products !== 'undefined') { %>
+                <%
+                    const totalVariants = products.length;
+                    const lowItems = products.filter(p => p.stock > 0 && p.stock <= 2);
+                    const outItems = products.filter(p => p.stock <= 0);
+                %>
+                <div class="stock-summary-chips">
+                    <div class="summary-chip all">
+                        <span class="chip-num"><%= totalVariants %></span> Total variants
+                    </div>
+                    <div class="summary-chip low-chip">
+                        <span class="chip-num"><%= lowItems.length %></span> Low stock
+                    </div>
+                    <div class="summary-chip out-chip">
+                        <span class="chip-num"><%= outItems.length %></span> Out of stock
+                    </div>
+                </div>
+                <div class="stock-search-bar">
+                    <input type="text" id="stockSearch" class="form-input" placeholder="Search product name..." oninput="filterStock()" />
+                    <div class="stock-filter-btns">
+                        <button class="filter-btn active-filter" onclick="setFilter('all', this)">All</button>
+                        <button class="filter-btn" onclick="setFilter('low', this)">Low stock</button>
+                        <button class="filter-btn" onclick="setFilter('out', this)">Out of stock</button>
+                    </div>
+                </div>
+                <div class="stock-table-wrap">
+                    <table class="stock-table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Size</th>
+                                <th>Status</th>
+                                <th>Stock level</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="stockBody">
+                            <% products.forEach(p => {
+                                let statusClass = 'healthy';
+                                let statusLabel = p.stock + ' in stock';
+                                if (p.stock <= 0) { statusClass = 'out'; statusLabel = 'Out of stock'; }
+                                else if (p.stock <= 2) { statusClass = 'low'; statusLabel = p.stock + ' left — low'; }
+                                const pct = Math.min(100, Math.round((p.stock / 50) * 100));
+                            %>
+                            <tr class="stock-row-item" data-name="<%= p.name.toLowerCase() %>" data-status="<%= statusClass %>">
+                                <td>
+                                    <div class="product-cell">
+                                        <img src="<%= p.image %>" alt="<%= p.name %>" class="product-thumb" />
+                                        <span class="stock-product-name"><%= p.name %></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <% if (p.size) { %>
+                                        <span class="stock-size-badge"><%= p.size %></span>
+                                    <% } else { %>
+                                        <span class="size-dash">—</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <span class="stock-pill <%= statusClass %>">
+                                        <span class="stock-pill-dot"></span>
+                                        <%= statusLabel %>
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="stock-bar-wrap">
+                                        <div class="stock-bar-track">
+                                            <div class="stock-bar-fill <%= statusClass %>" style="width:<%= pct %>%"></div>
+                                        </div>
+                                        <span class="stock-count"><%= p.stock %></span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="action-btns">
+                                        <button class="btn-icon btn-edit"
+                                            data-id="<%= p.id %>"
+                                            data-name="<%= p.name %>"
+                                            data-price="<%= p.price %>"
+                                            data-stock="<%= p.stock %>"
+                                            onclick="editProduct(this.dataset)"
+                                            title="Edit">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z"/></svg>
+                                        </button>
+                                        <button class="btn-icon btn-delete" onclick="deleteProduct(<%= p.id %>)" title="Delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                    <div id="stockEmpty" class="stock-empty" style="display:none;">No products match your filter.</div>
+                </div>
+                <% } else { %>
+                    <div class="stock-empty">No stock data available.</div>
+                <% } %>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- Edit Popup -->
+<div id="editOverlay" class="overlay">
+    <div class="popup">
+        <div class="popup-header">
+            <div class="popup-title">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256"><path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63Z"/></svg>
+                Edit Product
+            </div>
+            <button class="popup-close" onclick="closeEditPopup()">×</button>
+        </div>
+        <div class="popup-body">
+            <input type="hidden" id="editProductId" />
+            <div class="form-group">
+                <label class="form-label">Product Name</label>
+                <input id="editProductName" type="text" class="form-input" placeholder="Product name" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Price (₦)</label>
+                <input id="editProductPrice" type="number" class="form-input" placeholder="e.g. 25000" />
+            </div>
+            <div class="form-group">
+                <label class="form-label">Stock</label>
+                <input id="editProductStock" type="number" class="form-input" placeholder="e.g. 50" />
+            </div>
+        </div>
+        <div class="popup-footer">
+            <button class="btn-ghost" onclick="closeEditPopup()">Cancel</button>
+            <button class="btn-save" onclick="saveProductChanges()">Save Changes</button>
+        </div>
     </div>
+</div>
 
-    <script>
-        function showSection(name) {
-            ['categories', 'products', 'orders', 'stock'].forEach(s => {
-                document.getElementById('section-' + s).style.display = s === name ? 'block' : 'none';
-            });
-            document.querySelectorAll('.sidebar-item').forEach((item, i) => {
-                item.classList.toggle('active', ['categories', 'products', 'orders', 'stock'][i] === name);
-            });
-        }
-
-        function updateSingleStock() {
-            const hasRows = document.querySelectorAll('.row').length > 0;
-            document.getElementById('single-stock').style.display = hasRows ? 'none' : '';
-        }
-
-        function removeRow(btn) {
-            btn.closest('.row').remove();
-            updateSingleStock();
-        }
-
-        function addRow() {
-            const div = document.createElement('div');
-            div.className = 'row';
-            div.innerHTML = `
-                <input type="text" name="sizes[]" placeholder="Size (e.g. M)" required>
-                <input type="number" name="stock[]" placeholder="Stock" required>
-                <button type="button" class="btn-remove" onclick="removeRow(this)">×</button>
-            `;
-            document.getElementById('rows').appendChild(div);
-            updateSingleStock();
-        }
-
-        function previewImage(input) {
-            const preview = document.getElementById('image-preview');
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(input.files[0]);
-            } else {
-                preview.src = '';
-                preview.style.display = 'none';
-            }
-        }
-
-        function toggleOrderList(orderId) {
-            const list = document.getElementById('order-list-' + orderId);
-            list.style.display = list.style.display === 'none' ? 'block' : 'none';
-        }
-
-        // Stock filter logic
-        let activeFilter = 'all';
-
-        function setFilter(filter, btn) {
-            activeFilter = filter;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active-filter'));
-            btn.classList.add('active-filter');
-            filterStock();
-        }
-
-        function filterStock() {
-            const query = document.getElementById('stockSearch').value.toLowerCase();
-            const rows = document.querySelectorAll('.stock-row-item');
-            let visible = 0;
-
-            rows.forEach(row => {
-                const name = row.dataset.name;
-                const status = row.dataset.status;
-                const matchesSearch = name.includes(query);
-                const matchesFilter = activeFilter === 'all' || status === activeFilter;
-
-                if (matchesSearch && matchesFilter) {
-                    row.style.display = '';
-                    visible++;
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-
-            document.getElementById('stockEmpty').style.display = visible === 0 ? 'block' : 'none';
-        }
-    </script>
+<script src="admin.js"></script>
 </body>
 </html>
 
