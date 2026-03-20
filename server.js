@@ -369,9 +369,12 @@ app.get("/cart", async(req, res) => {
                 [v.variant_id]
             );
 
-            let actualResult = result.rows;
-            actualResult[0].qty = v.qty;
-            cartedProducts.push(actualResult[0]);
+            let product = result.rows[0];
+            
+            //code to select stock from pv then compare against v.qty, before rendering
+            product.qty = Math.min(v.qty, product.stock);
+            cartedProducts.push(product);
+            
             
         }
 
@@ -395,7 +398,12 @@ app.get("/cart", async(req, res) => {
                 WHERE c.user_id = $1`,
             [userId]);
 
-    const cartedProducts = result.rows;
+    //code to select stock from pv then compare against c.qty, before rendering
+    const cartedProducts = result.rows.map(product => ({
+        ...product,
+        qty: Math.min(product.qty, product.stock)
+    }));
+
 
     res.render("cart.ejs", { cartedProducts, popupmsg: "" }); 
 })
@@ -414,10 +422,10 @@ app.get("/cart/count", async(req, res) => {
     res.json({ count: count });
 });
 
-app.post("/cart/:id/:qty/:stock", async(req, res) => {
+app.post("/cart/:id/:stock", async(req, res) => {
 
      const variantId = req.params.id;
-     const qty = req.params.qty;
+     const qty = 1;
      const stock = req.params.stock;
 
     // Initialize session cart if it doesn't exist
@@ -431,11 +439,12 @@ app.post("/cart/:id/:qty/:stock", async(req, res) => {
         // User is logged in - save to database
         const userId = req.user.id;
         
+        //select qty in db
         const cartResult = await db.query(
             `SELECT qty FROM cart WHERE user_id = $1 AND variant_id = $2`,
             [userId, variantId]
         );
-
+        //current quantity in db for user
         const currentQty = cartResult.rows.length > 0 ? cartResult.rows[0].qty : 0;
 
         if (parseInt(currentQty) + parseInt(qty) > parseInt(stock)) {
@@ -1229,12 +1238,16 @@ app.get("/payment/verify", async (req, res) => {
                     VALUES ($1, $2, $3, $4)`,
                     [orderId, item.variant_id, item.qty, parseInt(item.price)]
                 );
+                await db.query(
+                    `UPDATE product_variants SET stock = stock - $1 WHERE id = $2`,
+                    [item.qty, item.variant_id]
+                );
             }
 
             await db.query(`DELETE FROM cart WHERE user_id = $1`, [req.user.id]);
         }
 
-        res.render("receipt.ejs", { amount: Math.floor(amount / 100), reference, status, msg: "", popupmsg: "" });
+        res.render("receipt.ejs", { amount: Math.floor(amount / 100), reference, status, msg: ""});
 
     } catch (err) {
         console.error("Verification error:", err.response?.data || err.message);

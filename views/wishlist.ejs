@@ -37,9 +37,9 @@
                             <% if (variants[i].length === 1 & variants[i][0].size === "") {%>
                                     <div class="xyz-size-row">
                                         <div class="xyz-qty-control">
-                                            <button class="xyz-qty-btn" onclick="changeQty(this, -1)">-</button>
-                                            <span class="xyz-qty-value" data-stock="<%= variants[i][0].stock %>">0</span>
-                                            <button class="xyz-qty-btn" onclick="changeQty(this, 1); addToCart(<%= variants[i][0].id %>, 1, <%= variants[i][0].stock %>)">+</button>
+                                            <button class="xyz-qty-btn" onclick="cart(this, '-', <%= variants[i][0].id %>, <%= variants[i][0].stock %>, false)">-</button>
+                                                <span class="xyz-qty-value">0</span>
+                                            <button class="xyz-qty-btn" onclick="cart(this, '+', <%= variants[i][0].id %>, <%= variants[i][0].stock %>, false)">+</button>
                                         </div>
                                     </div>
                             <% } else { %>
@@ -47,9 +47,9 @@
                                         <div class="xyz-size-row">
                                             <span class="xyz-size-name"><%= variant.size %></span>
                                             <div class="xyz-qty-control">
-                                                <button class="xyz-qty-btn" onclick="changeQty(this, -1); reduceFromCart(<%= variant.id %>)">-</button>
-                                                <span class="xyz-qty-value" data-stock="<%= variant.stock %>">0</span>
-                                                <button class="xyz-qty-btn" onclick="changeQty(this, 1); addToCart(<%= variant.id %>, 1, <%= variant.stock %>)">+</button>
+                                                <button class="xyz-qty-btn" onclick="cart(this, '-', <%= variant.id %>, <%= variant.stock %>, false)">-</button>
+                                                    <span class="xyz-qty-value">0</span>
+                                                <button class="xyz-qty-btn" onclick="cart(this, '+', <%= variant.id %>, <%= variant.stock %>, false)">+</button>
                                             </div>
                                         </div>
                                     <% }) %>

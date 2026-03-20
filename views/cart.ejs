@@ -14,33 +14,41 @@
                 <h4 class="empty-cart">Cart is empty, add <a href="/product/1">products</a>.</h4>
             <% } %>
             <% for (let cartedProduct of cartedProducts) {%>
-                <div class="si-card flex-c">
-                    
-                    <div class="si-img"><img src="<%= cartedProduct.image %>"/></div>
-                    <div class="si-writeup">
-                        <span class="si1 flex-sb-c">
-                            <p class="name"><%= cartedProduct.name %></p>
-                            <button style="border: none; background-color: inherit; color: black; cursor: pointer; " onclick="removeFromCart(<%= cartedProduct.id %>)">X</button>
-                        </span>
-                        <% if (cartedProduct.size) { %>
-                        <span class="ms flex-c">
-                            <p class="size">Size: <%= cartedProduct.size %></p>
-                        </span>
-                        <% } %>
-                        <div class="qp flex-c gap1">
-                            <div class="flex-sb-c gap05">
-                                <button class="xyz-qty-btn" onclick="changeQty(this, -1); cReduceFromCart(<%= cartedProduct.id %>)">-</button>
-                                <span class="xyz-qty-value" data-stock="<%= cartedProduct.stock %>"><%= cartedProduct.qty %></span>
-                                <button class="xyz-qty-btn" onclick="changeQty(this, 1); cAddToCart(<%= cartedProduct.id %>, 1, <%= cartedProduct.stock %>)">+</button>
+                <% if (cartedProduct.stock > 0) { %>
+                    <div class="si-card flex-c">
+                        
+                        <div class="si-img"><img src="<%= cartedProduct.image %>"/></div>
+                        <div class="si-writeup">
+                            <span class="si1 flex-sb-c">
+                                <p class="name"><%= cartedProduct.name %></p>
+                                <button style="border: none; background-color: inherit; color: black; cursor: pointer; " onclick="removeFromCart(<%= cartedProduct.id %>)">X</button>
+                            </span>
+                            <% if (cartedProduct.size) { %>
+                            <span class="ms flex-c">
+                                <p class="size">Size: <%= cartedProduct.size %></p>
+                            </span>
+                            <% } %>
+                            <div class="qp flex-c gap1">
+                                <div class="flex-sb-c gap05">
+                                    <button class="xyz-qty-btn" onclick="cart(this, '-', <%= cartedProduct.id %>, <%= cartedProduct.stock %>, true)">-</button>
+                                     <span class="xyz-qty-value"><%= cartedProduct.qty %></span>
+                                    <button class="xyz-qty-btn" onclick="cart(this, '+', <%= cartedProduct.id %>, <%= cartedProduct.stock %>, true)">+</button>
+                                </div>
+                                <p class="product-price">₦<%= Number(cartedProduct.price * cartedProduct.qty).toLocaleString('en-NG') %></p>
                             </div>
-                            <p class="product-price">₦<%= Number(cartedProduct.price * cartedProduct.qty).toLocaleString('en-NG') %></p>
+                            <span class="av flex-c gap025">
+
+                                <% if (cartedProduct.stock > 2) { %>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
+                                    <p>In stock</p>
+                                <% } else if (cartedProduct.stock <= 2) { %>                                    
+                                    <p style="color: red"><%= cartedProduct.stock %> unit<%= cartedProduct.stock === 1 ? '' : 's' %> left</p>
+                                <% } %>
+                      
+                            </span>
                         </div>
-                        <span class="av flex-c gap025">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path></svg>
-                            <p>In stock</p>
-                        </span>
                     </div>
-                </div>
+                <% } %>
             <% } %>
         </div>
         <div class="order-sum">

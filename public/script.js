@@ -137,9 +137,9 @@ document.querySelectorAll('.wait').forEach(item => {
   });
 });
 
-async function addToCart(variantId, qty, stock) {
+async function addToCart(variantId, stock, redirectToCart) {
     try {
-        const response = await fetch(`/cart/${variantId}/${qty}/${stock}`, {
+        const response = await fetch(`/cart/${variantId}/${stock}`, {
             method: 'POST'
         });
         if (response.ok) {
@@ -147,6 +147,12 @@ async function addToCart(variantId, qty, stock) {
             cartCount = data.count;
             cartCountElement.textContent = cartCount;
             showToast('Product added to cart!', 'info');
+            if (redirectToCart) {
+                setTimeout(() => {
+                    window.location.href = '/cart';
+                }, 2000);
+            }
+            
         } else if (response.status === 409) {
             const data = await response.json();
             showToast(data.message, 'info');
@@ -159,52 +165,7 @@ async function addToCart(variantId, qty, stock) {
     }
 }
 
-async function reduceFromCart(variantId) {
-    try {
-        const response = await fetch(`/cart/${variantId}`, {
-            method: 'PATCH'
-        });
-        if (response.ok) {
-            const data = await response.json();
-            cartCount = data.count;
-            cartCountElement.textContent = cartCount;
-            showToast('Cart updated successfully!', 'success');
-        } else {
-            showToast('Failed to remove product from cart', 'error');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        showToast('Failed to remove product from cart', 'error');
-    }
-}
-
-async function cAddToCart(variantId, qty, stock) {
-    try {
-        const response = await fetch(`/cart/${variantId}/${qty}/${stock}`, {
-            method: 'POST'
-        });
-        if (response.ok) {
-            const data = await response.json();
-            cartCount = data.count;
-            cartCountElement.textContent = cartCount;
-            showToast('Product added to cart!', 'info');
-
-            setTimeout(() => {
-                window.location.href = '/cart';
-            }, 2000);
-        } else if (response.status === 409) {
-            const data = await response.json();
-            showToast(data.message, 'info');
-        } else {
-            showToast('Failed to add to cart', 'error');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        showToast('Failed to add to cart', 'error');
-    }
-}
-
-async function cReduceFromCart(variantId) {
+async function reduceFromCart(variantId, redirectToCart) {
     try {
         const response = await fetch(`/cart/${variantId}`, {
             method: 'PATCH'
@@ -215,9 +176,11 @@ async function cReduceFromCart(variantId) {
             cartCountElement.textContent = cartCount;
             showToast('Cart updated successfully!', 'success');
 
-            setTimeout(() => {
-                window.location.href = '/cart';
-            }, 2000); 
+            if (redirectToCart) {
+                setTimeout(() => {
+                    window.location.href = '/cart';
+                }, 2000); 
+            }
         } else {
             showToast('Failed to remove product from cart', 'error');
         }
@@ -298,16 +261,54 @@ function closePopup(id) {
     document.getElementById(`xyz-overlay${id}`).classList.remove('active');
 }
 
-function changeQty(btn, delta) {
-    const qtyEl = btn.parentElement.querySelector('.xyz-qty-value');
-    const stock = parseInt(qtyEl.dataset.stock);
-    let current = parseInt(qtyEl.textContent);
-    current += delta;
-    if (current < 0) current = 0;
-    if (current > stock) current = stock;
-    qtyEl.textContent = current;
-}
+// function changeQty(btn, delta) {
+//     //find the qty number that sits next to the button that was clicked
+//     const qtyEl = btn.parentElement.querySelector('.xyz-qty-value');
+//     const stock = parseInt(qtyEl.dataset.stock);
+//     let current = parseInt(qtyEl.textContent);
+//     current += delta;
+//     if (current < 0) current = 0;
+//     if (current > stock) current = stock;
+//     qtyEl.textContent = current;
+// }
 
+async function cart(btn, operator, variantId, stock, redirectToCart) {
+
+    //find the qty number that sits next to the button that was clicked
+    const qtyElement = btn.parentElement.querySelector('.xyz-qty-value');
+
+    let currentQty = parseInt(qtyElement.textContent);
+
+    switch (operator) {
+        case '+':
+            currentQty += 1;
+
+            if(currentQty > stock) {
+                currentQty = stock
+                qtyElement.textContent = currentQty;
+                showToast('quantity exceeds stock', 'error');
+                return;
+            }
+
+            qtyElement.textContent = currentQty;
+            addToCart(variantId, stock, redirectToCart)
+            break;
+
+        case '-':
+
+            currentQty -= 1;
+
+            if (currentQty < 0) {
+                currentQty = 0
+                qtyElement.textContent = currentQty;
+                showToast('cannot go below 0', 'error');
+                return
+            } 
+            qtyElement.textContent = currentQty;
+            reduceFromCart(variantId, redirectToCart);
+            break;
+    }
+}
 
 //sort
 function toggleSortDropdown() {
