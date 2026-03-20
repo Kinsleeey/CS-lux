@@ -339,7 +339,8 @@
                                 <td>
                                     <div class="action-btns">
                                         <button class="btn-icon btn-edit"
-                                            data-id="<%= p.id %>"
+                                            data-product-id="<%= p.id %>"
+                                            data-variant-id="<%= p.variant_id %>"
                                             data-name="<%= p.name %>"
                                             data-price="<%= p.price %>"
                                             data-stock="<%= p.stock %>"
@@ -378,6 +379,7 @@
             <button class="popup-close" onclick="closeEditPopup()">×</button>
         </div>
         <div class="popup-body">
+            <input type="hidden" id="editVariantId" />
             <input type="hidden" id="editProductId" />
             <div class="form-group">
                 <label class="form-label">Product Name</label>
@@ -394,7 +396,7 @@
         </div>
         <div class="popup-footer">
             <button class="btn-ghost" onclick="closeEditPopup()">Cancel</button>
-            <button class="btn-save" onclick="saveProductChanges()">Save Changes</button>
+            <button class="btn-save" onclick="patchVariant()">Save Changes</button>
         </div>
     </div>
 </div>

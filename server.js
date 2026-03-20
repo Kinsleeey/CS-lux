@@ -61,6 +61,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(express.json());
 
 app.use(async (req, res, next) => {
     const user =  req.user;
@@ -744,38 +745,6 @@ app.delete("/wishlist/:id", async(req, res) => {
 
 })
 
-app.delete("/variant/:vId/:pId", async (req, res) => {
-    const variantId = parseInt(req.params.vId);
-    const productId = parseInt(req.params.pId);
-    if (isNaN(variantId)) {
-        return res.status(400).json({ success: false, message: "Invalid variant ID" });
-    }
-
-    try {
-        const result = await db.query(`DELETE FROM product_variants WHERE id = $1`, [variantId]);
-        
-        if (result.rowCount === 0) {
-            return res.status(404).json({ success: false, message: "Variant not found" });
-        }
-
-        // Check if any variants remain for this product
-        const remaining = await db.query(
-            `SELECT id FROM product_variants WHERE product_id = $1`, 
-            [productId]
-        );
-
-        // If no variants left, delete the product too
-        if (remaining.rows.length === 0) {
-            await db.query(`DELETE FROM products WHERE id = $1`, [productId]);
-        }
-
-
-        res.status(200).json({ success: true, message: "Product variant deleted" });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, message: "An error occurred" });
-    }
-});
 app.get("/edit-profile", async (req, res) => {
   if (!req.isAuthenticated()) {
     return res.redirect("/sign-in");
@@ -895,6 +864,65 @@ app.post("/admin/order/status", async (req, res) => {
     console.error(err);
     res.status(500).send("Error updating order status");
   }
+});
+
+app.patch("/variant/:vId/:pId", async (req, res) => {
+    const variantId = parseInt(req.params.vId);
+    const productId = parseInt(req.params.pId);
+    const { name, price, stock } = req.body; 
+
+    if (isNaN(variantId) || isNaN(productId)) {
+        return res.status(400).json({ success: false, message: "Invalid ID" });
+    }
+
+    try {
+        await db.query(
+            `UPDATE products SET name = $1, price = $2 WHERE id = $3`, 
+            [name, price, productId]
+        );
+        await db.query(
+            `UPDATE product_variants SET stock = $1 WHERE id = $2`, 
+            [stock, variantId]
+        );
+
+        res.status(200).json({ success: true, message: "Product variant updated" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "An error occurred" });
+    }
+});
+
+app.delete("/variant/:vId/:pId", async (req, res) => {
+    const variantId = parseInt(req.params.vId);
+    const productId = parseInt(req.params.pId);
+    if (isNaN(variantId)) {
+        return res.status(400).json({ success: false, message: "Invalid variant ID" });
+    }
+
+    try {
+        const result = await db.query(`DELETE FROM product_variants WHERE id = $1`, [variantId]);
+        
+        if (result.rowCount === 0) {
+            return res.status(404).json({ success: false, message: "Variant not found" });
+        }
+
+        // Check if any variants remain for this product
+        const remaining = await db.query(
+            `SELECT id FROM product_variants WHERE product_id = $1`, 
+            [productId]
+        );
+
+        // If no variants left, delete the product too
+        if (remaining.rows.length === 0) {
+            await db.query(`DELETE FROM products WHERE id = $1`, [productId]);
+        }
+
+
+        res.status(200).json({ success: true, message: "Product variant deleted" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "An error occurred" });
+    }
 });
 
 app.post("/new-category", async (req, res) => {

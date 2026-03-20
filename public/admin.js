@@ -106,7 +106,8 @@ function dismissToast(toast) {
     }
 
     function editProduct(data) {
-        document.getElementById('editProductId').value    = data.id;
+        document.getElementById('editVariantId').value  = data.variantId;       // product id
+        document.getElementById('editProductId').value  = data.productId; // variant id
         document.getElementById('editProductName').value  = data.name;
         document.getElementById('editProductPrice').value = data.price;
         document.getElementById('editProductStock').value = data.stock;
@@ -120,6 +121,35 @@ function dismissToast(toast) {
     function saveProductChanges() {
         // TODO: wire up to backend
         closeEditPopup();
+    }
+
+    async function patchVariant() {
+        const variantId = document.getElementById('editVariantId').value;
+        const productId = document.getElementById('editProductId').value;
+        const name      = document.getElementById('editProductName').value;
+        const price     = document.getElementById('editProductPrice').value;
+        const stock     = document.getElementById('editProductStock').value;
+
+        try {
+            const response = await fetch(`/variant/${variantId}/${productId}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, price, stock })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showToast(data.message, 'success');
+                setTimeout(() => window.location.href = '/admin', 2000);
+            } else {
+                showToast(data.message || 'Failed to edit product variant', 'error');
+            }
+            closeEditPopup();
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Failed to edit product variant', 'error');
+        }
     }
 
    async function deleteVariant(variantId, productId) {
