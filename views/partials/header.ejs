@@ -91,13 +91,13 @@
                     <div onclick="toggleMobileNav()" style="cursor:pointer; font-size:1.5rem; color:var(--color-text);">×</div>
                 </div>
                 <ul style="display:flex; flex-direction:column; gap:0.25rem; list-style:none;">
-                    <li><a href="/" class="spinner" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Home</a></li>
-                    <li><a href="/product/1" class="spinner" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Product</a></li>
-                    <li><a href="/cart" class="spinner" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Cart</a></li>
-                    <li><a href="/wishlist" class="spinner" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Wishlist</a></li>
-                    <li><a href="/track-order" class="spinner" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Track Order</a></li>
+                    <li><a href="/"  style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Home</a></li>
+                    <li><a href="/product/1"  style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Product</a></li>
+                    <li><a href="/cart"  style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Cart</a></li>
+                    <li><a href="/wishlist"  style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Wishlist</a></li>
+                    <li><a href="/track-order"  style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Track Order</a></li>
                     <% if (!user) { %>
-                        <li><a href="/sign-in" class="spinner" style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Sign In</a></li>
+                        <li><a href="/sign-in"  style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Sign In</a></li>
                     <% } %>
                 </ul>
             </div>
@@ -191,34 +191,34 @@
                     </a>
                 </div>
                 <div class="inner">
-                    <p><a href="/sign-in" class="spinner">Log-in</a> to view details</p>
+                    <p><a href="/sign-in">Log-in</a> to view details</p>
                 </div>
             </div>
             <hr />
             <div>
                 <div class="flex-sb-c">
                     <h4>Shipping Address</h4>
-                    <a href="/sign-in" class="spinner">
+                    <a href="/sign-in">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M208,32H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32Zm0,176H48V48H208V208Zm-32-80a8,8,0,0,1-8,8H136v32a8,8,0,0,1-16,0V136H88a8,8,0,0,1,0-16h32V88a8,8,0,0,1,16,0v32h32A8,8,0,0,1,176,128Z"></path></svg>
                     </a>
                 </div>
                 <div class="inner">
-                    <p><a href="/sign-in" class="spinner">Log-in</a> to view details</p>
+                    <p><a href="/sign-in">Log-in</a> to view details</p>
                 </div>
             </div>
 
         <% } %>
         <hr />
-        <a href="/track-order" class="spinner">Order History</a>
+        <a href="/track-order" >Order History</a>
         <hr />
-        <a href="/wishlist" class="spinner">My Wishlist</a>
+        <a href="/wishlist">My Wishlist</a>
         <hr />
-        <a href="/cart" class="spinner">My Cart</a>
+        <a href="/cart">My Cart</a>
         <hr />
-        <a href="/edit-profile" class="spinner">Edit Profile</a>
+        <a href="/edit-profile">Edit Profile</a>
         <hr />
         <% if (user) { %>
-            <a href="/logout" class="spinner">Log out</a>
+            <a href="/logout">Log out</a>
         <% } %>
         
     </div>

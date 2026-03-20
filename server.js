@@ -875,7 +875,6 @@ app.get("/admin", async(req, res) => {
         ORDER BY p.name, pv.size
         `);
         const products = productsResult.rows;
-    console.log(products[0].image);
     res.render("admin", { msg, categories, orders, products });
 
   } catch (err) {

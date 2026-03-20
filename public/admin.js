@@ -1,3 +1,39 @@
+const TOAST_DURATION = 2000;
+ 
+const TOAST_ICONS = {
+    success: '✓',
+    error:   '✕',
+    info:    'i'
+};
+ 
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+    <div class="toast-icon">${TOAST_ICONS[type]}</div>
+    <div class="toast-content">
+        <div class="toast-message">${message}</div>
+    </div>
+    <button class="toast-close" onclick="dismissToast(this.closest('.toast'))">✕</button>
+    <div class="toast-progress" style="animation-duration: ${TOAST_DURATION}ms"></div>
+    `;
+
+    document.getElementById('toast-container').appendChild(toast);
+
+    requestAnimationFrame(() => {
+    requestAnimationFrame(() => toast.classList.add('show'));
+    });
+
+    toast._timer = setTimeout(() => dismissToast(toast), TOAST_DURATION);
+}
+ 
+function dismissToast(toast) {
+    if (!toast) return;
+    clearTimeout(toast._timer);
+    toast.classList.add('hide');
+    toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+}
+
 
     function showSection(name) {
         ['categories', 'products', 'orders', 'stock'].forEach(s => {
@@ -86,8 +122,24 @@
         closeEditPopup();
     }
 
-    function deleteProduct(id) {
-        // TODO: wire up to backend
+   async function deleteVariant(variantId, productId) {
+        try {
+            const response = await fetch(`/variant/${variantId}/${productId}`, {
+                method: 'DELETE'
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showToast(data.message, 'success');
+                setTimeout(() => window.location.href = '/admin', 2000);
+            } else {
+                showToast(data.message || 'Failed to remove product', 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Failed to remove product', 'error');
+        }
     }
 
     document.getElementById('editOverlay').addEventListener('click', function(e) {
