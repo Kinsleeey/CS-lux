@@ -261,16 +261,6 @@ function closePopup(id) {
     document.getElementById(`xyz-overlay${id}`).classList.remove('active');
 }
 
-// function changeQty(btn, delta) {
-//     //find the qty number that sits next to the button that was clicked
-//     const qtyEl = btn.parentElement.querySelector('.xyz-qty-value');
-//     const stock = parseInt(qtyEl.dataset.stock);
-//     let current = parseInt(qtyEl.textContent);
-//     current += delta;
-//     if (current < 0) current = 0;
-//     if (current > stock) current = stock;
-//     qtyEl.textContent = current;
-// }
 
 async function cart(btn, operator, variantId, stock, redirectToCart) {
 

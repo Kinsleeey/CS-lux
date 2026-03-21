@@ -551,26 +551,26 @@ app.delete("/cart/:id", async(req, res) => {
 app.get("/checkout", async (req, res) => {
 
     if (!req.isAuthenticated()) {
-
         return res.redirect('/sign-in');
-
     }
 
   const userId = req.user.id;
   
   try {
+    const result = await db.query(`SELECT name, fee FROM delivery_options`);
+    const fee = result.rows;
     const subtotal = await calculateCartTotal(userId);
-    const shippingFee = 2000;
-    const total = subtotal + shippingFee;
+    // const shippingFee = 2000;
+    // const total = subtotal + shippingFee;
 
     const userResult = await db.query(
-      `SELECT first_name, last_name, email, phone, address, city, state, country 
+      `SELECT first_name, last_name, email, phone, address, city, state
        FROM users WHERE id = $1`,
       [userId]
     );
     const user = userResult.rows[0];
 
-    res.render("checkout.ejs", { subtotal, shippingFee, total, user, popupmsg: "" });
+    res.render("checkout.ejs", { subtotal, user, fee });
   } catch (err) {
     console.log(err);
   }
@@ -761,7 +761,7 @@ app.get("/edit-profile", async (req, res) => {
 
   try {
     const result = await db.query(
-      `SELECT id, email, first_name, last_name, phone, address, city, state, country 
+      `SELECT id, email, first_name, last_name, phone, address, city, state
        FROM users WHERE id = $1`,
       [req.user.id]
     );
@@ -1118,25 +1118,22 @@ passport.deserializeUser(async (id, done) => {
 
 // Initiate payment
 app.post("/payment/initiate", async (req, res) => {
-  const { first_name, last_name, delivery_type, within_lagos_location, address, city, state, country, is_save } = req.body;
+  const { first_name, last_name, email, phone, delivery_type, address, city, state, country, is_save } = req.body;
 
     if (is_save) {
         await db.query(
-            `UPDATE users SET first_name = $1, last_name = $2, phone = $3, address = $4, city = $5, state = $6, country = $7 WHERE id = $8`,
-            [first_name, last_name, req.body.phone, address, city, state, country, req.user.id]
+            `UPDATE users SET first_name = $1, last_name = $2, email = $3, phone = $4, address = $5, city = $6, state = $7, country = $8 WHERE id = $9`,
+            [first_name, last_name, email, phone, address, city, state, country, req.user.id]
         );
     }
 
-  const email = req.user.email;
+    let delivery_location = '';
 
-  // Build delivery location string based on type
-  let delivery_location = '';
-
-  if (delivery_type === 'within_lagos') {
-    delivery_location = within_lagos_location;
-  } else if (delivery_type === 'outside_lagos') {
-    delivery_location = `${address}, ${city}, ${state}, ${country}`;
-  }
+    if (delivery_type === 'pickup') {
+        delivery_location = "No. 1 Onyebuchi avenue, New Jerusalem plaza, Ago palace, Oshodi-Isolo, Lagos State.";
+    } else {
+        delivery_location = `${address}, ${city}, ${state}, ${country}`;
+    }
 
   try {
     // Get delivery option id and fee from DB
@@ -1153,7 +1150,7 @@ app.post("/payment/initiate", async (req, res) => {
 
     // Calculate total
     const subtotal = await calculateCartTotal(req.user.id);
-    const total = subtotal + shippingFee;
+    const total = subtotal + shippingFee; 
 
     const response = await axios.post(
       "https://api.paystack.co/transaction/initialize",

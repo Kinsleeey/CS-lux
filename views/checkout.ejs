@@ -31,7 +31,7 @@
                     <legend>Shipping Method</legend>
 
                     <!-- Pickup at store -->
-                    <label class="shipping-label">
+                    <label class="shipping-label" onclick="updateFeeUI(<%= fee.find(i => i.name === 'pickup')?.fee %>)">
                         <div class="shipping-option">
                             <input type="radio" id="pickup" name="delivery_type" value="pickup" />
                             <div class="pm">
@@ -46,39 +46,14 @@
                         </div>
                     </label>
 
-                    <!-- Delivery Within Lagos -->
-                    <label class="shipping-label">
+                    <!-- Delivery Within Lagos --> 
+                    <label class="shipping-label" onclick="updateFeeUI(<%= fee.find(i => i.name === 'within_lagos')?.fee %>)">
                         <div class="shipping-option">
                             <input type="radio" id="within_lagos" name="delivery_type" value="within_lagos" />
                             <div class="pm">
                                 <span>
                                     <p>Delivery within Lagos, Nigeria.</p>
-                                    <p>Delivery within 48hrs of purchase</p>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="delivery-inner">
-                            <p class="psha">Select Pickup</p>
-                            <select name="within_lagos_location" id="within_lagos_location">
-                                <option value="">-- Select Location --</option>
-                                <option>Location1</option>
-                                <option>Location2</option>
-                                <option>Location3</option>
-                                <option>Location4</option>
-                                <option>Location5</option>
-                                <option>Location6</option>
-                            </select>
-                        </div>
-                    </label>
-
-                    <!-- Delivery Outside Lagos -->
-                    <label class="shipping-label">
-                        <div class="shipping-option">
-                            <input type="radio" id="outside_lagos" name="delivery_type" value="outside_lagos"/>
-                            <div class="pm">
-                                <span>
-                                    <p>Delivery Outside Lagos, Nigeria.</p>
-                                    <p>Available at the store upon payment completion.</p>
+                                    <p>Delivery within 48hrs of purchase.</p>
                                 </span>
                             </div>
                         </div>
@@ -86,16 +61,99 @@
                             <div class="user-address" style="border: none; padding: 0;">
                                 <p class="psha">Shipping Address</p>
                                 <div class="flex-sb-c">
+                                    <!-- everything here is new -->
+                                     <!-- remove select dropdown -->
                                     <div>
+                                        <label for="state">Country</label>
+                                        <input type="text" id="country" name="country" value="Nigeria"/>
+                                    </div>
+                                    <div>
+                                        <label for="state">State</label>
+                                        <input type="text" id="state" name="state" value="Lagos"/>
+                                    </div>
+                                    <div>
+                                        <label for="city">City/Area</label>
+                                        <input type="text" id="city" name="city" value="<%= user.city || '' %>"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="address">Address</label>
+                                    <input type="text" id="address" name="address" placeholder="street, no" value="<%= user.address || '' %>"/>
+                                </div>
+                                <div class="checkbox-row">
+                                    <input type="checkbox" id="is_save" name="is_save"/>
+                                    <p>Update address as your profile shipping address</p>
+                                </div>
+                            </div>
+                        </div>
+                    </label>
+
+                    <!-- Delivery Outside Lagos -->
+                    <label class="shipping-label" onclick="updateFeeUI(<%= fee.find(i => i.name === 'outside_lagos')?.fee %>)">
+                        <div class="shipping-option">
+                            <input type="radio" id="outside_lagos" name="delivery_type" value="outside_lagos"/>
+                            
+                            <div class="pm">
+                                <span>
+                                    <p>Delivery Outside Lagos, Nigeria.</p>
+                                    <p>Delivery time depends on Location.</p>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="delivery-inner">
+                            <div class="user-address" style="border: none; padding: 0;">
+                                <p class="psha">Shipping Address</p>
+                                <div class="flex-sb-c">
+                                     <div>
                                         <label for="country">Country</label>
-                                        <input type="text" id="country" name="country" value="<%= user.country || '' %>"/>
+                                        <input type="text" id="country" name="country" value="Nigeria"/>
                                     </div>
                                     <div>
                                         <label for="state">State</label>
                                         <input type="text" id="state" name="state" value="<%= user.state || '' %>"/>
                                     </div>
                                     <div>
-                                        <label for="city">City</label>
+                                        <label for="city">City/Area</label>
+                                        <input type="text" id="city" name="city" value="<%= user.city || '' %>"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="address">Address</label>
+                                    <input type="text" id="address" name="address" placeholder="street, no" value="<%= user.address || '' %>"/>
+                                </div>
+                                <div class="checkbox-row">
+                                    <input type="checkbox" id="is_save" name="is_save"/>
+                                    <p>Update address as your profile shipping address</p>
+                                </div>
+                            </div>
+                        </div>
+                    </label>
+
+                    <!-- Delivery Outside Nigeria -->
+                    <label class="shipping-label" onclick="updateFeeUI(<%= fee.find(i => i.name === 'outside_nigeria')?.fee %>)">
+                        <div class="shipping-option">
+                            <input type="radio" id="outside_nigeria" name="delivery_type" value="outside_nigeria"/>
+                            <div class="pm">
+                                <span>
+                                    <p>Delivery Outside Nigeria.</p>
+                                    <p>Delivery time depends on Location.</p>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="delivery-inner">
+                            <div class="user-address" style="border: none; padding: 0;">
+                                <p class="psha">Shipping Address</p>
+                                <div class="flex-sb-c">
+                                     <div>
+                                        <label for="state">Country</label>
+                                        <input type="text" id="country" name="country" value="<%= user.Country || '' %>"/>
+                                    </div>
+                                    <div>
+                                        <label for="state">State</label>
+                                        <input type="text" id="state" name="state" value="<%= user.state || '' %>"/>
+                                    </div>
+                                    <div>
+                                        <label for="city">City/Area</label>
                                         <input type="text" id="city" name="city" value="<%= user.city || '' %>"/>
                                     </div>
                                 </div>
@@ -112,26 +170,25 @@
                     </label>
 
                 </fieldset>
-                
-            </div>
-
-            
+            </div>     
 
             <div class="order-sum">
                 <h4>Order Summary</h4>
                 <div class="cal">
                     <div class="summary-row">
                         <p>Subtotal</p>
-                        <p>₦<%= Number(subtotal).toLocaleString('en-NG') %></p>
+                        <p id="checkout-subtotal">₦ <%= Number(subtotal).toLocaleString('en-NG') %></p>
                     </div>
                     <div class="summary-row">
                         <p>Shipping Fee</p>
-                        <p>₦<%= Number(shippingFee).toLocaleString('en-NG') %></p>
+                        <!-- Number(shippingFee).toLocaleString('en-NG') -->
+                        <p id="checkout-shipping-fee">₦ 0</p>
                     </div>
                 </div>
                 <div class="summary-total">
                     <h4>Total</h4>
-                    <h4>₦<%= Number(total).toLocaleString('en-NG') %></h4>
+                    <!--  Number(total).toLocaleString('en-NG') -->
+                    <h4 id="checkout-total">₦ <%= Number(subtotal).toLocaleString('en-NG') %></h4>
                 </div>
                 <button type="submit" class="c-button wait">Confirm Order</button>
                 <a href="/cart" class="c-button wait">Back to cart</a>
@@ -141,27 +198,76 @@
 </section>
 
 <script>
-    document.querySelectorAll('.shipping-label input[type="radio"]').forEach(function(radio) {
-    radio.addEventListener('change', function() {
-        // hide all delivery-inner divs first
-        document.querySelectorAll('.shipping-label .delivery-inner').forEach(function(inner) {
-            inner.style.display = 'none';
-        });
+    //required
+    document.getElementById('payment-form').addEventListener('submit', function(e) {
+        // Check a delivery type is selected
+        const selectedRadio = document.querySelector('input[name="delivery_type"]:checked');
+        if (!selectedRadio) {
+            e.preventDefault();
+            showToast('Please select a shipping method', 'error');
+            return;
+        }
 
-        // show only the one inside the selected label
-        var selectedInner = this.closest('.shipping-label').querySelector('.delivery-inner');
-        if (selectedInner) {
-            selectedInner.style.display = 'flex';
+        // Check all visible enabled inputs are filled
+        const activeInner = document.querySelector('.shipping-label .delivery-inner:not([style*="display: none"])');
+        if (activeInner) {
+            const inputs = activeInner.querySelectorAll('input[type="text"], input[type="number"]');
+            for (let input of inputs) {
+                if (!input.value.trim()) {
+                    e.preventDefault();
+                    showToast('Please fill in all shipping details', 'error');
+                    return;
+                }
+            }
+        }
+
+        // Check personal details
+        const personalInputs = document.querySelectorAll('.c-edit-body input');
+        for (let input of personalInputs) {
+            if (!input.value.trim()) {
+                e.preventDefault();
+                showToast('Please fill in all personal details', 'error');
+                return;
+            }
         }
     });
-});
 
-// show the default checked one on page load
-var defaultChecked = document.querySelector('.shipping-label input[type="radio"]:checked');
-if (defaultChecked) {
-    var defaultInner = defaultChecked.closest('.shipping-label').querySelector('.delivery-inner');
-    if (defaultInner) defaultInner.style.display = 'flex';
-}
+    //display shipping fee
+    const checkoutShippingFee = document.getElementById("checkout-shipping-fee");
+    const checkoutTotal = document.getElementById("checkout-total");
+    const checkoutSubtotal = document.getElementById("checkout-subtotal");
+
+    function updateFeeUI(deliveryFee) {
+        console.log(deliveryFee)
+        let c_subtotal = Number(checkoutSubtotal.textContent.replace(/[^0-9.]/g, ''));
+
+        checkoutShippingFee.textContent =`₦ ${Number(deliveryFee).toLocaleString('en-NG')}`;
+        checkoutTotal.textContent = `₦ ${Number(c_subtotal + deliveryFee).toLocaleString('en-NG')}`;
+        
+    }
+
+    //radio popup
+    document.querySelectorAll('.shipping-label input[type="radio"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            // hide all delivery-inner divs and disable their inputs
+            document.querySelectorAll('.shipping-label .delivery-inner').forEach(function(inner) {
+                inner.style.display = 'none';
+                inner.querySelectorAll('input, select').forEach(i => i.disabled = true);
+            });
+
+            // show only the one inside the selected label and enable its inputs
+            var selectedInner = this.closest('.shipping-label').querySelector('.delivery-inner');
+            if (selectedInner) {
+                selectedInner.style.display = 'flex';
+                selectedInner.querySelectorAll('input, select').forEach(i => i.disabled = false);
+            }
+        });
+    });
+    document.querySelectorAll('.shipping-label .delivery-inner').forEach(function(inner) {
+        inner.style.display = 'none';
+        inner.querySelectorAll('input, select').forEach(i => i.disabled = true);
+    });
+
 </script>
 
 
