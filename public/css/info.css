@@ -30,7 +30,7 @@
 .info-card-img {
     height: 450px;
     
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 1 / 1;
     max-height: 500px;
     border-radius: var(--radius-lg);
     overflow: hidden;

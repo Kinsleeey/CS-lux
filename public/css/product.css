@@ -59,7 +59,7 @@
 .item-img {
     width: 100%;
     height: auto;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 1 / 1;
     border: 0.0625rem solid var(--color-primary);
     border-radius: var(--radius-sm);
     position: relative;
