@@ -14,6 +14,8 @@ import { createClient } from "@supabase/supabase-js";
 
 env.config();
 
+console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
+
 const { Pool } = pg;
 const db = new Pool(
     process.env.DATABASE_URL
