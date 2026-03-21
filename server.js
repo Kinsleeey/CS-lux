@@ -14,7 +14,6 @@ import { createClient } from "@supabase/supabase-js";
 
 env.config({ override: false });
 
-console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
 
 const { Pool } = pg;
 const db = new Pool(
@@ -970,6 +969,9 @@ app.post("/new-category", async (req, res) => {
 });
 
 app.post("/upload", upload.single("product-img"), async(req, res) => {
+    if (!req.file) {
+        return res.redirect("/admin?msg=No image uploaded");
+    }
     //product details
     const categoryId = req.body["category-id"];
     const productName = req.body["product-name"];
@@ -1148,10 +1150,14 @@ app.post("/payment/initiate", async (req, res) => {
   const { first_name, last_name, email, phone, delivery_type, address, city, state, country, is_save } = req.body;
 
     if (is_save) {
-        await db.query(
-            `UPDATE users SET first_name = $1, last_name = $2, email = $3, phone = $4, address = $5, city = $6, state = $7, country = $8 WHERE id = $9`,
-            [first_name, last_name, email, phone, address, city, state, country, req.user.id]
-        );
+        try {
+            await db.query(
+                `UPDATE users SET first_name = $1, last_name = $2, email = $3, phone = $4, address = $5, city = $6, state = $7, country = $8 WHERE id = $9`,
+                [first_name, last_name, email, phone, address, city, state, country, req.user.id]
+            );
+        } catch(err) {
+            console.log(err)
+        }
     }
 
     let delivery_location = '';
