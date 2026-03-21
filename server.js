@@ -9,6 +9,8 @@ import { Strategy } from "passport-local";
 import bcrypt from "bcrypt"
 import env from "dotenv"
 import axios from "axios";
+import { createClient } from "@supabase/supabase-js";
+
 
 env.config();
 
@@ -28,15 +30,19 @@ const db = new Pool(
           }
 );
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
-const upload = multer({ storage: storage });
+
+// const storage = multer.diskStorage({ previous code for memory
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/uploads/');
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + path.extname(file.originalname));
+//   }
+// });
+
+// const upload = multer({ storage: storage }); previous used for memory
+
+const upload = multer({ storage: multer.memoryStorage() }); //new to supabase
 const app = express();
 const PORT = process.env.PORT || 3000;
 const saltRounds = 3;
@@ -46,6 +52,13 @@ const paystackHeaders = {
   Authorization: `Bearer ${PAYSTACK_SECRET}`,
   "Content-Type": "application/json",
 };
+
+//supabase for img (new)
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+);
+
 
 app.use(
   session({
@@ -960,15 +973,27 @@ app.post("/upload", upload.single("product-img"), async(req, res) => {
     const productName = req.body["product-name"];
     const productDes = req.body["product-des"];
     const productPrice = req.body["product-price"];
-    const imageUrl = `/uploads/${req.file.filename}`;
     const singleStock = req.body["single-stock"] || "";
 
-    console.log(categoryId);
-    console.log(productName);
-    console.log(productDes);
-    console.log(productPrice);
-    console.log(imageUrl);
-    console.log(singleStock);
+    //supabase img 
+    //const imageUrl = `/uploads/${req.file.filename}`; previous code block
+    const fileExt = req.file.originalname.split(".").pop();
+    const fileName = `${Date.now()}.${fileExt}`;
+
+    const { error: uploadError } = await supabase.storage
+    .from("products")
+    .upload(fileName, req.file.buffer, {
+        contentType: req.file.mimetype,
+    });
+
+    if (uploadError) {
+    console.log("Supabase upload error:", uploadError);
+    return res.redirect("/admin?msg=Image upload failed");
+    }
+
+    const { data } = supabase.storage.from("products").getPublicUrl(fileName);
+    const imageUrl = data.publicUrl;
+    //end
 
     let productId
     //product query
