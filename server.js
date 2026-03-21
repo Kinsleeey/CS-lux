@@ -12,7 +12,7 @@ import axios from "axios";
 import { createClient } from "@supabase/supabase-js";
 
 
-env.config();
+env.config({ override: false });
 
 console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
 
