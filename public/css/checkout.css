@@ -152,22 +152,7 @@
     line-height: 1.5;
 }
 
-.delivery-inner select {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-sm);
-    font-size: 0.875rem;
-    color: var(--color-dark);
-    background: var(--color-white);
-    cursor: pointer;
-    transition: border-color var(--transition-fast);
-}
-
-.delivery-inner select:focus {
-    outline: none;
-    border-color: var(--color-primary);
-}
+.checkbox-row
 
 /* ==========================================================================
    PM (shared between shipping and payment)
@@ -266,8 +251,7 @@
     align-items: start;
 }
 
-.user-address > div,
-.user-address .flex-sb-c > div {
+.direct {
     display: flex;
     flex-direction: column;
     gap: 0.375rem;
@@ -279,7 +263,7 @@
     color: var(--color-text);
 }
 
-.user-address input {
+.user-address-input {
     width: 100%;
     padding: 0.75rem;
     border: 1px solid var(--color-border);

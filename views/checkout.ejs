@@ -60,25 +60,23 @@
                         <div class="delivery-inner">
                             <div class="user-address" style="border: none; padding: 0;">
                                 <p class="psha">Shipping Address</p>
-                                <div class="flex-sb-c">
-                                    <!-- everything here is new -->
-                                     <!-- remove select dropdown -->
-                                    <div>
+                                <div class="direct flex-sb-c">
+                                    <div class="direct">
                                         <label for="state">Country</label>
-                                        <input type="text" id="country" name="country" value="Nigeria"/>
+                                        <input class="user-address-input" type="text" id="country" name="country" value="Nigeria"/>
                                     </div>
-                                    <div>
+                                    <div class="direct">
                                         <label for="state">State</label>
-                                        <input type="text" id="state" name="state" value="Lagos"/>
+                                        <input class="user-address-input" type="text" id="state" name="state" value="Lagos"/>
                                     </div>
-                                    <div>
+                                    <div class="direct">
                                         <label for="city">City/Area</label>
-                                        <input type="text" id="city" name="city" value="<%= user.city || '' %>"/>
+                                        <input class="user-address-input" type="text" id="city" name="city" value="<%= user.city || '' %>"/>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="direct">
                                     <label for="address">Address</label>
-                                    <input type="text" id="address" name="address" placeholder="street, no" value="<%= user.address || '' %>"/>
+                                    <input class="user-address-input" type="text" id="address" name="address" placeholder="street, no" value="<%= user.address || '' %>"/>
                                 </div>
                                 <div class="checkbox-row">
                                     <input type="checkbox" id="is_save" name="is_save"/>
@@ -103,23 +101,23 @@
                         <div class="delivery-inner">
                             <div class="user-address" style="border: none; padding: 0;">
                                 <p class="psha">Shipping Address</p>
-                                <div class="flex-sb-c">
-                                     <div>
+                                <div class="direct flex-sb-c">
+                                     <div class="direct">
                                         <label for="country">Country</label>
-                                        <input type="text" id="country" name="country" value="Nigeria"/>
+                                        <input class="user-address-input" type="text" id="country" name="country" value="Nigeria"/>
                                     </div>
-                                    <div>
+                                    <div class="direct">
                                         <label for="state">State</label>
-                                        <input type="text" id="state" name="state" value="<%= user.state || '' %>"/>
+                                        <input class="user-address-input" type="text" id="state" name="state" value="<%= user.state || '' %>"/>
                                     </div>
-                                    <div>
+                                    <div class="direct">
                                         <label for="city">City/Area</label>
-                                        <input type="text" id="city" name="city" value="<%= user.city || '' %>"/>
+                                        <input class="user-address-input" type="text" id="city" name="city" value="<%= user.city || '' %>"/>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="direct">
                                     <label for="address">Address</label>
-                                    <input type="text" id="address" name="address" placeholder="street, no" value="<%= user.address || '' %>"/>
+                                    <input class="user-address-input" type="text" id="address" name="address" placeholder="street, no" value="<%= user.address || '' %>"/>
                                 </div>
                                 <div class="checkbox-row">
                                     <input type="checkbox" id="is_save" name="is_save"/>
@@ -143,23 +141,23 @@
                         <div class="delivery-inner">
                             <div class="user-address" style="border: none; padding: 0;">
                                 <p class="psha">Shipping Address</p>
-                                <div class="flex-sb-c">
-                                     <div>
+                                <div class="direct flex-sb-c">
+                                     <div class="direct">
                                         <label for="state">Country</label>
-                                        <input type="text" id="country" name="country" value="<%= user.Country || '' %>"/>
+                                        <input class="user-address-input" type="text" id="country" name="country" value="<%= user.Country || '' %>"/>
                                     </div>
-                                    <div>
+                                    <div class="direct">
                                         <label for="state">State</label>
-                                        <input type="text" id="state" name="state" value="<%= user.state || '' %>"/>
+                                        <input class="user-address-input" type="text" id="state" name="state" value="<%= user.state || '' %>"/>
                                     </div>
-                                    <div>
+                                    <div class="direct">
                                         <label for="city">City/Area</label>
-                                        <input type="text" id="city" name="city" value="<%= user.city || '' %>"/>
+                                        <input class="user-address-input" type="text" id="city" name="city" value="<%= user.city || '' %>"/>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="direct">
                                     <label for="address">Address</label>
-                                    <input type="text" id="address" name="address" placeholder="street, no" value="<%= user.address || '' %>"/>
+                                    <input class="user-address-input" type="text" id="address" name="address" placeholder="street, no" value="<%= user.address || '' %>"/>
                                 </div>
                                 <div class="checkbox-row">
                                     <input type="checkbox" id="is_save" name="is_save"/>
@@ -170,8 +168,7 @@
                     </label>
 
                 </fieldset>
-            </div>     
-
+            </div>  
             <div class="order-sum">
                 <h4>Order Summary</h4>
                 <div class="cal">
