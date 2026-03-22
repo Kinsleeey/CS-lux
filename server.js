@@ -244,7 +244,39 @@ app.get("/product/:categoryId", async(req, res) => {
 
     res.render("product.ejs", { msg: "", products, variants, popupmsg: "" });
 })
-
+app.get("/search", async(req, res) => {
+    const search = req.query.search;
+    if (search) {
+        try {
+            const result = await db.query(`
+                SELECT 
+                    p.id, p.name, p.description, p.category_id, p.price, c.name AS category_name, p.image,
+                    ts_rank(
+                        setweight(to_tsvector('english', p.name), 'A') ||
+                        setweight(to_tsvector('english', coalesce(p.description, '')), 'B') ||
+                        setweight(to_tsvector('english', coalesce(c.name, '')), 'A'),
+                        plainto_tsquery('english', $1)
+                    ) AS rank
+                FROM products p
+                LEFT JOIN categories c ON c.id = p.category_id
+                WHERE 
+                    setweight(to_tsvector('english', p.name), 'A') ||
+                    setweight(to_tsvector('english', coalesce(p.description, '')), 'B') ||
+                    setweight(to_tsvector('english', coalesce(c.name, '')), 'A')
+                    @@ plainto_tsquery('english', $1)
+                ORDER BY rank DESC
+                LIMIT 20;
+            `, [search])
+                const products = result.rows;
+                res.render("search.ejs", { products, query: search })
+        } catch (err) {
+            console.log(err)
+            return res.send("an error occured")
+        }
+    } else {
+        res.render("search.ejs", { products: [] })
+    }
+})
 app.get("/sign-in", (req, res) => {
     res.render("sign-in.ejs", { message: req.session.messages?.[0] || "" })
 })
@@ -272,7 +304,6 @@ app.post("/login",
     res.redirect(redirectTo);
   }
 );
-
 
 app.get("/sign-up", (req, res) => {
     res.render("sign-up.ejs", { msg: "" })
