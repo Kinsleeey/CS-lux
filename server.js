@@ -1248,7 +1248,7 @@ app.post("/payment/initiate", async (req, res) => {
         email,
         amount: total * 100,
         metadata: { delivery_option_id, delivery_location },
-        callback_url: "https://cs-lux-production.up.railway.app/payment/verify",
+        callback_url: "https://csluxury.shop/payment/verify",
       },
       { headers: paystackHeaders }
     );

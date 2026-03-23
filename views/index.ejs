@@ -30,8 +30,8 @@
                         </a></span>
                     </span>
 
-                    <div class="grid-x8">
-                        <% for(let p of productsInThisCategory.slice(0, 8)) { %>
+                    <div class="grid-x4">
+                        <% for(let p of productsInThisCategory) { %>
                             <% const variantOfProduct = variants.find(v => v[0].product_id === p.id); %>
                             <% if (variantOfProduct) { %>
                                 <div class="item">
