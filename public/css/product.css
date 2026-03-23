@@ -196,6 +196,11 @@
     .grid-x4 {
         grid-template-columns: repeat(3, 15.625rem);
     }
+        .fav .item,
+    .item {
+        min-width: 28rem;
+        width: 28px;
+    }
 }
 
 @media (max-width: 768px) {
