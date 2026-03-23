@@ -36,10 +36,10 @@
     width: 100%;
 }
 .grid-x8 {
-    display: grid;
-    grid-template-columns: repeat(8, 15.625rem);
+    display: flex;
+    align-items: center;
     gap: 1rem;
-    margin: 0 auto;
+    overflow-x: scroll;
     width: 100%;
 }
 
