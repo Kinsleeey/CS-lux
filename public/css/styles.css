@@ -750,3 +750,8 @@
         font-size: 0.688rem;
     }
 } */
+ @media (max-width: 370px) {
+    html {
+        font-size: 10px;
+    }
+}
