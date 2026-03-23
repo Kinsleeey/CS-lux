@@ -27,7 +27,7 @@
 
 .search-grid {
     display: grid;
-    grid-template-columns: repeat(4, 15.625rem);
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
     gap: 1rem;
 }
 
@@ -148,12 +148,6 @@
 /* ==========================================================================
    SEARCH RESULTS RESPONSIVE
    ========================================================================== */
-
-@media (max-width: 1100px) {
-    .search-grid {
-        grid-template-columns: repeat(3, 15.625rem);
-    }
-}
 
 @media (max-width: 768px) {
     .search-page {

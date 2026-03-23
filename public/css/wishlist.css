@@ -14,7 +14,7 @@
 
 .fav-center {
     display: grid;
-    grid-template-columns: repeat(4, 15.625rem);
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
     gap: 1rem;
 }
 
@@ -162,9 +162,7 @@
         margin: 2rem 1.5rem;
     }
 
-    .fav-center {
-        grid-template-columns: repeat(2, 1fr);
-    }
+    
 
     .fav-item {
         width: 100%;
