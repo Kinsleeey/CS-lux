@@ -168,9 +168,7 @@
         width: 100%;
     }
 
-    .search-item-img {
-        aspect-ratio: 3 / 4;
-    }
+    
 }
 
 @media (max-width: 480px) {
