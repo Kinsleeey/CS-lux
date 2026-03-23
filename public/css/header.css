@@ -93,7 +93,6 @@ header {
     flex: 1;
     border: none;
     outline: none;
-    font-size: 0.938rem;
     color: var(--color-dark);
     background: transparent;
 }

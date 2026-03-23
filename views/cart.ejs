@@ -11,7 +11,7 @@
         
         <div class="si-cards">
             <% if (cartedProducts.length === 0) { %>
-                <h4 class="empty-cart">Cart is empty, add <a href="/product/1">products</a>.</h4>
+                <h4 class="empty-cart">Cart is empty, add <a href="/product/<%= categories[0].id %>">products</a>.</h4>
             <% } %>
             <% for (let cartedProduct of cartedProducts) {%>
                 <% if (cartedProduct.stock > 0) { %>

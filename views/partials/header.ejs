@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0, user-scalable=no">
     <title>CS-Luxury</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2300aaaa'/><text x='50' y='72' font-size='60' font-family='Arial' font-weight='bold' fill='white' text-anchor='middle'>C</text></svg>">
     <link rel="stylesheet" href="/css/styles.css">
@@ -94,7 +94,7 @@
                 </div>
                 <ul style="display:flex; flex-direction:column; gap:0.25rem; list-style:none;">
                     <li><a href="/"  style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Home</a></li>
-                    <li><a href="/product/1"  style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Product</a></li>
+                    <li><a href="/product/<%= categories[0].id %>"  style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Product</a></li>
                     <li><a href="/cart"  style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Cart</a></li>
                     <li><a href="/wishlist"  style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Wishlist</a></li>
                     <li><a href="/track-order"  style="display:block; padding:0.875rem 1rem; border-radius:var(--radius-sm); font-size:1rem; font-weight:500; color:var(--color-dark); transition:all var(--transition-fast);">Track Order</a></li>

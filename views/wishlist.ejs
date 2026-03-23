@@ -5,7 +5,7 @@
         <h3>My Wishlist</h3>
         <div class="fav-center">
             <% if (products.length === 0) { %>
-                <h4 class="empty-wishlist">Wishlist is empty, add<a href="/product/1"> products</a>.</h4>
+                <h4 class="empty-wishlist">Wishlist is empty, add<a href="/product/<%= categories[0].id %>"> products</a>.</h4>
             <% } %>
             
             <% for (let i = 0; i < products.length; i++) { %>
