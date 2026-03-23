@@ -57,7 +57,7 @@
 /* Main Product Layout */
 .p-stuff {
     display: grid;
-    grid-template-columns: 240px 1fr;
+    grid-template-columns: 200px 1fr;
     gap: 2rem;
 }
 
@@ -200,7 +200,7 @@
     }
 
     .p-page-display {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
