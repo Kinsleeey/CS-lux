@@ -35,6 +35,13 @@
     margin: 0 auto;
     width: 100%;
 }
+.grid-x8 {
+    display: grid;
+    grid-template-columns: repeat(8, 15.625rem);
+    gap: 1rem;
+    margin: 0 auto;
+    width: 100%;
+}
 
 /* Product Items */
 .fav .item,
