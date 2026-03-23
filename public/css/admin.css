@@ -352,6 +352,9 @@
         /* ── Categories ── */
         .category-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
         .category-tag {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             background: var(--color-primary-light);
             color: var(--color-primary-dark);
             border: 1px solid rgba(2,159,174,0.2);

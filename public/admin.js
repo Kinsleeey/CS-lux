@@ -122,6 +122,29 @@ function dismissToast(toast) {
         // TODO: wire up to backend
         closeEditPopup();
     }
+    async function removeCategory(id) {
+        try {
+            const response = await fetch(`/category/${id}`, {
+                method: 'DELETE'
+            });
+            if (response.ok) {
+                const data = await response.json();
+
+                showToast(data.message, 'success');
+
+                setTimeout(() => {
+                    window.location.href = '/admin';
+                }, 2000);
+            } else if (response.status === 400) {
+                const data = await response.json();
+                showToast(data.message, 'info');
+            } else {
+                showToast('Failed to delete category', 'error');
+            }
+        } catch (err) {
+
+        }
+    }
 
     async function patchVariant() {
         const variantId = document.getElementById('editVariantId').value;

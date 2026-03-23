@@ -230,7 +230,7 @@ app.get("/product/:categoryId", async(req, res) => {
     const products = result.rows;
 
     let variants = [];
-    const varArr = products.map(product => product.id);
+    const varArr = products.map(product => product.id); //to array of id"s
     
 
     for (let v of varArr) {
@@ -268,7 +268,17 @@ app.get("/search", async(req, res) => {
                 LIMIT 20;
             `, [search])
                 const products = result.rows;
-                res.render("search.ejs", { products, query: search })
+
+                let variants = [];
+                const varArr = products.map(product => product.id); // to array of id"s
+                
+
+                for (let v of varArr) {
+                    const variant = await getVariantDetails(v);    
+                    variants.push(variant);
+                }
+
+                res.render("search.ejs", { products, variants, query: search })
         } catch (err) {
             console.log(err)
             return res.send("an error occured")
@@ -998,6 +1008,22 @@ app.post("/new-category", async (req, res) => {
     res.redirect("/admin?msg=Something went wrong");
   }
 });
+app.delete("/category/:id", async (req, res) => {
+    const categoryId = parseInt(req.params.id);
+
+    if (isNaN(categoryId)) {
+        return res.status(400).json({ success: false, message: "Invalid variant ID" });
+    }
+
+    try {
+        await db.query(`DELETE FROM categories WHERE id = $1`, [categoryId]);
+        res.status(200).json({ success: true, message: "Product variant deleted" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ success: false, message: "An error occurred" });
+    }
+        
+})
 
 app.post("/upload", upload.single("product-img"), async(req, res) => {
     if (!req.file) {

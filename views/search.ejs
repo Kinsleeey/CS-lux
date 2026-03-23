@@ -14,23 +14,56 @@
         </div>
     <% } else { %>
         <div class="search-grid">
-            <% products.forEach(p => { %>
-                <a href="/info/<%= p.category_id %>/<%= p.id %>" class="search-item">
+            <% for (let i = 0; i < products.length; i++) { %>
+                <a href="/info/<%= products[i].category_id %>/<%= products[i].id %>" class="search-item">
                     <div class="search-item-img">
-                        <div class="category-badge"><%= p.category_name %></div>
-                        <img src="<%= p.image %>" alt="<%= p.name %>" />
+                        <div class="category-badge"><%= products[i].category_name %></div>
+                        <img src="<%= products[i].image %>" alt="<%= products[i].name %>" />
                     </div>
                     <div class="search-item-footer">
                         <span>
-                            <p><%= p.name %></p>
-                            <p>₦<%= Number(p.price).toLocaleString('en-NG') %></p>
+                            <p><%= products[i].name %></p>
+                            <p>₦<%= Number(products[i].price).toLocaleString('en-NG') %></p>
                         </span>
-                        <div class="search-cart-btn" onclick="event.preventDefault(); openPopup(<%= p.id %>)">
+                        <div class="search-cart-btn" onclick="event.preventDefault(); openPopup(<%= products[i].id %>)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000000" viewBox="0 0 256 256"><path d="M230.14,58.87A8,8,0,0,0,224,56H62.68L56.6,22.57A8,8,0,0,0,48.73,16H24a8,8,0,0,0,0,16h18L67.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42A27.75,27.75,0,0,0,160,204a28,28,0,1,0,28-28H91.17a8,8,0,0,1-7.87-6.57L80.13,152h116a24,24,0,0,0,23.61-19.71l12.16-66.86A8,8,0,0,0,230.14,58.87ZM104,204a12,12,0,1,1-12-12A12,12,0,0,1,104,204Zm96,0a12,12,0,1,1-12-12A12,12,0,0,1,200,204Zm4-74.57A8,8,0,0,1,196.1,136H77.22L65.59,72H214.41Z"></path></svg>
                         </div>
                     </div>
                 </a>
-            <% }) %>
+                <div class="xyz-overlay" id="xyz-overlay<%= products[i].id %>">
+                        <div class="xyz-popup">
+                            <div class="xyz-header">
+                                <h3 class="xyz-title">Select Quantity</h3>
+                                <button class="xyz-close" onclick="closePopup(<%= products[i].id %>)">×</button>
+                            </div>
+                            <% if (variants[i].length === 1 & variants[i][0].size === "") {%>
+                                    <div class="xyz-size-row">
+                                        <div class="xyz-qty-control">
+                                            <button class="xyz-qty-btn" onclick="cart(this, '-', <%= variants[i][0].id %>, <%= variants[i][0].stock %>, false)">-</button>
+                                                <span class="xyz-qty-value">0</span>
+                                            <button class="xyz-qty-btn" onclick="cart(this, '+', <%= variants[i][0].id %>, <%= variants[i][0].stock %>, false)">+</button>
+                                        </div>
+                                    </div>
+                            <% } else { %>
+                                    <% variants[i].forEach(variant => { %>
+                                        <div class="xyz-size-row">
+                                            <span class="xyz-size-name"><%= variant.size %></span>
+                                            <div class="xyz-qty-control">
+                                                <button class="xyz-qty-btn" onclick="cart(this, '-', <%= variant.id %>, <%= variant.stock %>, false)">-</button>
+                                                    <span class="xyz-qty-value">0</span>
+                                                <button class="xyz-qty-btn" onclick="cart(this, '+', <%= variant.id %>, <%= variant.stock %>, false)">+</button>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                            <% } %>
+                            <div class="flex-c gap1">
+                                <a href="/cart"><button class="xyz-add-btn">View Cart</button></a>
+                                <a href="/product/1"><button class="xyz-add-btn">Continue Shopping</button></a>
+                            </div>
+                            
+                        </div>
+                    </div>
+            <% } %>
         </div>
     <% } %>
 </section>

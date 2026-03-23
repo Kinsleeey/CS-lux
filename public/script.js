@@ -137,6 +137,7 @@ document.querySelectorAll('.wait').forEach(item => {
   });
 });
 
+
 async function addToCart(variantId, stock, redirectToCart) {
     try {
         const response = await fetch(`/cart/${variantId}/${stock}`, {
