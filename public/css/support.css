@@ -6,7 +6,8 @@
 
 .wa-float {
     position: fixed;
-    bottom: 2rem;
+    z-index: 1000000;
+    bottom: 3rem;
     right: 2rem;
     width: 56px;
     height: 56px;
