@@ -192,14 +192,17 @@
    RESPONSIVE BREAKPOINTS
    ========================================================================== */
 
-@media (max-width: 1100px) {
-    .grid-x4 {
-        grid-template-columns: repeat(3, 15.625rem);
-    }
-        .fav .item,
+@media (min-width: 1100px) {
+    .fav .item,
     .item {
         min-width: 28rem;
         width: 28px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .grid-x4 {
+        grid-template-columns: repeat(3, 15.625rem);
     }
 }
 
