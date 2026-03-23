@@ -122,7 +122,7 @@
 
 /* Product Footer */
 .item-footer {
-    padding: 1.25rem;
+    padding-top: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;

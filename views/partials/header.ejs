@@ -37,7 +37,7 @@
             <nav>
                 <ul class="nav flex-sb-c gap1">
                     <li><a href="/">Home</a></li>
-                    <li><a href="/product/1">Product</a></li>
+                    <li><a href="/product/<%= categories[0].id %>">Product</a></li>
                     <li><a href="/cart">Cart</a></li>
                     <% if (!user) { %>
                         <li><a href="/sign-in">Sign-in</a></li>
