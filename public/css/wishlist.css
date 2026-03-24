@@ -152,18 +152,15 @@
    ========================================================================== */
 
 @media (max-width: 1100px) {
-    .fav-center {
+    /* .fav-center {
         grid-template-columns: repeat(3, 15.625rem);
-    }
+    } */
 }
 
 @media (max-width: 768px) {
     .favourite {
         margin: 2rem 1.5rem;
     }
-
-    
-
     .fav-item {
         width: 100%;
     }

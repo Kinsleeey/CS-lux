@@ -3,7 +3,7 @@
    ========================================================================== */
 
 .product {
-    margin: 3rem;
+    margin: 5rem 3rem;
 }
 
 .product > span {
@@ -20,13 +20,54 @@
 }
 
 .product-sect-header {
-    margin-bottom: 1.5rem;
+    margin: 0 58px 1.5rem 58px;
+    
 }
 
-.product-sect-header p {
-    font-size: 0.75rem;
+/* popular */
+.product-head-writeup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
+.tag {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: #fff;
+  padding: 1rem;
+  font-weight: 700;
+  clip-path: polygon(0% 0%, 100% 20%, 100% 80%, 0% 100%);
+  border-top-left-radius: 14px;
+  border-bottom-left-radius: 14px;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.prev, .next {
+    width: 44px;
+    height: 44px;
+    background: var(--color-bg-gray);
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+.prev:hover, .next:hover {
+    background: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-primary);
+}
+
+.prev svg, .next svg {
+    transition: fill var(--transition-fast);
+}
+.prev:hover svg, .next:hover svg {
+    fill: var(--color-white);
+}
 /* Grid Layout */
 .grid-x4 {
     display: grid;
@@ -35,15 +76,27 @@
     margin: 0 auto;
     width: 100%;
 }
-.grid-x8 {
+.home-product { 
     display: flex;
+    /* flex-wrap: nowrap; */
     gap: 1rem;
     margin: 0 auto;
     width: 100%;
     overflow-x: scroll;
+    scrollbar-width: none;
+}
+.parent::-webkit-scrollbar {
+    display: none;
 }
 
+/* .home-product * {
+    flex-shrink: 0;
+} */
 /* Product Items */
+.home-product-card { /* item previously */
+    min-width: 14.5rem;
+    width: 100%;
+}
 .fav .item,
 .item {
     min-width: 14rem;
@@ -54,13 +107,24 @@
     box-shadow: var(--shadow-lg);
     transform: translateY(-4px);
 }
-
 .item a {
     text-decoration: none;
     color: inherit;
 }
 
 .item:hover .item-img img {
+    transform: scale(1.05);
+}
+.home-product-card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+}
+.home-product-card a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.home-product-card:hover .item-img img {
     transform: scale(1.05);
 }
 
@@ -128,6 +192,7 @@
     align-items: flex-start;
 }
 
+
 .item-footer > span {
     flex: 1;
     display: flex;
@@ -191,13 +256,33 @@
 /* ==========================================================================
    RESPONSIVE BREAKPOINTS
    ========================================================================== */
-
+@media (min-width: 1100px) {
+    .home-product-card { /* item previously */
+        width: 22rem;
+    }
+}
 @media (max-width: 1100px) {
     .grid-x4 {
         grid-template-columns: repeat(3, 15.625rem);
     }
 }
-
+@media (min-width: 768px) {
+    
+    .home-product-card { /* item previously */
+        width: 22rem;
+    }
+}
+@media (min-width: 480px) {
+    .home-product-card { /* item previously */
+        width: 18rem;
+    }
+    .home-product * {
+    flex-shrink: 0;
+}
+    .home-product {
+        flex-wrap: nowrap;
+    }
+}
 @media (max-width: 768px) {
     .product {
         margin: 2rem 1.5rem;
@@ -211,11 +296,17 @@
     .item {
         width: 100%;
     }
+    .prev, .next {
+        display: none;
+    }
+    .product-sect-header {
+        margin: 0 0 1.5rem 0;
+    }
 }
 
 @media (max-width: 480px) {
     .product {
-        margin: 1.5rem 1rem;
+        margin: 4rem 1.5rem;
     }
 
     .product-sect {
@@ -235,4 +326,5 @@
     .item-footer p {
         font-size: 0.75rem;
     }
+    
 }

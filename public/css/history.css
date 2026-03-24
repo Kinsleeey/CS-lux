@@ -4,11 +4,15 @@
 
 .track-order {
     max-width: 1440px;
-    margin: 7rem auto 0 auto;
+    margin: 0 auto;
     padding: 3rem 2rem;
     min-height: calc(100vh - 7.3125rem);
 }
-
+.tkheader{
+    margin-bottom: 2rem;
+    text-align: center;
+    width: 100%;
+}
 /* Order Card */
 .to-card {
     background: var(--color-white);

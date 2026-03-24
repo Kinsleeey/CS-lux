@@ -160,10 +160,7 @@ header {
     border: 2px solid var(--color-primary);
 }
 
-.brand p {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--color-dark);
+.brand h2 {
     margin: 0;
 }
 

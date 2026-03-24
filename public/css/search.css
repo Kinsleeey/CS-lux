@@ -154,9 +154,9 @@
         padding: 2rem 1.5rem;
     }
 
-    .search-grid {
+    /* .search-grid {
         grid-template-columns: repeat(2, 1fr);
-    }
+    } */
 
     .search-item {
         width: 100%;
@@ -170,10 +170,10 @@
         padding: 1.5rem 1rem;
     }
 
-    .search-grid {
+     .search-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 0.625rem;
-    }
+    } 
 
     .search-item-footer > span p:first-child {
         font-size: 0.8rem;

@@ -11,7 +11,7 @@
     background: linear-gradient(135deg, #d4edf5 0%, #f5f8fa 45%, #f5f8fa 55%, #d4edf5 100%);
 }
 
-.bebas-neue-regular {
+ .bebas-neue-regular {
   font-family: "Bebas Neue", sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -38,9 +38,9 @@
 }
 
 .hero-text h1 {
-    font-size: 70px;
     line-height: 1;
 }
+
 
 .ht-button {
     font-size: 0.875rem;
@@ -114,9 +114,7 @@
         font-size: 38px;
     }
 
-    .hero-text p:first-child {
-        font-size: 0.813rem;
-    }
+    
 
     .ht-button {
         padding: 0.75rem 1.25rem;

@@ -13,86 +13,107 @@
         </div>
     </div>
 </section>
+
 <section class="product" >
-    <span>
-        <h2 class="bebas-neue-regular">Our Products</h2>
-        <p>Find something you'll love, from fresh fits to the latest gadgets</p>
-    </span>
+    <div class="product-head-writeup">
+        <h2 style="width: fit-content;"><div class="tag">Popular</div> Products</h2>
+        <!-- <p>Find something you"ll love, from fresh fits to the latest gadgets</p> -->
+    </div>
     <% for(let c of categories) { %>
         <% const productsInThisCategory = products.filter(p => p.category === c.name); %>
             <% if (productsInThisCategory.length > 0) { %>
+
                 <div class="product-sect">
                     <span class="product-sect-header">
-                        <p class="bebas-neue-regular" style="font-size: 1.6rem; font-weight: bold;"><%= c.name %></p>
-                        <span><a href="product/<%= c.id %>" class="flex-sb-c gap025" >
+                        <h3><%= c.name.charAt(0).toUpperCase() + c.name.slice(1) %></h3>
+                         <span><a href="product/<%= c.id %>" class="flex-sb-c gap025" >
                             <p>See All</p>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#000000" viewBox="0 0 256 256"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"></path></svg>
                         </a></span>
                     </span>
+                    <div class="flex-c gap1">
+                        <div class="prev"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="36" fill="#029FAE" viewBox="0 0 256 256"><path d="M168.49,199.51a12,12,0,0,1-17,17l-80-80a12,12,0,0,1,0-17l80-80a12,12,0,0,1,17,17L97,128Z"></path></svg></div>
+                            <div class="home-product">
+                                <% for(let p of productsInThisCategory) { %>
+                                    <% const variantOfProduct = variants.find(v => v[0].product_id === p.id); %>
+                                    <% if (variantOfProduct) { %>
 
-                    <div class="grid-x4">
-                        <% for(let p of productsInThisCategory) { %>
-                            <% const variantOfProduct = variants.find(v => v[0].product_id === p.id); %>
-                            <% if (variantOfProduct) { %>
-                                <div class="item">
-                                    <a href="/info/<%= p.category %>/<%= p.id %>">
-                                        <div class="item-img">
-                                            <div class="greyback" onclick="event.preventDefault(); addToWishlist(<%= p.id %>)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000000" viewBox="0 0 256 256"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path></svg></div>    
-                                            <img src="<%= p.image %>"/>
-                                        </div>
-                                        <div class="item-footer flex-sb-c">
-                                            <span>
-                                                <p><%= p.name %></p>
-                                                <p>₦<%= Number(p.price).toLocaleString('en-NG') %></p>
-                                            </span>
-                                            <div class="gback" onclick="event.preventDefault(); openPopup(<%= p.id %>)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000000" viewBox="0 0 256 256"><path d="M230.14,58.87A8,8,0,0,0,224,56H62.68L56.6,22.57A8,8,0,0,0,48.73,16H24a8,8,0,0,0,0,16h18L67.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42A27.75,27.75,0,0,0,160,204a28,28,0,1,0,28-28H91.17a8,8,0,0,1-7.87-6.57L80.13,152h116a24,24,0,0,0,23.61-19.71l12.16-66.86A8,8,0,0,0,230.14,58.87ZM104,204a12,12,0,1,1-12-12A12,12,0,0,1,104,204Zm96,0a12,12,0,1,1-12-12A12,12,0,0,1,200,204Zm4-74.57A8,8,0,0,1,196.1,136H77.22L65.59,72H214.41Z"></path></svg></div>
-                                        </div>
-                                    </a>
-                                </div>
-
-                                <div class="xyz-overlay" id="xyz-overlay<%= p.id %>">
-                                    <div class="xyz-popup">
-                                        <div class="xyz-header">
-                                            <h3 class="xyz-title">Select Quantity</h3>
-                                            <button class="xyz-close" onclick="closePopup(<%= p.id %>)">×</button>
-                                        </div>
-                                        <% if (variantOfProduct.length === 1 & variantOfProduct[0].size === "") {%>
-                                                <div class="xyz-size-row">
-                                                    <div class="xyz-qty-control">
-                                                        <button class="xyz-qty-btn" onclick="cart(this, '-', <%= variantOfProduct[0].id %>, <%= variantOfProduct[0].stock %>, false)">-</button>
-                                                            <span class="xyz-qty-value">0</span>
-                                                        <button class="xyz-qty-btn" onclick="cart(this, '+', <%= variantOfProduct[0].id %>, <%= variantOfProduct[0].stock %>, false)">+</button>
-                                                    </div>
+                                        <div class="home-product-card">
+                                            <a href="/info/<%= p.category %>/<%= p.id %>">
+                                                <div class="item-img">
+                                                    <div class="greyback" onclick="event.preventDefault(); addToWishlist(<%= p.id %>)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000000" viewBox="0 0 256 256"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"></path></svg></div>    
+                                                    <img src="<%= p.image %>"/>
                                                 </div>
-                                        <% } else { %>
-                                                <% variantOfProduct.forEach(variant => { %>
-                                                    <div class="xyz-size-row">
-                                                        <span class="xyz-size-name"><%= variant.size %></span>
-                                                        <div class="xyz-qty-control">
-                                                            <button class="xyz-qty-btn" onclick="cart(this, '-', <%= variant.id %>, <%= variant.stock %>, false)">-</button>
-                                                                <span class="xyz-qty-value">0</span>
-                                                            <button class="xyz-qty-btn" onclick="cart(this, '+', <%= variant.id %>, <%= variant.stock %>, false)">+</button>
-                                                        </div>
-                                                    </div>
-                                                <% }) %>
-                                        <% } %>
-                                        <div class="flex-c gap1">
-                                            <a href="/cart" class="wait"><button class="xyz-add-btn">View Cart</button></a>
-                                            <a href="/product/<%= categories[0].id %>" class="wait"><button class="xyz-add-btn">Continue Shopping</button></a>
+                                                <div class="item-footer flex-sb-c">
+                                                    <span>
+                                                        <p><%= p.name %></p>
+                                                        <p>₦<%= Number(p.price).toLocaleString('en-NG') %></p>
+                                                    </span>
+                                                    <div class="gback" onclick="event.preventDefault(); openPopup(<%= p.id %>)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="#000000" viewBox="0 0 256 256"><path d="M230.14,58.87A8,8,0,0,0,224,56H62.68L56.6,22.57A8,8,0,0,0,48.73,16H24a8,8,0,0,0,0,16h18L67.56,172.29a24,24,0,0,0,5.33,11.27,28,28,0,1,0,44.4,8.44h45.42A27.75,27.75,0,0,0,160,204a28,28,0,1,0,28-28H91.17a8,8,0,0,1-7.87-6.57L80.13,152h116a24,24,0,0,0,23.61-19.71l12.16-66.86A8,8,0,0,0,230.14,58.87ZM104,204a12,12,0,1,1-12-12A12,12,0,0,1,104,204Zm96,0a12,12,0,1,1-12-12A12,12,0,0,1,200,204Zm4-74.57A8,8,0,0,1,196.1,136H77.22L65.59,72H214.41Z"></path></svg></div>
+                                                </div>
+                                            </a>
                                         </div>
-                                    </div>
-                                </div>
-                            <% } %>
-                        <% } %>
+
+                                        <div class="xyz-overlay" id="xyz-overlay<%= p.id %>">
+                                            <div class="xyz-popup">
+                                                <div class="xyz-header">
+                                                    <h3 class="xyz-title">Select Quantity</h3>
+                                                    <button class="xyz-close" onclick="closePopup(<%= p.id %>)">×</button>
+                                                </div>
+                                                <% if (variantOfProduct.length === 1 & variantOfProduct[0].size === "") {%>
+                                                        <div class="xyz-size-row">
+                                                            <div class="xyz-qty-control">
+                                                                <button class="xyz-qty-btn" onclick="cart(this, '-', <%= variantOfProduct[0].id %>, <%= variantOfProduct[0].stock %>, false)">-</button>
+                                                                    <span class="xyz-qty-value">0</span>
+                                                                <button class="xyz-qty-btn" onclick="cart(this, '+', <%= variantOfProduct[0].id %>, <%= variantOfProduct[0].stock %>, false)">+</button>
+                                                            </div>
+                                                        </div>
+                                                <% } else { %>
+                                                        <% variantOfProduct.forEach(variant => { %>
+                                                            <div class="xyz-size-row">
+                                                                <span class="xyz-size-name"><%= variant.size %></span>
+                                                                <div class="xyz-qty-control">
+                                                                    <button class="xyz-qty-btn" onclick="cart(this, '-', <%= variant.id %>, <%= variant.stock %>, false)">-</button>
+                                                                        <span class="xyz-qty-value">0</span>
+                                                                    <button class="xyz-qty-btn" onclick="cart(this, '+', <%= variant.id %>, <%= variant.stock %>, false)">+</button>
+                                                                </div>
+                                                            </div>
+                                                        <% }) %>
+                                                <% } %>
+                                                <div class="flex-c gap1">
+                                                    <a href="/cart" class="wait"><button class="xyz-add-btn">View Cart</button></a>
+                                                    <a href="/product/<%= categories[0].id %>" class="wait"><button class="xyz-add-btn">Continue Shopping</button></a>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    <% } %>
+                                <% } %>
+                            </div>
+                        <div class="next"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="36" fill="#029fae" viewBox="0 0 256 256"><path d="M184.49,136.49l-80,80a12,12,0,0,1-17-17L159,128,87.51,56.49a12,12,0,1,1,17-17l80,80A12,12,0,0,1,184.49,136.49Z"></path></svg></div>
                     </div>
+
                 </div>
+
             <% } %>
     <% } %>
     
 </section>
 
 <script>
-    
+    const container = document.querySelector('.home-product');
+    const prev = document.querySelector('.prev');
+    const next = document.querySelector('.next');
+
+    prev.addEventListener('click', () => {
+        container.scrollBy({ left: -600, behavior: 'smooth' });
+    });
+
+    next.addEventListener('click', () => {
+        container.scrollBy({ left: 600, behavior: 'smooth' });
+    });
+
+
     if (window.location.search.includes('login=true')) {
         document.getElementById('signin-overlay').style.display = 'flex';
     }

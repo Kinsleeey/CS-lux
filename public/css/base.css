@@ -10,6 +10,7 @@
     --color-primary-light: #F7FCFD;
     
     /* Neutral Colors */
+    --color-bg: #f7feff;
     --color-dark: #272343;
     --color-text: #636270;
     --color-text-light: #9A9CAA;
@@ -70,6 +71,7 @@ body {
     padding-top: 109px;
     width: 100vw;
     overflow-x: hidden;
+    background-color: var(--color-bg);
 }
 /*toggle*/
 
@@ -106,14 +108,28 @@ body {
 /* ==========================================================================
    TYPOGRAPHY
    ========================================================================== */
-
+h1 {
+    font-size: 4.5rem;
+}
 h2 {
-    font-size: 1.75rem;
+    font-size: 2.5rem;
 }
 
 h3 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-dark);
 }
+
+h4 {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+p {
+    font-size: 1rem;
+}
+
 input[type="checkbox"], input[type="radio"] {
     accent-color: var(--color-primary);
 }
