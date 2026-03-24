@@ -1012,12 +1012,12 @@ app.delete("/category/:id", async (req, res) => {
     const categoryId = parseInt(req.params.id);
 
     if (isNaN(categoryId)) {
-        return res.status(400).json({ success: false, message: "Invalid variant ID" });
+        return res.status(400).json({ success: false, message: "Invalid category ID" });
     }
 
     try {
         await db.query(`DELETE FROM categories WHERE id = $1`, [categoryId]);
-        res.status(200).json({ success: true, message: "Product variant deleted" });
+        res.status(200).json({ success: true, message: "category deleted" });
     } catch (err) {
         console.error(err);
         res.status(500).json({ success: false, message: "An error occurred" });
