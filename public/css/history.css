@@ -6,7 +6,7 @@
     max-width: 1440px;
     margin: 0 auto;
     padding: 3rem 2rem;
-    min-height: calc(100vh - 7.3125rem);
+    min-height: 40vh;
 }
 .tkheader{
     margin-bottom: 2rem;
@@ -613,7 +613,7 @@ table td:last-child {
 
 @media (max-width: 480px) {
     .track-order {
-        padding: 1.5rem 0.75rem;
+        padding: 2rem 0.75rem;
     }
 
     .to-card {

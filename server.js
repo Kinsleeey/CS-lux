@@ -640,15 +640,19 @@ app.get("/track-order", async (req, res) => {
         o.status,
         o.delivery_option,
         o.delivery_location,
-        o.created_at,
+        o.created_at
       FROM orders o
       WHERE o.user_id = $1
       ORDER BY o.created_at DESC`,
       [userId]
     );
 
-    const orders = ordersResult.rows;
+    if(ordersResult.rows.length === 0) {
+        res.render("track-order.ejs", { orders: "" });
+        return
+    }
 
+    const orders = ordersResult.rows;
     // Get items for each order
     for (let order of orders) {
       const itemsResult = await db.query(
@@ -665,7 +669,7 @@ app.get("/track-order", async (req, res) => {
       order.items = itemsResult.rows;
     }
 
-    res.render("track-order.ejs", { orders, });
+    res.render("track-order.ejs", { orders });
 
   } catch (err) {
     console.error(err);

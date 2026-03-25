@@ -1,87 +1,92 @@
 <%- include('partials/header') %>
 
 <section class="track-order">
+  <div class="tkheader"><h3>Order History</h3></div>
   <% if (orders.length === 0) { %>
-    <p>You have no orders yet.</p>
-  <% } %>
-    <div class="tkheader"><h3>Order History</h3></div>
-  <% orders.forEach(order => { %>
-  <div class="to-card">
-    <div class="to-top">
-      <div class="to-top-left">
-        <div>
-          <h3>Order Id #223<%= order.id %></h3>
-          <p class="sm">Order placed on <span><%= new Date(order.created_at).toDateString() %></span></p>
-        </div>
-        <button class="view-products-link" onclick="toggleOrderList(<%= order.id %>)">View</button>
-      </div>
-      <div class="order-info">
-        <span>
-          <p>Delivery Type</p>
-          <p><%= order.delivery_type %></p>
-          <p><%= order.delivery_location || 'N/A' %></p>
-        </span>
-      </div>
-    </div>
+    <h4>You have no orders yet.</h4>
+  <% } else { %>
 
-    <div class="order-list" id="order-list-<%= order.id %>" style="display:none;">
-      <table>
-        <tr>
-          <th>Product</th>
-          <th>Size</th>
-          <th>Quantity</th>
-          <th>Amount</th>
-        </tr>
-        <% order.items.forEach(item => { %>
-        <tr>
-          <td>
-            <div class="flex-c gap05">
-              <div class="ol-img"><img src="<%= item.image %>"></div>
-              <p><%= item.name %></p>
+  
+
+        <% orders.forEach(order => { %>
+        <div class="to-card">
+          <div class="to-top">
+            <div class="to-top-left">
+              <div>
+                <h3>Order Id #223<%= order.id %></h3>
+                <p class="sm">Order placed on <span><%= new Date(order.created_at).toDateString() %></span></p>
+              </div>
+              <button class="view-products-link" onclick="toggleOrderList(<%= order.id %>)">View</button>
             </div>
-          </td>
-          <td><%= item.size || 'N/A' %></td>
-          <td><%= item.qty %></td>
-          <td>₦<%= item.price.toLocaleString() %></td>
-        </tr>
+            <div class="order-info">
+              <span>
+                <p>Delivery Type</p>
+                <p><%= order.delivery_type %></p>
+                <p><%= order.delivery_location || 'N/A' %></p>
+              </span>
+            </div>
+          </div>
+
+          <div class="order-list" id="order-list-<%= order.id %>" style="display:none;">
+            <table>
+              <tr>
+                <th>Product</th>
+                <th>Size</th>
+                <th>Quantity</th>
+                <th>Amount</th>
+              </tr>
+              <% order.items.forEach(item => { %>
+              <tr>
+                <td>
+                  <div class="flex-c gap05">
+                    <div class="ol-img"><img src="<%= item.image %>"></div>
+                    <p><%= item.name %></p>
+                  </div>
+                </td>
+                <td><%= item.size || 'N/A' %></td>
+                <td><%= item.qty %></td>
+                <td>₦<%= item.price.toLocaleString() %></td>
+              </tr>
+              <% }) %>
+            </table>
+            <button class="view-products-link" onclick="toggleOrderList(<%= order.id %>)">Hide</button>
+          </div>
+
+          <hr />
+
+          <div class="to-bottom">
+            <div class="progress"></div>
+            <div class="progress-icons flex-sb-c">
+              <div>
+                <div class="progress-icon <%= ['processing', 'shipped', 'delivered'].includes(order.status) ? 'done' : '' %>">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"></path></svg>
+                </div>
+                <p>Order Placed</p>
+              </div>
+              <div>
+                <div class="progress-icon <%= ['processing', 'shipped', 'delivered'].includes(order.status) ? 'done' : '' %>">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51s-18.75-7.85-28.51-8c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C146.28,23.51,138.44,16,128,16s-18.27,7.51-25.18,14.14c-3.94,3.77-8,7.67-11.57,9.14C88,40.64,82.56,40.72,77.31,40.8c-9.76.15-20.82.31-28.51,8S41,67.55,40.8,77.31c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C23.51,109.72,16,117.56,16,128s7.51,18.27,14.14,25.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C109.72,232.49,117.56,240,128,240s18.27-7.51,25.18-14.14c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C232.49,146.28,240,138.44,240,128S232.49,109.73,225.86,102.82Z"></path></svg>
+                </div>
+                <p>Processing</p>
+              </div>
+              <div>
+                <div class="progress-icon <%= ['shipped', 'delivered'].includes(order.status) ? 'done' : '' %>">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M255.42,117l-14-35A15.93,15.93,0,0,0,226.58,72H192V64a8,8,0,0,0-8-8H32A16,16,0,0,0,16,72V184a16,16,0,0,0,16,16H49a32,32,0,0,0,62,0h50a32,32,0,0,0,62,0h17a16,16,0,0,0,16-16V120A7.94,7.94,0,0,0,255.42,117Z"></path></svg>
+                </div>
+                <p>Shipped</p>
+              </div>
+              <div>
+                <div class="progress-icon <%= order.status === 'delivered' ? 'done' : '' %>">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68Z"></path></svg>
+                </div>
+                <p>Delivered</p>
+              </div>
+            </div>
+          </div>
+        </div>
         <% }) %>
-      </table>
-      <button class="view-products-link" onclick="toggleOrderList(<%= order.id %>)">Hide</button>
-    </div>
 
-    <hr />
-
-    <div class="to-bottom">
-      <div class="progress"></div>
-      <div class="progress-icons flex-sb-c">
-        <div>
-          <div class="progress-icon <%= ['processing', 'shipped', 'delivered'].includes(order.status) ? 'done' : '' %>">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"></path></svg>
-          </div>
-          <p>Order Placed</p>
-        </div>
-        <div>
-          <div class="progress-icon <%= ['processing', 'shipped', 'delivered'].includes(order.status) ? 'done' : '' %>">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51s-18.75-7.85-28.51-8c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C146.28,23.51,138.44,16,128,16s-18.27,7.51-25.18,14.14c-3.94,3.77-8,7.67-11.57,9.14C88,40.64,82.56,40.72,77.31,40.8c-9.76.15-20.82.31-28.51,8S41,67.55,40.8,77.31c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C23.51,109.72,16,117.56,16,128s7.51,18.27,14.14,25.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C109.72,232.49,117.56,240,128,240s18.27-7.51,25.18-14.14c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C232.49,146.28,240,138.44,240,128S232.49,109.73,225.86,102.82Z"></path></svg>
-          </div>
-          <p>Processing</p>
-        </div>
-        <div>
-          <div class="progress-icon <%= ['shipped', 'delivered'].includes(order.status) ? 'done' : '' %>">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M255.42,117l-14-35A15.93,15.93,0,0,0,226.58,72H192V64a8,8,0,0,0-8-8H32A16,16,0,0,0,16,72V184a16,16,0,0,0,16,16H49a32,32,0,0,0,62,0h50a32,32,0,0,0,62,0h17a16,16,0,0,0,16-16V120A7.94,7.94,0,0,0,255.42,117Z"></path></svg>
-          </div>
-          <p>Shipped</p>
-        </div>
-        <div>
-          <div class="progress-icon <%= order.status === 'delivered' ? 'done' : '' %>">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="#000000" viewBox="0 0 256 256"><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68Z"></path></svg>
-          </div>
-          <p>Delivered</p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <% }) %>
+  <% } %>
 </section>
 
 <script>
