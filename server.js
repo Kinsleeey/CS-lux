@@ -32,17 +32,6 @@ const db = new Pool(
 );
 
 
-// const storage = multer.diskStorage({ previous code for memory
-//   destination: (req, file, cb) => {
-//     cb(null, 'public/uploads/');
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + path.extname(file.originalname));
-//   }
-// });
-
-// const upload = multer({ storage: storage }); previous used for memory
-
 const upload = multer({ storage: multer.memoryStorage() }); //new to supabase
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -649,11 +638,10 @@ app.get("/track-order", async (req, res) => {
         o.id,
         o.total_amount,
         o.status,
+        o.delivery_option,
         o.delivery_location,
         o.created_at,
-        d.name AS delivery_type
       FROM orders o
-      JOIN delivery_options d ON o.delivery_option_id = d.id
       WHERE o.user_id = $1
       ORDER BY o.created_at DESC`,
       [userId]
@@ -665,21 +653,19 @@ app.get("/track-order", async (req, res) => {
     for (let order of orders) {
       const itemsResult = await db.query(
         `SELECT 
-          p.name,
-          p.image,
-          pv.size,
+          oi.name,
+          oi.image,
+          oi.size,
           oi.qty,
           oi.price
         FROM order_details oi
-        JOIN product_variants pv ON oi.variant_id = pv.id
-        JOIN products p ON pv.product_id = p.id
         WHERE oi.order_id = $1`,
         [order.id]
       );
       order.items = itemsResult.rows;
     }
 
-    res.render("track-order.ejs", { orders, popupmsg: "" });
+    res.render("track-order.ejs", { orders, });
 
   } catch (err) {
     console.error(err);
@@ -881,14 +867,12 @@ app.get("/admin", async(req, res) => {
     for (let order of orders) {
       const itemsResult = await db.query(`
         SELECT 
-          p.name,
-          p.image,
-          pv.size,
+          oi.name,
+          oi.image,
+          oi.size,
           oi.qty,
           oi.price
         FROM order_details oi
-        JOIN product_variants pv ON oi.variant_id = pv.id
-        JOIN products p ON pv.product_id = p.id
         WHERE oi.order_id = $1`,
         [order.id]
       );
@@ -1008,6 +992,7 @@ app.post("/new-category", async (req, res) => {
     res.redirect("/admin?msg=Something went wrong");
   }
 });
+
 app.delete("/category/:id", async (req, res) => {
     const categoryId = parseInt(req.params.id);
 
@@ -1228,7 +1213,7 @@ app.post("/payment/initiate", async (req, res) => {
   try {
     // Get delivery option id and fee from DB
     const deliveryResult = await db.query(
-      `SELECT id, fee FROM delivery_options WHERE name = $1`,
+      `SELECT name, fee FROM delivery_options WHERE name = $1`,
       [delivery_type]
     );
 
@@ -1236,7 +1221,7 @@ app.post("/payment/initiate", async (req, res) => {
       return res.status(400).send("Invalid delivery type");
     }
 
-    const { id: delivery_option_id, fee: shippingFee } = deliveryResult.rows[0];
+    const { name: delivery_option, fee: shippingFee } = deliveryResult.rows[0];
 
     // Calculate total
     const subtotal = await calculateCartTotal(req.user.id);
@@ -1247,7 +1232,7 @@ app.post("/payment/initiate", async (req, res) => {
       {
         email,
         amount: total * 100,
-        metadata: { delivery_option_id, delivery_location },
+        metadata: { delivery_option, delivery_location },
         callback_url: "https://www.csluxury.shop/payment/verify",
       },
       { headers: paystackHeaders }
@@ -1280,7 +1265,7 @@ app.get("/payment/verify", async (req, res) => {
                 [reference]
             );
             const { amount, status } = existingPayment.rows[0];
-            return res.render("receipt.ejs", { amount, reference, status, popupmsg: "" });
+            return res.render("receipt.ejs", { amount, reference, status});
         }
 
         const response = await axios.get(
@@ -1299,8 +1284,14 @@ app.get("/payment/verify", async (req, res) => {
         );
 
         if (status === "success") {
-            const cartResult = await db.query(
-                `SELECT c.variant_id, c.qty, p.price
+            const cartResult = await db.query( 
+                `SELECT  
+                    c.qty, 
+                    c.variant_id,
+                    p.price,
+                    pv.size,
+                    p.name,
+                    p.image
                     FROM cart c
                     JOIN product_variants pv ON c.variant_id = pv.id
                     JOIN products p ON pv.product_id = p.id
@@ -1311,19 +1302,19 @@ app.get("/payment/verify", async (req, res) => {
             const cartItems = cartResult.rows;
 
             const orderResult = await db.query(
-                `INSERT INTO orders (user_id, total_amount, payment_reference, status, delivery_option_id, delivery_location)
+                `INSERT INTO orders (user_id, total_amount, payment_reference, status, delivery_option, delivery_location)
                 VALUES ($1, $2, $3, $4, $5, $6)
                 RETURNING id`,
-                [req.user.id, Math.floor(amount / 100), reference, "processing", metadata.delivery_option_id, metadata.delivery_location]
+                [req.user.id, Math.floor(amount / 100), reference, "processing", metadata.delivery_option, metadata.delivery_location]
             );
 
             const orderId = orderResult.rows[0].id;
 
             for (let item of cartItems) {
                 await db.query(
-                    `INSERT INTO order_details (order_id, variant_id, qty, price)
-                    VALUES ($1, $2, $3, $4)`,
-                    [orderId, item.variant_id, item.qty, parseInt(item.price)]
+                    `INSERT INTO order_details (order_id, qty, price, size, name, image)
+                    VALUES ($1, $2, $3, $4, $5, $6)`,
+                    [orderId, item.qty, parseInt(item.price), item.size, item.name, item.image]
                 );
                 await db.query(
                     `UPDATE product_variants SET stock = stock - $1 WHERE id = $2`,
