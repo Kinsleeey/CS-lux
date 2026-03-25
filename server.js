@@ -856,12 +856,11 @@ app.get("/admin", async(req, res) => {
         o.status,
         o.delivery_location,
         o.created_at,
-        d.name AS delivery_type,
+        o.delivery_option,
         u.email,
         u.first_name,
         u.last_name
       FROM orders o
-      JOIN delivery_options d ON o.delivery_option_id = d.id
       JOIN users u ON o.user_id = u.id
       ORDER BY o.created_at DESC
     `);
