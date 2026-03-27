@@ -843,7 +843,7 @@ app.post("/update-user-details", async (req, res) => {
 });
 
 app.get("/admin/sign-in", (req, res) => {
-    res.render("admin-sign-in.ejs", {message: ""})
+    res.render("admin-sign-in.ejs", { message: req.query.error || "" })
 })
 
 app.get("/admin", adminAuth, async(req, res) => {
@@ -865,7 +865,7 @@ app.get("/admin", adminAuth, async(req, res) => {
         u.first_name,
         u.last_name
       FROM orders o
-      JOIN users u ON o.user_id = u.id
+      LEFT JOIN users u ON o.user_id = u.id
       ORDER BY o.created_at DESC
     `);
     const orders = ordersResult.rows;
@@ -915,7 +915,7 @@ app.post("/admin", async (req, res) => {
         req.session.admin = true;
         res.redirect("/admin");
     } else {
-        res.render("admin-sign-in.ejs", {message: "invalid Email or Password"});
+        res.redirect("/admin/sign-in?error=Invalid Email or Password");
     }
 });
 
