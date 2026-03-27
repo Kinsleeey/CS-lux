@@ -93,16 +93,15 @@ app.use(async (req, res, next) => {
 app.set('view engine', 'ejs');
 app.set('views', './views')
 
-async function deductStock(cartItems) {
-  for (let item of cartItems) {
-    await db.query(
-      `UPDATE product_variants 
-       SET stock = stock - $1 
-       WHERE id = $2 AND stock >= $1`,
-      [item.qty, item.variant_id]
-    );
-  }
+function adminAuth(req, res, next) {
+    if (req.session.admin) {
+        next();
+    } else {
+        res.redirect("/admin/sign-in");
+    }
 }
+
+
 
 async function calculateCartTotal(userId) {
     const result = await db.query(`
@@ -843,7 +842,12 @@ app.post("/update-user-details", async (req, res) => {
   }
 });
 
-app.get("/admin", async(req, res) => {
+app.get("/admin/sign-in", (req, res) => {
+    res.render("admin-sign-in.ejs", {message: ""})
+})
+
+app.get("/admin", adminAuth, async(req, res) => {
+
   try {
     const result = await db.query("SELECT * FROM categories");
     const categories = result.rows;
@@ -901,6 +905,18 @@ app.get("/admin", async(req, res) => {
     console.error("Admin page error:", err);
    res.render("admin", { msg: "Failed to load", categories: [], orders: [], products: [] });
   }
+});
+
+app.post("/admin", async (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    if (email.toLowerCase() === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+        req.session.admin = true;
+        res.redirect("/admin");
+    } else {
+        res.render("admin-sign-in.ejs", {message: "invalid Email or Password"});
+    }
 });
 
 app.post("/admin/order/status", async (req, res) => {
