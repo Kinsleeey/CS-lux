@@ -193,7 +193,7 @@
                                 <span class="order-id">Order #<%= order.id %></span>
                                 <span class="status-badge status-<%= order.status %>"><%= order.status %></span>
                             </div>
-                            <span class="order-customer"><%= order.first_name || '' %> <%= order.last_name || '' %> — <%= order.email %></span>
+                            <span class="order-customer"><%= order.first_name || '' %> <%= order.last_name || '' %> — <%= order.phone %></span>
                         </div>
                         <div class="order-details-row">
                             <div class="order-detail-item">
@@ -201,8 +201,8 @@
                                 <span class="detail-value"><%= new Date(order.created_at).toDateString() %></span>
                             </div>
                             <div class="order-detail-item">
-                                <span class="detail-label">Delivery</span>
-                                <span class="detail-value"><%= order.delivery_type %></span>
+                                <span class="detail-label">Location</span>
+                                <span class="detail-value"><%= order.delivery_location %></span>
                             </div>
                             <div class="order-detail-item">
                                 <span class="detail-label">Total</span>

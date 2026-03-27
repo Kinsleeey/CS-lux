@@ -861,9 +861,9 @@ app.get("/admin", adminAuth, async(req, res) => {
         o.delivery_location,
         o.created_at,
         o.delivery_option,
-        u.email,
         u.first_name,
-        u.last_name
+        u.last_name,
+        u.phone
       FROM orders o
       LEFT JOIN users u ON o.user_id = u.id
       ORDER BY o.created_at DESC
