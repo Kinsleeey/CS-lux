@@ -122,7 +122,7 @@ function dismissToast(toast) {
         // TODO: wire up to backend
         closeEditPopup();
     }
-    async function removeCategory(id) {
+    async function removeCategoryConfirmed(id) {
         try {
             const response = await fetch(`/category/${id}`, {
                 method: 'DELETE'
@@ -175,7 +175,7 @@ function dismissToast(toast) {
         }
     }
 
-   async function deleteVariant(variantId, productId) {
+   async function deleteVariantConfirmed(variantId, productId) {
         try {
             const response = await fetch(`/variant/${variantId}/${productId}`, {
                 method: 'DELETE'
@@ -198,3 +198,29 @@ function dismissToast(toast) {
     document.getElementById('editOverlay').addEventListener('click', function(e) {
         if (e.target === this) closeEditPopup();
     });
+
+    let pendingAction = null;
+
+function showConfirm(message, action) {
+    document.getElementById("confirmMessage").textContent = message;
+    document.getElementById("confirmOverlay").style.display = "flex";
+    pendingAction = action;
+}
+
+function closeConfirm() {
+    document.getElementById("confirmOverlay").style.display = "none";
+    pendingAction = null;
+}
+
+function confirmAction() {
+    if (pendingAction) pendingAction();
+    closeConfirm();
+}
+
+function removeCategory(id) {
+    showConfirm("Are you sure? Deleting this category will delete all its products too.", () => removeCategoryConfirmed(id));
+}
+
+function deleteVariant(variantId, productId) {
+    showConfirm("Are you sure you want to delete this variant?", () => deleteVariantConfirmed(variantId, productId));
+}

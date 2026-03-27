@@ -370,7 +370,7 @@
     </main>
 </div>
 
-<!-- Edit Popup -->
+
 <div id="editOverlay" class="overlay">
     <div class="popup">
         <div class="popup-header">
@@ -399,6 +399,23 @@
         <div class="popup-footer">
             <button class="btn-ghost" onclick="closeEditPopup()">Cancel</button>
             <button class="btn-save" onclick="patchVariant()">Save Changes</button>
+        </div>
+    </div>
+</div>
+
+
+<div id="confirmOverlay" class="overlay">
+    <div class="popup">
+        <div class="popup-header">
+            <div class="popup-title">Confirm Delete</div>
+            <button class="popup-close" onclick="closeConfirm()">×</button>
+        </div>
+        <div class="popup-body">
+            <p id="confirmMessage" style="color: var(--text); font-size: 14px;"></p>
+        </div>
+        <div class="popup-footer">
+            <button class="btn-ghost" onclick="closeConfirm()">Cancel</button>
+            <button class="btn-save" style="background: red;" onclick="confirmAction()">Delete</button>
         </div>
     </div>
 </div>
