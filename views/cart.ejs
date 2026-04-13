@@ -16,7 +16,7 @@
                 <% if (cartedProduct.stock > 0) { %>
                     <div class="si-card flex-c">
                         
-                        <div class="si-img"><img src="<%= cartedProduct.image %>"/></div>
+                        <div class="si-img"><img src="<%= cartedProduct.image %>" loading="lazy" /></div>
                         <div class="si-writeup">
                             <span class="si1 flex-sb-c">
                                 <p class="name"><%= cartedProduct.name %></p>
